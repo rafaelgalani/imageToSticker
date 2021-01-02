@@ -5,11 +5,11 @@ const updateJson = require('update-json-file')
 moment.tz.setDefault('Asia/Jakarta').locale('id')
 
 // Color
-const color = (text, color) => {
+export const color = (text, color?) => {
     return !color ? chalk.green(text) : chalk.keyword(color)(text)
 }
 
-const processTime = (timestamp, now) => {
+export const processTime = (timestamp, now) => {
     return moment.duration(now - moment(timestamp * 1000)).asSeconds()
 }
 
@@ -41,22 +41,18 @@ const addFilter = (from) => {
 }
 
 // Message type Log
-const messageLog = (fromMe, type) => updateJson('utils/stat.json', (data) => {
+export const messageLog = (fromMe, type) => updateJson('utils/stat.json', (data) => {
     (fromMe) ? (data.sent[type]) ? data.sent[type] += 1 : data.sent[type] = 1 : (data.receive[type]) ? data.receive[type] += 1 : data.receive[type] = 1
     return data
 })
 
-module.exports = {
-    msgFilter: {
-        isFiltered,
-        addFilter
-    },
-    processTime,
-    is: {
-        Url,
-        Giphy,
-        MediaGiphy
-    },
-    color,
-    messageLog
-}
+export const msgFilter = {
+    isFiltered,
+    addFilter
+};
+
+export const is = {
+    Url,
+    Giphy,
+    MediaGiphy
+};

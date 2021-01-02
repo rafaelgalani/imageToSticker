@@ -1,4 +1,4 @@
-exports.textTnC = () => {
+export const textTnC = () => {
     return `
 Source code / bot is an open-source program (free) written using Javascript, you can use, copy, modify, combine, publish, distribute, sub-license, and or sell copies without removing the main author of the source code / bot.
 By using this source code / bot, you agree to the following Terms and Conditions:
@@ -19,7 +19,7 @@ NodeJS WhatsApp library: https://github.com/open-wa/wa-automate-nodejs
 Best regards, Yoga Sakti.`
 }
 
-exports.textMenu = (pushname) => {
+export const textMenu = (pushname) => {
     return `
 Hi, ${pushname || ''}! 👋️
 Here are some of the features of this bot! ✨
@@ -54,7 +54,7 @@ Displays Bot Terms and Conditions.
 Hope you have a great day!✨`
 }
 
-exports.textAdmin = () => {
+export const textAdmin = () => {
     return `
 ⚠ [ *Admin Group Only* ] ⚠ 
 Here are some of the group admin features included in this bot!

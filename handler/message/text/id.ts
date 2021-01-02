@@ -1,4 +1,4 @@
-exports.textTnC = () => {
+export const textTnC = () => {
     return `
 Source code / bot ini merupakan program open-source (gratis) yang ditulis menggunakan Javascript, kamu dapat menggunakan, menyalin, memodifikasi, menggabungkan, menerbitkan, mendistribusikan, mensublisensikan, dan atau menjual salinan dengan tanpa menghapus author utama dari source code / bot ini.
 
@@ -20,7 +20,7 @@ NodeJS WhatsApp library: https://github.com/open-wa/wa-automate-nodejs
 Best regards, Yoga Sakti.`
 }
 
-exports.textMenu = (pushname) => {
+export const textMenu = (pushname) => {
     return `
 Hi, ${pushname}! 👋️
 Berikut adalah beberapa fitur yang ada pada bot ini!✨
@@ -85,7 +85,7 @@ menampilkan informasi donasi.
 Hope you have a great day!✨`
 }
 
-exports.textAdmin = () => {
+export const textAdmin = () => {
     return `
 ⚠ [ *Admin Group Only* ] ⚠ 
 Berikut adalah beberapa fitur admin grup yang ada pada bot ini!
@@ -106,7 +106,7 @@ Untuk mention semua member grup. (Premium Only)
 Untuk menghapus pesan bot (balas pesan bot dengan #del)`
 }
 
-exports.textDonasi = () => {
+export const textDonasi = () => {
     return `
 Hai, terimakasih telah menggunakan bot ini, untuk mendukung bot ini kamu dapat membantu dengan berdonasi melalui link berikut:
 1. Saweria: https://saweria.co/yogasakti

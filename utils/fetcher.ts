@@ -1,8 +1,8 @@
-const fetch = require('node-fetch')
-const FormData = require('form-data')
-const fs = require('fs')
-const { fromBuffer } = require('file-type')
-const resizeImage = require('./imageProcessing')
+import fetch from 'node-fetch';
+import FormData from 'form-data';
+import fs from 'fs';
+import { fromBuffer } from 'file-type';
+import resizeImage from './imageProcessing';
 
 /**
  *Fetch Json from Url
@@ -10,7 +10,7 @@ const resizeImage = require('./imageProcessing')
  *@param {String} url
  *@param {Object} options
  */
-const fetchJson = (url, options) =>
+export const fetchJson = (url, options) =>
     new Promise((resolve, reject) =>
         fetch(url, options)
             .then(response => response.json())
@@ -27,7 +27,7 @@ const fetchJson = (url, options) =>
  * @param {String} url
  * @param {Object} options
  */
-const fetchText = (url, options) => {
+export const fetchText = (url, options) => {
     return new Promise((resolve, reject) => {
         return fetch(url, options)
             .then(response => response.text())
@@ -44,13 +44,13 @@ const fetchText = (url, options) => {
  * @param {String} url
  */
 
-const fetchBase64 = (url, mimetype) => {
+export const fetchBase64 = (url, mimetype) => {
     return new Promise((resolve, reject) => {
         console.log('Get base64 from:', url)
         return fetch(url)
             .then((res) => {
-                const _mimetype = mimetype || res.headers.get('content-type')
-                res.buffer()
+                const _mimetype = mimetype || res.headers.get('content-type');
+                (res as any).buffer()
                     .then((result) => resolve(`data:${_mimetype};base64,` + result.toString('base64')))
             })
             .catch((err) => {
@@ -67,7 +67,7 @@ const fetchBase64 = (url, mimetype) => {
  * @param  {Boolean} resize
  */
 
-const uploadImages = (buffData, type) => {
+export const uploadImages = (buffData, type) : Promise<string> => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
         const { ext } = await fromBuffer(buffData)
@@ -92,11 +92,4 @@ const uploadImages = (buffData, type) => {
                 .catch(err => reject(err))
         })
     })
-}
-
-module.exports = {
-    fetchJson,
-    fetchText,
-    fetchBase64,
-    uploadImages
 }

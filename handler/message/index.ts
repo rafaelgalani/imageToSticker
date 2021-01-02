@@ -1,15 +1,14 @@
 require('dotenv').config()
-const { decryptMedia, Client } = require('@open-wa/wa-automate')
-const moment = require('moment-timezone')
+import { decryptMedia, Client } from '@open-wa/wa-automate';
+import moment from 'moment-timezone';
 moment.tz.setDefault('Asia/Jakarta').locale('id')
-const { downloader, cekResi, removebg, urlShortener, meme, translate, getLocationData } = require('../../lib')
-const { msgFilter, color, processTime, is } = require('../../utils')
-const mentionList = require('../../utils/mention')
-const { uploadImages } = require('../../utils/fetcher')
+import { downloader, cekResi, removebg, urlShortener, meme, translate, getLocationData } from '../../lib';
+import { msgFilter, color, processTime, is } from '../../utils';
+import { uploadImages } from '../../utils/fetcher';
 
-const { menuId, menuEn } = require('./text') // Indonesian & English menu
+import { menuId, menuEn } from './text' // Indonesian & English men;
 
-module.exports = msgHandler = async (client, message) => {
+export default async (client, message) => {
     try {
         const { type, id, from, t, sender, isGroupMsg, chat, caption, isMedia, isGif, mimetype, quotedMsg, quotedMsgObj, mentionedJidList } = message
         let { body } = message
@@ -172,7 +171,7 @@ module.exports = msgHandler = async (client, message) => {
         case 'twt':
         case 'twitter':
             if (args.length !== 1) return client.reply(from, 'Maaf, format pesan salah silahkan periksa menu. [Wrong Format]', id)
-            if (!is.Url(url) & !url.includes('twitter.com') || url.includes('t.co')) return client.reply(from, 'Maaf, url yang kamu kirim tidak valid. [Invalid Link]', id)
+            if (!is.Url(url) && !url.includes('twitter.com') || url.includes('t.co')) return client.reply(from, 'Maaf, url yang kamu kirim tidak valid. [Invalid Link]', id)
             await client.reply(from, `_Scraping Metadata..._ \n\n${menuId.textDonasi()}`, id)
             downloader.tweet(url).then(async (data) => {
                 if (data.type === 'video') {

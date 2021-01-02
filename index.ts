@@ -1,8 +1,8 @@
-const { create, Client } = require('@open-wa/wa-automate')
-const { color, messageLog } = require('./utils')
-const msgHandler = require('./handler/message')
+import { create, Client } from '@open-wa/wa-automate';
+import { color, messageLog } from './utils';
+import msgHandler from './handler/message';
 
-const start = (client = new Client()) => {
+const start = (client = new Client(void 0, void 0, void 0)) => {
     console.log('[DEV]', color('Red Emperor', 'yellow'))
     console.log('[CLIENT] CLIENT Started!')
 
@@ -49,7 +49,7 @@ const start = (client = new Client()) => {
 
 const options = {
     sessionId: 'Imperial',
-    headless: true,
+    headless: false,
     qrTimeout: 0,
     authTimeout: 0,
     restartOnCrash: start,

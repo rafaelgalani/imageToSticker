@@ -2,7 +2,7 @@ const sharp = require('sharp')
 const { fromBuffer } = require('file-type')
 
 // eslint-disable-next-line no-async-promise-executor
-module.exports = resizeImage = (buff, encode) => new Promise(async (resolve, reject) => {
+export default (buff, encode) => new Promise(async (resolve, reject) => {
     console.log('Resizeing image...')
     const { mime } = await fromBuffer(buff)
     sharp(buff, { failOnError: false })
