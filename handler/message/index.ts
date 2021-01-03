@@ -11,6 +11,13 @@ import { menuId, menuEn } from './text'; // Indonesian & English men;
 
 const votingMap = {};
 
+export class ZapError extends Error {
+    public constructor(message: string){
+        super(message);
+        Object.setPrototypeOf(this, ZapError.prototype);
+    }
+}
+
 export default async (client: Client, message) => {
     try {
         let { type, id, from, fromMe, to, t, sender, isGroupMsg, chat, caption, isMedia, isGif, mimetype, quotedMsg, quotedMsgObj, mentionedJidList } = message
@@ -287,37 +294,59 @@ export default async (client: Client, message) => {
         // Group Commands (group admin only)
         case 'ban':
         case 'kick':
-            if (!isGroupMsg) return await client.reply(from, 'Só funciona em grupo.', id);
-            if (!isGroupAdmins) return await client.reply(from, 'Precisa ser admin.', id);
-            if (!isBotGroupAdmins) return await client.reply(from, 'O bot não é admin.', id);
-            if (mentionedJidList.length === 0) return client.reply(from, 'Kd os membros irmão', id);
-            if (mentionedJidList[0] === botNumber) return await client.reply(from, 'Cheirou meia.', id);
-            await client.sendTextWithMentions(groupId, `Xauuu ${mentionedJidList.map(x => `@${x.replace('@c.us', '')}`).join('\n')} xD`)
-            for (let i = 0; i < mentionedJidList.length; i++) {
-                //if (groupAdmins.includes(mentionedJidList[i])) return await client.sendText(from, "You can't kick an admin.")
-                await client.removeParticipant(groupId, mentionedJidList[i])
+            try {
+                if (!isGroupMsg) throw new ZapError('Só funciona em grupo.');
+                if (!isGroupAdmins) throw new ZapError('Precisa ser admin.');
+                if (!isBotGroupAdmins) throw new ZapError('O bot não é admin.');
+                if (mentionedJidList.length === 0) throw new ZapError('Kd os membros irmão');
+                if (mentionedJidList[0] === botNumber) throw new ZapError('Cheirou meia.');
+                await client.sendTextWithMentions(groupId, `Xauuu ${mentionedJidList.map(x => `@${x.replace('@c.us', '')}`).join('\n')} xD`)
+                for (let i = 0; i < mentionedJidList.length; i++) {
+                    //if (groupAdmins.includes(mentionedJidList[i])) return await client.sendText(from, "You can't kick an admin.")
+                    await client.removeParticipant(groupId, mentionedJidList[i])
+                }
+                return;
+            } catch (e) {
+                console.error(color(e, 'red'));
+                if (e instanceof ZapError){
+                    return await client.reply(from, e.message, id);
+                }
+                return await client.reply(from, 'bugou algo.', id);
             }
-            break
         case 'promote':
-            if (!isGroupMsg) return await client.reply(from, 'Só funciona em grupo.', id);
-            if (!isGroupAdmins) return await client.reply(from, 'Precisa ser admin.', id);
-            if (!isBotGroupAdmins) return await client.reply(from, 'O bot não é admin.', id);
-            if (mentionedJidList.length !== 1) return await client.reply(from, 'Só um promote por vez.', id);
-            if (groupAdmins.includes(mentionedJidList[0])) return await client.reply(from, 'Esse aí já é adm kkjjj', id);
-            if (mentionedJidList[0] === botNumber) return await client.reply(from, 'Cheirou meia.', id);
-            await client.promoteParticipant(groupId, mentionedJidList[0]);
-            await client.sendTextWithMentions(groupId, `Parabenizem o novo adm, @${mentionedJidList[0].replace('@c.us', '')}!!!`)
-            break
+            try {
+                if (!isGroupMsg) throw new ZapError('Só funciona em grupo.');
+                if (!isGroupAdmins) throw new ZapError('Precisa ser admin.');
+                if (!isBotGroupAdmins) throw new ZapError('O bot não é admin.');
+                if (mentionedJidList.length !== 1) throw new ZapError('Só um promote por vez.');
+                if (groupAdmins.includes(mentionedJidList[0])) throw new ZapError('Esse aí já é adm kkjjj');
+                if (mentionedJidList[0] === botNumber) throw new ZapError('Cheirou meia.');
+                await client.promoteParticipant(groupId, mentionedJidList[0]);
+                return await client.sendTextWithMentions(groupId, `Parabenizem o novo adm, @${mentionedJidList[0].replace('@c.us', '')}!!!`)
+            } catch (e) {
+                console.error(color(e, 'red'));
+                if (e instanceof ZapError){
+                    return await client.reply(from, e.message, id);
+                }
+                return await client.reply(from, 'bugou algo.', id);
+            }
         case 'demote':
-            if (!isGroupMsg) return await client.reply(from, 'Só funciona em grupo.', id)
-            if (!isGroupAdmins) return await client.reply(from, 'Precisa ser admin.', id)
-            if (!isBotGroupAdmins) return await client.reply(from, 'O bot não é admin.', id)
-            if (mentionedJidList.length !== 1) return await client.reply(from, 'Só um demote por vez.', id)
-            if (!groupAdmins.includes(mentionedJidList[0])) return await client.reply(from, 'Esse aí já é membro comum kkkjjjj', id)
-            if (mentionedJidList[0] === botNumber) return await client.reply(from, 'Cheirou meia.', id)
-            await client.demoteParticipant(groupId, mentionedJidList[0])
-            await client.sendTextWithMentions(groupId, `@${mentionedJidList[0].replace('@c.us', '')} virou pobre.`)
-            break
+            try {
+                if (!isGroupMsg) throw new ZapError('Só funciona em grupo.');
+                if (!isGroupAdmins) throw new ZapError('Precisa ser admin.');
+                if (!isBotGroupAdmins) throw new ZapError('O bot não é admin.');
+                if (mentionedJidList.length !== 1) throw new ZapError('Só um demote por vez.');
+                if (!groupAdmins.includes(mentionedJidList[0])) throw new ZapError('Esse aí já é membro comum kkkjjjj');
+                if (mentionedJidList[0] === botNumber) throw new ZapError('Cheirou meia.');
+                await client.demoteParticipant(groupId, mentionedJidList[0])
+                return await client.sendTextWithMentions(groupId, `@${mentionedJidList[0].replace('@c.us', '')} virou pobre.`)
+            } catch (e) {
+                console.error(color(e, 'red'));
+                if (e instanceof ZapError){
+                    return await client.reply(from, e.message, id);
+                }
+                return await client.reply(from, 'bugou algo.', id);
+            }
         case 'codiguin': {
             if (!isGroupMsg) break;
             let code = getId();
@@ -366,17 +395,25 @@ export default async (client: Client, message) => {
         case 'tnc':
             return await client.sendTextWithMentions(groupId, 'Os seguintes membros tomaram no cu: ' + groupMembers.map(a => '@' + a.replace('@c.us', '') ).join(', ') );
         case 'login':
-            if (!isGroupMsg) return;
+            try {
+                if (!isGroupMsg) return;
 
-            if (args.length === 1){
-                let actor = sender.id;
-                let randomMinutes = random(24, 260);
-                if (isNaN(arg[0])) return await client.sendText(groupId, 'Wrong format.');
-                if (Number(arg[0]) < 0) return await client.sendText(groupId, 'O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
+                if (args.length === 1){
+                    let actor = sender.id;
+                    let randomMinutes = random(24, 260);
+                    if (isNaN(arg[0])) throw new ZapError('Wrong format.');
+                    if (Number(arg[0]) < 0) throw new ZapError('O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
 
-                return await client.sendTextWithMentions(groupId, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + Number(arg[0])} minutos.`);
-            } else {
-                return await client.sendText(groupId, 'Wrong format.');
+                    return await client.sendTextWithMentions(groupId, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + Number(arg[0])} minutos.`);
+                } else {
+                    return await client.sendText(groupId, 'Wrong format.');
+                }
+            } catch (e){
+                console.error(color(e, 'red'));
+                if (e instanceof ZapError){
+                    return await client.reply(from, e.message, id);
+                }
+                return await client.reply(from, 'bugou algo.', id);
             }
         case 'fuckbilly':{
             if (!isGroupMsg) break;
@@ -397,11 +434,11 @@ export default async (client: Client, message) => {
             if (!isBotGroupAdmins) return;
             try {
                 if (args.length == 0){
-                    return await client.reply(from, 'Você precisa especificar em qual votação está votando.', id);
+                    throw new ZapError('Você precisa especificar em qual votação está votando.');
                 } else if (args.length <= 2){
                     let votingMember = args[0];
                     if (!votingMap[votingMember]){
-                        return await client.reply(from, 'Não há votações para esse membro.', id);
+                        throw new ZapError('Não há votações para esse membro.');
                     }
                     let vote = args.length === 2? args[1] : 'y';
 
@@ -439,6 +476,9 @@ export default async (client: Client, message) => {
                 }
             } catch (e){
                 console.error(color(e, 'red'));
+                if (e instanceof ZapError){
+                    return await client.reply(from, e.message, id);
+                }
                 return await client.reply(from, 'bugou algo.', id);
             }
         }
