@@ -8,10 +8,7 @@ export class AllowBotArgumentRule extends Rule {
     constructor(shouldAllow: boolean) {
         super();
         this.shouldAllow = shouldAllow;
-    }
-
-    getErrorMessage() {
-        return `O bot ${this.shouldAllow? 'deve' : 'não deve'} ser usado como argumento desse comando.`;
+        this.errorMessage = `O bot ${this.shouldAllow? 'deve' : 'não deve'} ser usado como argumento desse comando.`
     }
 
     validate(context: ZapContext): boolean{

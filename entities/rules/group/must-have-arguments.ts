@@ -8,10 +8,7 @@ export class MustHaveArgumentsRule extends Rule {
     constructor(minArgsCount: number = 1) {
         super();
         this.minArgsCount = minArgsCount;
-    }
-
-    getErrorMessage() {
-        return `${this.toLabel('Deve', 'm')} ser ${this.toLabel('informado')} pelo menos ${this.minArgsCount} ${this.toLabel('argumento')}.`;
+        this.errorMessage = `${this.toLabel('Deve', 'm')} ser ${this.toLabel('informado')} pelo menos ${this.minArgsCount} ${this.toLabel('argumento')}.`;
     }
 
     private toLabel(label: string, pluralModifier: string = 's'){

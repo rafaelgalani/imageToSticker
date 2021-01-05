@@ -8,7 +8,7 @@ export class KickCommand extends ZapCommand {
 
     protected getRules(){
         return [ 
-            new GroupOnlyRule(), 
+            new GroupOnlyRule().override('Grupo.'), 
             new AdminRule(), 
             new BotAdminRule(), 
             new MustHaveArgumentsRule(1), 
