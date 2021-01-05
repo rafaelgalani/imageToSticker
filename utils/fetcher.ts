@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import FormData from 'form-data';
-import fs from 'fs';
+import * as fs from 'fs';
 import { fromBuffer } from 'file-type';
 import resizeImage from './imageProcessing';
 
