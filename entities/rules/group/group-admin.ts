@@ -1,10 +1,9 @@
 import { Rule } from "..";
-import { ZapContext, ZapError } from "../../core";
+import { ZapContext } from "../../core";
 
-export default class AdminRule extends Rule {
-    constructor(){
-        super();
-        this.error = new ZapError('O membro não é administrador.');
+export class AdminRule extends Rule {
+    getErrorMessage() {
+        return "O membro não é um administrador do grupo.";
     }
 
     validate(context: ZapContext): boolean{

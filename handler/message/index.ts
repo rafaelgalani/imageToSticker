@@ -1,14 +1,14 @@
-/* eslint-disable */ 
 require('dotenv').config()
 import { Client, Message } from '@open-wa/wa-automate'
-import { StickerCommand, ZapContext, ZapError } from '../../entities';
+import { KickCommand, StickerCommand, ZapContext, ZapError } from '../../entities';
 
 export default async (client: Client, message: Message) => {
     try {
         let context = await ZapContext.getContext(client, message);
 
         let commands = [
-            new StickerCommand(context) 
+            new StickerCommand(context) ,
+            new KickCommand(context) ,
         ];
 
         for (let command of commands){

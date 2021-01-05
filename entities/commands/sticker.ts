@@ -1,10 +1,8 @@
-import AdminRule from "../rules/group/group-admin";
-
 import { decryptMedia } from "@open-wa/wa-automate";
 import { ZapCommand } from "./command";
 // WILL ALSO BE MOVED LATER.
 import { is } from "../../utils";
-import { ZapContext } from "../core";
+import { AdminRule } from "../rules";
 
 export class StickerCommand extends ZapCommand {
     
