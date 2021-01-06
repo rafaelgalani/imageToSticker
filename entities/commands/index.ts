@@ -1,3 +1,13 @@
-export { ZapCommand } from './command';
-export { StickerCommand } from './sticker';
-export { KickCommand } from './kick';
+export { CodeCommand } from './code'
+export { DemoteCommand } from './demote'
+export { FuckBillyCommand } from './fuck-billy'
+export { KickCommand } from './kick'
+export { LoginCommand } from './login'
+export { MentionAllCommand } from './mention-all'
+export { PoorCommand } from './poor'
+export { PromoteCommand } from './promote'
+export { SFCommand } from './salesforce'
+export { SexCommand } from './sex'
+export { StickerCommand } from './sticker'
+export { TestCommand } from './test'
+export { VavaCommand } from './vava'

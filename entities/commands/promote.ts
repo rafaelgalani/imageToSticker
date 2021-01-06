@@ -1,27 +1,26 @@
 import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-export class KickCommand extends ZapCommand {
+export class PromoteCommand extends ZapCommand {
     
     protected getPatterns(){
-        return ['kick', 'remover', 'ban', 'remove', ];
+        return ['promote', ];
     }
 
     protected getRules(){
         return [ 
-            new GroupOnlyRule().override('Grupo.'), 
+            new GroupOnlyRule(), 
             new AdminRule(), 
             new BotAdminRule(), 
-            new NArgumentsRule(1, ArgsOperator.EQ), 
             new AllowBotArgumentRule(false), 
+            new NArgumentsRule(1, ArgsOperator.EQ), 
+            new AdminRule(this.context.args[0]).override('Esse já é adm (teste)')
         ];
     }
 
     protected async runSpecificLogic() {
         const { client, groupId, mentionedJidList } = this.context;
-        await client.sendTextWithMentions(groupId, `Xauuu ${mentionedJidList.map(x => `@${x.replace('@c.us', '')}`).join('\n')} xD`)
-        for (let i = 0; i < mentionedJidList.length; i++) {
-            await client.removeParticipant(groupId, mentionedJidList[i])
-        }
+        await client.promoteParticipant(groupId, mentionedJidList[0]);
+        return await client.sendTextWithMentions(groupId, `Parabenizem o novo adm, @${mentionedJidList[0].replace('@c.us', '')}!!!`)
     }
 }

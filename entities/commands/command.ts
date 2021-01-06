@@ -25,7 +25,9 @@ export abstract class ZapCommand {
         if (!this.eligible) return;
 
         for (let rule of this.getRules()){
-            if (!rule.validate(this.context)){
+            let isValid = rule.validate(this.context);
+            isValid = (rule.reversed? !isValid : isValid)
+            if (!isValid){
                 rule.raiseError();
             }
         }
