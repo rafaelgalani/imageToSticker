@@ -11,7 +11,7 @@ export class StickerCommand extends ZapCommand {
     }
 
     protected getRules(){
-        return [ new AdminRule(), ];
+        return [  ];
     }
 
     protected async runSpecificLogic() {

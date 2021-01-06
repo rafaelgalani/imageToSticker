@@ -57,6 +57,8 @@ export class ZapContext {
         this.isQuotedImage = this.quotedMsg && this.quotedMsg.type === 'image'
         this.url = this.args.length !== 0 ? this.args[0] : ''
         this.uaOverride = process.env.UserAgent
+
+        //if (this.fromMe) this.from = this.chatId;
     }
 
     public static async getContext(client, message: Message) : Promise<ZapContext>{

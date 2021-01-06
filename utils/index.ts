@@ -1,3 +1,5 @@
+import { ZapContext } from "../entities"
+
 /* eslint-disable no-return-assign */
 const chalk = require('chalk')
 const moment = require('moment-timezone')
@@ -26,6 +28,44 @@ const MediaGiphy = (url) => {
     return url.match(new RegExp(/https?:\/\/media.giphy.com\/media/, 'gi'))
 }
 
+let admins = [];
+
+export const setup = (context: ZapContext) => {
+    admins = context.groupAdmins;
+};
+
+export const toMention = (number) => {
+    if (number.match(new RegExp(/^@\d+$/))){
+        return number;
+    } else if (number.match(new RegExp(/^\d+@c.us$/))){
+        return '@' + number.replace('@c.us', '');
+    }
+};
+
+export const isAdmin = function(number){
+    return admins.includes(number);
+};
+
+export const getTitle = function(number){
+    return isAdmin(number)? 'admin' : 'membro comum';
+};
+
+export const getMentionWithTitle = function(number){
+    return `${getTitle(number)} ${toMention(number)}`;
+};
+
+const sexSentences = [
+    'bateu uma punhetinha', 
+    'deu uma gozada gostosa',
+    'gozou tudão',
+    'alcançou o orgasmo',
+    'se deleitou sexualmente',
+    'fez uma surubinha safadinha',
+];
+
+export const getRandomSexSentence = () => {
+    return sexSentences[Math.floor((Math.random() * sexSentences.length))];
+};
 // Message Filter / Message Cooldowns
 const usedCommandRecently = new Set()
 
