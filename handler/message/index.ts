@@ -216,6 +216,30 @@ export default async (client: Client, message) => {
                 return await client.sendText(groupId, 'AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)')
             }
         }
+        case 'cu': {
+			if(!isGroupMsg) return;
+			try {
+                if (args.length > 1){
+                    return await client.sendText(groupId, 'Um cú de cada vez, né chapa?');
+                }
+				if(args.length > 0){
+					let randomizedPercentage = Math.floor(Math.random() * 101);     // returns a random integer from 0 to 100
+					let actor = sender.id;
+					let targetCuComido = args[0];
+                    let natinho = '@5511955541122@c.us'
+					if(actor != natinho){
+						return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor, groupAdmins)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido, groupAdmins).replace('@', '')}. Boa sorte!`)
+					} else {
+						return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor, groupAdmins)} possui ${randomizedPercentage}% de chance de CHEIRAR o cu do ${getMentionWithTitle(targetCuComido, groupAdmins).replace('@', '')}. Boa sorte!`)
+					}
+                    //return await client.reply(from, `O ${getMentionWithTitle(actor, groupAdmins)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido, groupAdmins)}. Boa sorte!`, id);
+				} else {
+					return await client.reply(from, 'marcou ninguém primo? come teu próprio cy aí então zé kkkkkjjjjjjjj.', id);
+				}
+			} catch (e) {
+				return await client.reply(from, e.message, id);
+			}
+		}
         case 'salesforce':{
             let actor = sender.id;
             await client.sendText(groupId, 'Blz kkkjjjj.');
@@ -224,18 +248,23 @@ export default async (client: Client, message) => {
         case 'uepa':{
             return await client.sendFile(chatId, path.resolve(__dirname, '../../assets/audios/uepa.mp3'), 'uepa', '', '', false, true, false);
         }
+        case 'poct':{
+            return await client.sendFile(chatId, path.resolve(__dirname, '../../assets/audios/poct.mp3'), 'poct', '', '', false, true, false);
+        }
         case 'comandos':{
             return await client.sendText(groupId, '       _*Comandos disponíveis:*_ \n /sexo [membro1], [membro2]... \n /kick @membro _(apenas admin)_ \n /promote @membro_comum _(apenas admin)_ \n /demote @admin _(apenas admin)_ \n /codiguin [membro1] [membro2]... \n /salesforce \n /comandos \n /vava \n /tnc \n /login número \n /fuckbilly \n /pobre \n /vote @membro [s || n] \n /votekick @membro')
         }
         case 'vava':
             if (!isGroupMsg) break;
             let chepo = '@5513991769173@c.us'
-            return await client.sendTextWithMentions(groupId, `${chepo}:\njoga vava?`);
+            return await client.sendFile(chatId, path.resolve(__dirname, '../../assets/audios/vava.mp3'), 'vava', '', '', false, true, false);
+            //return await client.sendTextWithMentions(groupId, `${chepo}:\njoga vava?`);
         case 'tnc':
             return await client.sendTextWithMentions(groupId, 'Os seguintes membros tomaram no cu: ' + groupMembers.map(a => '@' + a.replace('@c.us', '') ).join(', ') );
         case 'login':
             try {
                 if (!isGroupMsg) return;
+                let raga = '@5511945043226@c.us'
                 if (args.length === 1 && args[0] === '--help' || args[0] === '-h'){
                     return await client.sendText(groupId, `Pediu ajuda neh?`);
                 }
@@ -245,7 +274,7 @@ export default async (client: Client, message) => {
                     if (isNaN(arg[0])) throw new ZapError('Wrong format.');
                     if (Number(arg[0]) < 0) throw new ZapError('O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
 
-                    return await client.sendTextWithMentions(groupId, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + Number(arg[0])} minutos.`);
+                    return await client.sendTextWithMentions(groupId, `${toMention(raga)} irá logar em aproximadamente ${randomMinutes + Number(arg[0])} minutos.`);
                 } else {
                     return await client.sendText(groupId, 'Wrong format.');
                 }
@@ -264,7 +293,8 @@ export default async (client: Client, message) => {
         case 'pobre': {
             if (!isGroupMsg) break;
             let billy = '@5511958795261@c.us'
-            return await client.sendTextWithMentions(groupId, `${billy}:\nvocê é pobre mano kkk`);
+            return await client.sendFile(chatId, path.resolve(__dirname, '../../assets/audios/pobre.mp3'), 'pobre', '', '', false, true, false);
+            //return await client.sendTextWithMentions(groupId, `${billy}:\nvocê é pobre mano kkk`);
         }
         case 'teste': {
             let target = isGroupMsg? from : chat.id;
