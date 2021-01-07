@@ -55,18 +55,178 @@ export const getMentionWithTitle = function(number){
 };
 
 const sexSentences = [
-    'bateu uma punhetinha', 
-    'deu uma gozada gostosa',
-    'gozou tudão',
-    'alcançou o orgasmo',
-    'se deleitou sexualmente',
-    'fez uma surubinha safadinha',
-    'descabelou o palhaço',
-];
+    `bateu uma punhetinha`, 
+    `deu uma gozada gostosa`,
+    `gozou tudão`,
+    `alcançou o orgasmo`,
+    `se deleitou sexualmente`,
+    `fez uma surubinha safadinha`,
+    `descabelou o palhaço`,
+]
 
 export const getRandomSexSentence = () => {
     return sexSentences[Math.floor((Math.random() * sexSentences.length))];
 };
+
+const membersList = [
+    {
+        "name": "Gabriel Botta",
+        "nicknames": ['botta', 'boot'],
+        "number": "5511954975348@c.us",
+        "mute": false
+    },
+    {
+        "name": "Matheus Izidio",
+        "nicknames": ['eli', 'izidio'],
+        "number": "5511983339646@c.us",
+        "mute": false
+    },
+    {
+        "name": "João Pedro Cruz",
+        "nicknames": ['saude', 'saúde', 'geno', 'health'],
+        "number": "5511966266400@c.us",
+        "mute": false
+    },
+    {
+        "name": "Gabriel Casarotti",
+        "nicknames": ['nitt', 'casarotti'],
+        "number": "5511985997100@c.us",
+        "mute": false
+    },
+    {
+        "name": "Rafael Galani",
+        "nicknames": ['raga', 'rafa', 'galani'],
+        "number": "5511945043226@c.us",
+        "mute": false
+    },
+    {
+        "name": "Pedro Gatto",
+        "nicknames": ['gatto', 'cat', 'catt'],
+        "number": "5511987346469@c.us",
+        "mute": false
+    },
+    {
+        "name": "João Vitor Luchezzi",
+        "nicknames": ['fagundes', 'gundao', 'luchezzi'],
+        "number": "5511952265051@c.us",
+        "mute": false
+    },
+    {
+        "name": "Marcio Junior",
+        "nicknames": ['junin', 'marcio', 'marcinho'],
+        "number": "5511991668233@c.us",
+        "mute": false
+    },
+    {
+        "name": "Mariana Yamanaka",
+        "nicknames": ['mari', 'yamanaka'],
+        "number": "5511991399669@c.us",
+        "mute": false
+    },
+    {
+        "name": "Nychollas Dellamonica",
+        "nicknames": ['metela', 'dellamonica'],
+        "number": "5511953796932@c.us",
+        "mute": false
+    },
+    {
+        "name": "Gabriel Pazin",
+        "nicknames": ['billy', 'monduzzi', 'pazin', 'lubilas'],
+        "number": "5511958795261@c.us",
+        "mute": false
+    },
+    {
+        "name": "Renato Honório",
+        "nicknames": ['natinho', 'renato', 'natin'],
+        "number": "5511955541122@c.us",
+        "mute": false
+    },
+    {
+        "name": "Klisman Cruz",
+        "nicknames": ['xep', 'xepo', 'chepolino', 'chepo', 'chep', 'klisman'],
+        "number": "5513991769173@c.us",
+        "mute": false
+    },
+    {
+        "name": "Caio Pacini",
+        "nicknames": ['caio', 'pacini', 'xpranked'],
+        "number": "5511987808222@c.us",
+        "mute": false
+    },
+    {
+        "name": "Rodrigo Pazin",
+        "nicknames": ['rodrigo', 'sapo'],
+        "number": "5511970207129@c.us",
+        "mute": false
+    },
+    {
+        "name": "Enrico",
+        "nicknames": ['enrico', 'rico'],
+        "number": "5511976498140@c.us",
+        "mute": false
+    },
+    {
+        "name": "Alexandre Nunes",
+        "nicknames": ['frank', 'franke', 'cherakull'],
+        "number": "5511996674358@c.us",
+        "mute": false
+    },
+    {
+        "name": "Fernando Lao",
+        "nicknames": ['fernando', 'lao'],
+        "number": "5511973062236@c.us",
+        "mute": false
+    }
+]
+
+export const getMemberList = () => {
+    return membersList;
+}
+
+export const getMemberNumber = (nickname) => {
+    const memberList = getMemberList();
+    for (let j = 0; j < memberList.length; j++) {
+        for (let i = 0; i < memberList[j].nicknames.length; i++) {
+            if (nickname === memberList[j].nicknames[i]) {
+                return memberList[j].number;
+            }
+        }
+    }
+}
+
+export const muteMember = (nickname) => {
+    const memberList = getMemberList();
+    for (let j = 0; j < memberList.length; j++) {
+        for (let i = 0; i < memberList[j].nicknames.length; i++) {
+            if (nickname === memberList[j].nicknames[i]) {
+                memberList[j].mute = true;
+                console.log('MUTE:\nMute:', memberList[j].mute);
+            }
+        }
+    }
+}
+
+export const unmuteMember = (nickname) => {
+    const memberList = getMemberList();
+    for (let j = 0; j < memberList.length; j++) {
+        for (let i = 0; i < memberList[j].nicknames.length; i++) {
+            if (nickname === memberList[j].nicknames[i]) {
+                memberList[j].mute = false;
+                console.log('UNMUTE:\nMute:', memberList[j].mute);
+            }
+        }
+    }
+}
+
+export const verifyMute = (author) => {
+    const memberList = getMemberList();
+    for (let j = 0; j < memberList.length; j++) {
+        if (memberList[j].number === author) {
+            return memberList[j].mute;
+        }
+    }
+}
+
 // Message Filter / Message Cooldowns
 const usedCommandRecently = new Set()
 

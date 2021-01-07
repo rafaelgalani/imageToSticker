@@ -1,6 +1,7 @@
 import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
+import { getMemberNumber } from "../../utils";
 export class DemoteCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -10,7 +11,7 @@ export class DemoteCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule(), 
-            new AdminRule().reverse(true).override('Esse aí já é adm'), 
+            //new AdminRule().reverse(true).override('Esse aí já é adm'), 
             new BotAdminRule(), 
             new AllowBotArgumentRule(false), 
             new NArgumentsRule(1, ArgsOperator.EQ), 
@@ -18,8 +19,9 @@ export class DemoteCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, mentionedJidList } = this.context;
-        await client.promoteParticipant(groupId, mentionedJidList[0]);
-        return await client.sendTextWithMentions(groupId, `Tira essa roupa preta porque tu não é caveira, @${mentionedJidList[0].replace('@c.us', '')}!!!`)
+        const { client, groupId, args } = this.context;
+        const memberNumber = getMemberNumber(args[0]);
+        await client.demoteParticipant(groupId, memberNumber);
+        return await client.sendTextWithMentions(groupId, `Tira essa roupa preta porque tu não é caveira, @${memberNumber.replace('@c.us', '')}!!!`)
     }
 }

@@ -1,11 +1,11 @@
 import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMemberNumber } from "../../utils";
-export class KickCommand extends ZapCommand {
+import { getMemberNumber, verifyMute } from "../../utils";
+export class AddMemberCommand extends ZapCommand {
     
     protected getPatterns(){
-        return ['kick', 'remover', 'ban', 'remove', ];
+        return ['add', 'adicionar'];
     }
 
     protected getRules(){
@@ -19,12 +19,8 @@ export class KickCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, mentionedJidList, args } = this.context;
+        const { client, groupId, mentionedJidList, args, author, from, id } = this.context;
         const memberNumber = getMemberNumber(args[0]);
-        await client.removeParticipant(groupId, memberNumber);
-        return await client.sendTextWithMentions(groupId, `Xauuu @${memberNumber.replace('@c.us', '')} xD`)
-        /*for (let i = 0; i < mentionedJidList.length; i++) {
-            await client.removeParticipant(groupId, mentionedJidList[i]) */
-        //}
+        return await client.addParticipant(groupId, memberNumber);
     }
 }
