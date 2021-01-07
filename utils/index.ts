@@ -61,6 +61,7 @@ const sexSentences = [
     'alcançou o orgasmo',
     'se deleitou sexualmente',
     'fez uma surubinha safadinha',
+    'descabelou o palhaço',
 ];
 
 export const getRandomSexSentence = () => {
