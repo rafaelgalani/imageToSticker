@@ -1,10 +1,30 @@
 import { create, Client } from '@open-wa/wa-automate';
 import { color, messageLog } from './utils';
 import msgHandler from './handler/message';
+import * as puppeteer from 'puppeteer';
 
-const start = (client = new Client(void 0, void 0, void 0)) => {
+import { freeze, sendReplyWithMentions, newReply } from './lib/additional-content.js';
+
+const start = async (client = new Client(void 0, void 0, void 0)) => {
+    
     console.log('[DEV]', color('Red Emperor', 'yellow'))
     console.log('[CLIENT] CLIENT Started!')
+
+    await client.getPage().evaluate( ({
+        newReply, 
+        sendReplyWithMentions,
+    }) => {
+        eval(newReply)
+        eval(sendReplyWithMentions)
+
+        eval('window.WAPI.reply = newReply')
+        eval('window.WAPI.sendReplyWithMentions = sendReplyWithMentions')
+    }, {
+        newReply: newReply.toString() , 
+        sendReplyWithMentions: sendReplyWithMentions.toString() ,
+    }); 
+    
+    console.log('[CLIENT] INJECTED EXTERNAL LIB XDDDDDDDDDDDDDDDDDDDDDDDDDDD!')
 
     // Message log for analytic
     //client.onAnyMessage((fn) => messageLog(fn.fromMe, fn.type))
@@ -47,27 +67,50 @@ const start = (client = new Client(void 0, void 0, void 0)) => {
     })
 }
 
-const options = {
-    sessionId: 'Imperial',
-    headless: false,
-    qrTimeout: 0,
-    authTimeout: 0,
-    restartOnCrash: start,
-    cacheEnabled: false,
-    useChrome: true,
-    killProcessOnBrowserClose: true,
-    throwErrorOnTosBlock: false,
-    chromiumArgs: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--aggressive-cache-discard',
-        '--disable-cache',
-        '--disable-application-cache',
-        '--disable-offline-load-stale-cache',
-        '--disk-cache-size=0'
-    ]
-}
+let endpoint;
+let a = (async _ => {
+    const browser = await puppeteer.launch({
+        headless: false,
+    });
 
-create(options)
-    .then((client) => start(client))
-    .catch((err) => new Error(err))
+
+    let injector = setInterval(async _ => {
+        let pages = await browser.pages();
+        let whatsAppPage = pages[0];
+
+        if (whatsAppPage.url().includes('whatsapp')){
+            whatsAppPage.evaluate( _ => {
+                window.Object.freeze = o => o;
+            })
+            clearInterval(injector);
+        }
+
+    }, 50);
+
+    const options = {
+        sessionId: 'Imperial',
+        headless: false,
+        qrTimeout: 0,
+        authTimeout: 0,
+        restartOnCrash: start,
+        cacheEnabled: false,
+        useChrome: true,
+        browserWSEndpoint: browser.wsEndpoint(),
+        devtools: true,
+        killProcessOnBrowserClose: true,
+        throwErrorOnTosBlock: false,
+        chromiumArgs: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--aggressive-cache-discard',
+            '--disable-cache',
+            '--disable-application-cache',
+            '--disable-offline-load-stale-cache',
+            '--disk-cache-size=0'
+        ]
+    }
+    
+    create(options)
+        .then((client) => start(client))
+        .catch((err) => new Error(err))
+})()

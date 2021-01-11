@@ -10,8 +10,7 @@ export class TestCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { isGroupMsg, chat, from, client, id } = this.context;
-        let target = isGroupMsg? from : chat.id;
-        return await client.reply(from, `Tá funcionando xd`, id);
+        let { isGroupMsg, chat, target, client, id } = this.context;
+        return await client.reply(target, `Tá funcionando xd`, id);
     }
 }

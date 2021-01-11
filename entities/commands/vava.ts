@@ -13,9 +13,9 @@ export class VavaCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { groupId, client } = this.context;
+        let { groupId, target, client, id } = this.context;
         
         let chepo = '@5513991769173@c.us'
-        return await client.sendTextWithMentions(groupId, `${chepo}:\njoga vava?`);
+        return await client.sendReplyWithMentions(groupId, `${chepo}:\njoga vava?`, id);
     }
 }

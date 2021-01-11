@@ -18,8 +18,8 @@ export class DemoteCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, mentionedJidList } = this.context;
+        const { client, groupId, target, mentionedJidList } = this.context;
         await client.promoteParticipant(groupId, mentionedJidList[0]);
-        return await client.sendTextWithMentions(groupId, `Tira essa roupa preta porque tu não é caveira, @${mentionedJidList[0].replace('@c.us', '')}!!!`)
+        return await client.sendReplyWithMentions(target, `Virou pobre @${mentionedJidList[0].replace('@c.us', '')}!!!`, this.context.id);
     }
 }

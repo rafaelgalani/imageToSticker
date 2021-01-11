@@ -20,11 +20,11 @@ export class LoginCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { args, sender, client, groupId, from } = this.context;
+        let { args, sender, client, groupId, target, from } = this.context;
         let actor = sender.id;
         let randomMinutes = random(24, 260);
         if (Number(args[0]) < 0) throw new ZapError('O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
 
-        return await client.sendTextWithMentions(groupId, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + Number(args[0])} minutos.`);
+        return await client.sendReplyWithMentions(target, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + Number(args[0])} minutos.`, this.context.id);
     }
 }

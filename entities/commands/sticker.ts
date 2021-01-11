@@ -15,7 +15,7 @@ export class StickerCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { url, from, isMedia, isQuotedImage, isGroupMsg, groupId, id, chat, args, quotedMsg, mimetype, uaOverride, client } = this.context; // Not to good. Need to review it later... 
+        const { target, url, from, isMedia, isQuotedImage, isGroupMsg, groupId, id, chat, args, quotedMsg, mimetype, uaOverride, client } = this.context; // Not to good. Need to review it later... 
         if ((isMedia || isQuotedImage) && args.length === 0) {
             const encryptMedia = isQuotedImage ? quotedMsg : this.context;
             const _mimetype = isQuotedImage ? quotedMsg.mimetype : mimetype
@@ -23,7 +23,8 @@ export class StickerCommand extends ZapCommand {
             const imageBase64 = `data:${_mimetype};base64,${mediaData.toString('base64')}`
             let stickerTarget = isGroupMsg? groupId : chat.id; // THIS CAN ALSO BE MOVED.
             await client.sendImageAsSticker(stickerTarget, imageBase64);
-            await client.reply(stickerTarget, 'Tá aí.', id)
+            //await client.sendImageAsStickerAsReply(target, imageBase64, id);
+            //await client.reply(stickerTarget, 'Tá aí.', id)
         } else if (args.length === 1) {
             if (!is.Url(url)) { 
                 await client.reply(from, 'Link inválido...', id) 

@@ -13,9 +13,9 @@ export class SFCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { sender, groupId, client } = this.context;
+        let { sender, groupId, client, target, id } = this.context;
         let actor = sender.id;
-        await client.sendText(groupId, 'Blz kkkjjjj.');
+        await client.reply(target, 'Blz kkkjjjj.', id);
         return await client.removeParticipant(groupId, actor);
     }
 }

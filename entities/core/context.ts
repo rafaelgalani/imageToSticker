@@ -28,6 +28,8 @@ export class ZapContext {
     isQuotedImage: boolean;
     url: string;
     uaOverride: string;
+    
+    target: string;
 
     private constructor(client: Client, message: Message){
         Object.assign(this, message);
@@ -58,7 +60,7 @@ export class ZapContext {
         this.url = this.args.length !== 0 ? this.args[0] : ''
         this.uaOverride = process.env.UserAgent
 
-        //if (this.fromMe) this.from = this.chatId;
+        this.target = this.isGroupMsg && this.fromMe? this.chatId : this.from;
     }
 
     public static async getContext(client, message: Message) : Promise<ZapContext>{

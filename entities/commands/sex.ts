@@ -24,11 +24,11 @@ export class SexCommand extends ZapCommand {
                 lastMember = members.pop();
             
             let membersSentence = members.length >= 2? `${members.join(', ')} e o ${lastMember}` : `${members[0]} e o ${lastMember}`;
-            return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor)} ${getRandomSexSentence()} com o ${membersSentence} 🥵🥵🥵🥵🥵. AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)`,)
+            return await client.sendReplyWithMentions(groupId, `O ${getMentionWithTitle(actor)} ${getRandomSexSentence()} com o ${membersSentence} 🥵🥵🥵🥵🥵. AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)`, id)
         } else if (args.length === 1){
-            return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor)} ${getRandomSexSentence()} com o ${getMentionWithTitle(mentionedJidList[0])} 🥵🥵🥵🥵🥵. AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)`,);
+            return await client.sendReplyWithMentions(groupId, `O ${getMentionWithTitle(actor)} ${getRandomSexSentence()} com o ${getMentionWithTitle(mentionedJidList[0])} 🥵🥵🥵🥵🥵. AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)`, id)
         } else if (args.length === 0){
-            return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor)} ${getRandomSexSentence()} 🥵🥵🥵🥵🥵. AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)`,)
+            return await client.sendReplyWithMentions(groupId, `O ${getMentionWithTitle(actor)} ${getRandomSexSentence()} 🥵🥵🥵🥵🥵. AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)`, id)
         }
     }
 }

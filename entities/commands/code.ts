@@ -14,7 +14,7 @@ export class CodeCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { client, args, sender, mentionedJidList, groupId, groupAdmins } = this.context;
+        let { client, args, sender, mentionedJidList, target, groupAdmins } = this.context;
         let code = getId();
         let actor = sender.id;
 
@@ -23,11 +23,11 @@ export class CodeCommand extends ZapCommand {
                 lastMember = members.pop();
                 
             let membersSentence = members.length >= 2? `${members.join(', ')} e o ${lastMember}` : `${members[0]} e o ${lastMember}`;
-            return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor, groupAdmins)} enviou um codiguin para o ${membersSentence}. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`)
+            return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor, groupAdmins)} enviou um codiguin para o ${membersSentence}. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`, this.context.id)
         } else if (args.length === 1){
-            return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor, groupAdmins)} enviou um codiguin para o ${getMentionWithTitle(mentionedJidList[0], groupAdmins)}. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`)
+            return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor, groupAdmins)} enviou um codiguin para o ${getMentionWithTitle(mentionedJidList[0], groupAdmins)}. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`, this.context.id)
         } else if (args.length === 0){
-            return await client.sendTextWithMentions(groupId, `O ${getMentionWithTitle(actor, groupAdmins)} solicitou um codiguin. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`)
+            return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor, groupAdmins)} solicitou um codiguin. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`, this.context.id)
         }
     }
 }

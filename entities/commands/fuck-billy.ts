@@ -12,6 +12,6 @@ export class FuckBillyCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         let billy = '@5511958795261@c.us'
-        return await this.context.client.sendTextWithMentions(this.context.groupId, `${billy}:\nvocê é pobre mano kkk`)
+        return await this.context.client.sendReplyWithMentions(this.context.target, `${billy}:\nvocê é pobre mano kkk`, this.context.id)
     }
 }

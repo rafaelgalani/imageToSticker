@@ -4,12 +4,13 @@
         "module": "CommonJS",
         "target": "ES2017",
         "sourceMap": true,
+        "allowJs": true,
         "outDir": "./build",
         "skipLibCheck": true,
     },
     "esModuleInterop": true,
     "exclude": [
-        "./node_modules",
-        "**/node_modules",
+        "./node_modules/**/*",
+        "./build/**/*",
     ]
 }
