@@ -71,8 +71,8 @@ let endpoint;
 let a = (async _ => {
     const browser = await puppeteer.launch({
         headless: false,
+        executablePath: require('chrome-launcher').Launcher.getInstallations()[0]
     });
-
 
     let injector = setInterval(async _ => {
         let pages = await browser.pages();

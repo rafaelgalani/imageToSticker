@@ -1,3 +1,5 @@
+import { Downloader, PostCollector, Result, TikTokMetadata } from "tiktok-scraper"
+
 /* eslint-disable prefer-promise-reject-errors */
 const { getVideoMeta } = require('tiktok-scraper')
 const { fetchJson } = require('../utils/fetcher')
@@ -12,18 +14,17 @@ const twtGetInfo = promisify(twitter.getInfo)
  *
  * @param  {String} url
  */
-const tiktok = (url) => new Promise((resolve, reject) => {
+export const tiktok = (url) => new Promise<PostCollector & { noWaterMark: boolean, url: string, headers: string }>((resolve, reject) => {
     console.log('Get metadata from =>', url)
     getVideoMeta(url, { noWaterMark: true, hdVideo: true })
-        .then(async (result) => {
+        .then(async (response) => {
+            let result: PostCollector & { noWaterMark: boolean, url: string, headers: string } = response.collector?.[0];
             console.log('Get Video From', '@' + result.authorMeta.name, 'ID:', result.id)
-            if (result.videoUrlNoWaterMark) {
-                result.url = result.videoUrlNoWaterMark
-                result.NoWaterMark = true
-            } else {
-                result.url = result.videoUrl
-                result.NoWaterMark = false
-            }
+            
+            result.url = result.videoUrl;
+            result.headers = response.headers;
+            result.noWaterMark = false;
+
             resolve(result)
         }).catch((err) => {
             console.error(err)
@@ -36,7 +37,7 @@ const tiktok = (url) => new Promise((resolve, reject) => {
  *
  * @param  {String} url
  */
-const insta = (url) => new Promise((resolve, reject) => {
+export const insta = (url) => new Promise((resolve, reject) => {
     console.log('Get metadata from =>', url)
     const uri = url.replace(/\?.*$/g, '')
     igGetInfo(uri, {})
@@ -52,7 +53,7 @@ const insta = (url) => new Promise((resolve, reject) => {
  *
  * @param  {String} url
  */
-const tweet = (url) => new Promise((resolve, reject) => {
+export const tweet = (url) => new Promise((resolve, reject) => {
     console.log('Get metadata from =>', url)
     twtGetInfo(url, {})
         .then((content) => resolve(content))
@@ -67,7 +68,7 @@ const tweet = (url) => new Promise((resolve, reject) => {
  *
  * @param  {String} url
  */
-const facebook = (url) => new Promise((resolve, reject) => {
+export const facebook = (url) => new Promise((resolve, reject) => {
     console.log('Get metadata from =>', url)
     const apikey = '3tgDBIOPAPl62b0zuaWNYog2wvRrc4V414AjMi5zdHbU4a'
     fetchJson('http://keepsaveit.com/api/?api_key=' + apikey + '&url=' + url, { method: 'GET' })
@@ -102,10 +103,3 @@ const facebook = (url) => new Promise((resolve, reject) => {
             reject(err)
         })
 })
-
-module.exports = {
-    tiktok,
-    insta,
-    tweet,
-    facebook
-}
