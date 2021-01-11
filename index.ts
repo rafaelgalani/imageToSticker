@@ -6,9 +6,6 @@ const start = (client = new Client(void 0, void 0, void 0)) => {
     console.log('[DEV]', color('Red Emperor', 'yellow'))
     console.log('[CLIENT] CLIENT Started!')
 
-    // Message log for analytic
-    client.onAnyMessage((fn) => messageLog(fn.fromMe, fn.type))
-
     // Force it to keep the current session
     client.onStateChanged((state) => {
         console.log('[Client State]', state)
@@ -16,7 +13,7 @@ const start = (client = new Client(void 0, void 0, void 0)) => {
     })
 
     // listening on message
-    client.onMessage((message) => {
+    client.onAnyMessage((message) => {
         // Cut message Cache if cache more than 3K
         client.getAmountOfLoadedMessages().then((msg) => (msg >= 3000) && client.cutMsgCache())
         // Message Handler
