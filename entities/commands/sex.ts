@@ -1,7 +1,7 @@
 import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMentionWithTitle, getRandomSexSentence, setup } from "../../utils";
+import { getMentionWithTitle, getRandomSexSentence, setup, getMemberNumber } from "../../utils";
 export class SexCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -19,6 +19,7 @@ export class SexCommand extends ZapCommand {
 
         let { client, args, sender, mentionedJidList, from, id, chatId, groupId } = this.context;
         let actor = sender.id;
+
         if (args.length > 1) {
             let members = mentionedJidList.map(number => getMentionWithTitle(number)),
                 lastMember = members.pop();

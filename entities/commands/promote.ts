@@ -22,7 +22,7 @@ export class PromoteCommand extends ZapCommand {
     protected async runSpecificLogic() {
         const { client, groupId, mentionedJidList, args } = this.context;
         const memberNumber = getMemberNumber(args[0]);
-        await client.promoteParticipant(groupId, memberNumber);
-        return await client.sendTextWithMentions(groupId, `Parabenizem o novo adm, @${memberNumber.replace('@c.us', '')}!!!`)
+        await client.promoteParticipant(groupId, memberNumber || mentionedJidList[0]);
+        return await client.sendTextWithMentions(groupId, `Parabenizem o novo adm, @${(memberNumber)? memberNumber.replace('@c.us', '') : mentionedJidList[0]}!!!`)
     }
 }

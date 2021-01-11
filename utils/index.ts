@@ -187,7 +187,7 @@ export const getMemberNumber = (nickname) => {
     const memberList = getMemberList();
     for (let j = 0; j < memberList.length; j++) {
         for (let i = 0; i < memberList[j].nicknames.length; i++) {
-            if (nickname === memberList[j].nicknames[i]) {
+            if (nickname.toLowerCase() === memberList[j].nicknames[i]) {
                 return memberList[j].number;
             }
         }
@@ -198,7 +198,7 @@ export const muteMember = (nickname) => {
     const memberList = getMemberList();
     for (let j = 0; j < memberList.length; j++) {
         for (let i = 0; i < memberList[j].nicknames.length; i++) {
-            if (nickname === memberList[j].nicknames[i]) {
+            if (nickname.toLowerCase() === memberList[j].nicknames[i]) {
                 memberList[j].mute = true;
                 console.log('MUTE:\nMute:', memberList[j].mute);
             }
@@ -210,7 +210,7 @@ export const unmuteMember = (nickname) => {
     const memberList = getMemberList();
     for (let j = 0; j < memberList.length; j++) {
         for (let i = 0; i < memberList[j].nicknames.length; i++) {
-            if (nickname === memberList[j].nicknames[i]) {
+            if (nickname.toLowerCase() === memberList[j].nicknames[i]) {
                 memberList[j].mute = false;
                 console.log('UNMUTE:\nMute:', memberList[j].mute);
             }

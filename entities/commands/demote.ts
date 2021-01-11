@@ -19,9 +19,9 @@ export class DemoteCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, args } = this.context;
+        const { client, groupId, mentionedJidList, args } = this.context;
         const memberNumber = getMemberNumber(args[0]);
-        await client.demoteParticipant(groupId, memberNumber);
-        return await client.sendTextWithMentions(groupId, `Tira essa roupa preta porque tu não é caveira, @${memberNumber.replace('@c.us', '')}!!!`)
+        await client.demoteParticipant(groupId, memberNumber || mentionedJidList[0]);
+        return await client.sendTextWithMentions(groupId, `Parabenizem o novo membro comum, @${(memberNumber)? memberNumber.replace('@c.us', '') : mentionedJidList[0]}!!!`)
     }
 }

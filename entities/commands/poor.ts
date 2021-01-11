@@ -1,5 +1,6 @@
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
+import * as path from 'path';
 export class PoorCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -11,7 +12,7 @@ export class PoorCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let billy = '@5511958795261@c.us'
-        return await this.context.client.sendTextWithMentions(this.context.groupId, `${billy}:\nvocê é pobre mano kkk`)
+        let { groupId, client,chatId } = this.context;
+        return await this.context.client.sendFile(chatId, path.resolve(__dirname, '../../assets/audios/pobre.mp3'), 'pobre', '', '', false, true, false);
     }
 }
