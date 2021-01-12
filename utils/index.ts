@@ -241,6 +241,31 @@ export const verifyMute = (author) => {
     }
 }
 
+export let shieldedList = [];
+
+export const getShieldedList = () => {
+    return shieldedList;
+}
+
+export const shieldMember = (author) => {
+    const shieldedList = getShieldedList();
+    if(shieldedList[0]) {
+        for (let i = 0; i < shieldedList.length; i++) {
+            if (i === shieldedList.length && shieldedList[i] != author) {
+                shieldedList[shieldedList.length + 1] = author;
+                console.log("Novo adicionado");
+                return;
+            } else {
+                console.log("Já existe.");
+                return;
+            }
+        }
+    } else {
+        shieldedList[0] = author;
+    }
+    console.log(shieldedList);
+}
+
 // Message Filter / Message Cooldowns
 const usedCommandRecently = new Set()
 
