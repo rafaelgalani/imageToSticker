@@ -30,8 +30,11 @@ export class ZapContext {
     uaOverride: string;
     
     target: string;
+    
+    private message: Message;
 
     private constructor(client: Client, message: Message){
+        this.message = message;
         Object.assign(this, message);
         // let  type, id, from, fromMe, to, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg, quotedMsgObj, mentionedJidList } = message;
         // let { body } = message
@@ -44,7 +47,7 @@ export class ZapContext {
     private tryGet = async(fn: Function, ...args) : Promise<any> => {
         try {
             return await fn(...args);
-        } catch {
+        } catch (e) {
             return null;
         }
     }
@@ -52,8 +55,8 @@ export class ZapContext {
     private async setup(){
         this.botNumber = await this.client.getHostNumber() + '@c.us'
         this.groupId = this.isGroupMsg? (this.chat?.groupMetadata?.id ?? '') : ''
-        this.groupAdmins = this.isGroupMsg && this.groupId?  ( await this.tryGet(this.client.getGroupAdmins,    this.groupId) ) ?? [] : [];
-        this.groupMembers = this.isGroupMsg && this.groupId? ( await this.tryGet(this.client.getGroupMembersId, this.groupId) ) ?? [] : [];
+        this.groupAdmins = this.isGroupMsg && this.groupId?  ( await this.tryGet(this.client.getGroupAdmins.bind(this.client), this.groupId)    || [] ) : [];
+        this.groupMembers = this.isGroupMsg && this.groupId? ( await this.tryGet(this.client.getGroupMembersId.bind(this.client), this.groupId) || [] ) : [];
         this.isSenderGroupAdmin = this.groupAdmins.includes(this.sender?.id)
         this.isBotGroupAdmin = this.groupAdmins.includes(this.botNumber)
         
