@@ -54,7 +54,7 @@ export class ZapContext {
         this.groupId = this.isGroupMsg? (this.chat?.groupMetadata?.id ?? '') : ''
         this.groupAdmins = this.isGroupMsg && this.groupId?  ( await this.tryGet(this.client.getGroupAdmins,    this.groupId) ) ?? [] : [];
         this.groupMembers = this.isGroupMsg && this.groupId? ( await this.tryGet(this.client.getGroupMembersId, this.groupId) ) ?? [] : [];
-        this.isSenderGroupAdmin = this.groupAdmins.includes(this.sender.id)
+        this.isSenderGroupAdmin = this.groupAdmins.includes(this.sender?.id)
         this.isBotGroupAdmin = this.groupAdmins.includes(this.botNumber)
         
         const prefix = ZapContext.COMMAND_PREFIX;
