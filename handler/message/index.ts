@@ -25,7 +25,6 @@ export default async (client: Client, message: Message) => {
             new VotekickCommand(context),
             new TikTokCommand(context),
             new BocaLeiteCommand(context),
-            new ComeCuCommand(context),
             new AddMemberCommand(context),
             new MuteCommand(context),
             new UnmuteCommand(context),
