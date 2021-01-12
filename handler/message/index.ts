@@ -1,7 +1,7 @@
 require('dotenv').config()
 import { Client, Message } from '@open-wa/wa-automate'
-import { KickCommand, StickerCommand, ZapContext, ZapError, CodeCommand, DemoteCommand, FuckBillyCommand, LoginCommand, MentionAllCommand, PoorCommand, PromoteCommand, SFCommand, ShieldCommand, SexCommand, TestCommand, VavaCommand, UepaCommand, BocaLeiteCommand, AddMemberCommand, MuteCommand, UnmuteCommand, TikTokCommand, AssCommand, PoctCommand } from '../../entities';
-import { verifyMute } from '../../utils';
+import { KickCommand, StickerCommand, ZapContext, ZapError, CodeCommand, DemoteCommand, FuckBillyCommand, LoginCommand, MentionAllCommand, PoorCommand, PromoteCommand, SFCommand, SexCommand, TestCommand, VavaCommand, BocaLeiteCommand, AddMemberCommand, MuteCommand, UnmuteCommand, TikTokCommand, AssCommand, VotekickCommand, ShieldCommand, UepaCommand, PoctCommand } from '../../entities';
+import { fullTrim, verifyMute } from '../../utils';
 
 export default async (client: Client, message: Message) => {
     let context = await ZapContext.getContext(client, message);
@@ -22,6 +22,7 @@ export default async (client: Client, message: Message) => {
             new StickerCommand(context),
             new TestCommand(context),
             new VavaCommand(context),
+            new VotekickCommand(context),
             new TikTokCommand(context),
             new BocaLeiteCommand(context),
             new AddMemberCommand(context),
@@ -40,7 +41,7 @@ export default async (client: Client, message: Message) => {
 
     } catch (err) {
         if (err instanceof ZapError){
-            return await client.reply(context.target, err.message, message.id);
+            return await client.sendReplyWithMentions(context.target, fullTrim(err.message), message.id);
         }
     }
 }

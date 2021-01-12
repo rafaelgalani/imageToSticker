@@ -17,25 +17,50 @@ const argsLabelMap = new Map<ArgsOperator, string>([
     [ArgsOperator.LTE, 'menor ou igual a'],
 ]);
 
-export class NArgumentsRule extends Rule {
-
+interface ArgExpression {
     target: number;
     operation: ArgsOperator;
+}
 
-    constructor(minArgsCount: number = 1, operation: ArgsOperator) {
+export class NArgumentsRule extends Rule {    
+    expression: ArgExpression;
+    optionalExpression: ArgExpression;
+
+    constructor(expression : ArgExpression, optionalExpression? : ArgExpression) {
         super();
-        if (!operation){
-            throw new Error('Operation cannot be null.');
+        expression.target = expression.target ?? 1;
+        if (!expression.operation){
+            throw new Error('Expression operation cannot be null.');
         }
-        this.operation = operation;
-        this.target = minArgsCount;
-        this.errorMessage = `O número de argumentos deve ser ${argsLabelMap.get(operation)} ${this.target}.`;
+        this.expression = expression;
+        
+        if (optionalExpression){
+            optionalExpression.target = optionalExpression.target ?? 1;
+            if (!optionalExpression.operation){
+                throw new Error('Optional expression operation cannot be null.');
+            }
+        }
+        this.optionalExpression = optionalExpression;
+
+        if (!this.optionalExpression){
+            this.errorMessage = `O número de argumentos deve ser ${argsLabelMap.get(this.expression.operation)} ${this.expression.target}.`;
+        } else {
+            this.errorMessage = `
+            O número de argumentos deve ser ${argsLabelMap.get(this.expression.operation)} ${this.expression.target} e ${argsLabelMap.get(this.optionalExpression.operation)} ${this.optionalExpression.target}
+            `;
+        }
     }
 
     validate(context: ZapContext): boolean{
         // High IQ. Don't even try it.
+        let optionalStatement = (
+            this.optionalExpression?
+            `&& context.args.length ${this.optionalExpression.operation} ${this.optionalExpression.target}` : 
+            ''
+        );
+
         return eval(`
-            context.args.length ${this.operation} this.target
+            context.args.length ${this.expression.operation} ${this.expression.target} ${optionalStatement}
         `);
     }
 }

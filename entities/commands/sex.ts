@@ -1,7 +1,7 @@
 import { ZapCommand } from "./command";
-import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
+import { AdminRule, AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMentionWithTitle, getRandomSexSentence, setup, getMemberNumber } from "../../utils";
+import { getMentionWithTitle, getRandomSexSentence, setup, getMemberNumber, is } from "../../utils";
 export class SexCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -11,6 +11,9 @@ export class SexCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule(), 
+            new ArgumentFormatterRule([
+                new ArgumentFormat(is.Mention).override('Os argumentos do comando só podem ser números.'),
+            ])
         ];
     }
 

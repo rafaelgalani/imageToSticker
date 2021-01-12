@@ -11,7 +11,10 @@ export class ShieldCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule().override('Grupo.'), 
-            new NArgumentsRule(0, ArgsOperator.EQ), 
+            new NArgumentsRule({
+                target: 0,
+                operation: ArgsOperator.EQ
+            }), 
         ];
     }
 

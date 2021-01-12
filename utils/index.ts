@@ -1,4 +1,4 @@
-import { ZapContext } from "../entities"
+import { ZapContext, ZapError } from "../entities"
 import { resolve } from 'path';
 
 /* eslint-disable no-return-assign */
@@ -12,6 +12,10 @@ export const resolvePath = (...args) => resolve(...args);
 export const color = (text, color?) => {
     return !color ? chalk.green(text) : chalk.keyword(color)(text)
 }
+
+export const fullTrim = function(text: string){
+    return text.trim().replace(/( |\t|\r){2,}/g, '');
+};
 
 export const processTime = (timestamp, now) => {
     return moment.duration(now - moment(timestamp * 1000)).asSeconds()
@@ -31,9 +35,11 @@ const MediaGiphy = (url) => {
 }
 
 let admins = [];
+let members = [];
 
 export const setup = (context: ZapContext) => {
     admins = context.groupAdmins;
+    members = context.groupMembers;
 };
 
 const isId = number => !!number.match(new RegExp(/^\d+@c.us$/));
@@ -269,6 +275,88 @@ export const shieldMember = (author) => {
         }
     }
 }
+let votingMap = {};
+export const getVoting = function(voteTarget, groupId){
+    return votingMap?.[groupId]?.[voteTarget]
+}
+
+export const endVoting = function(voteTarget, groupId){
+    return delete votingMap[groupId][voteTarget]
+};
+
+export const createVoting = function(voteTarget, groupId, voteActor){
+    let voting = getVoting(voteTarget, groupId);
+    if (voting){
+        throw new ZapError(fullTrim(
+            `Já há um votekick para ${toMention(voteTarget)}. Votação:
+
+            Banir: ${voting.shouldKick}/${voting.votesNeeded}
+            Não banir: ${voting.shouldKeep}/${voting.votesNeeded}`
+        ));
+    }
+
+    let votesNeeded = Math.floor( (members.length/2)+1 );
+    if (!votingMap[groupId]) votingMap[groupId] = {}
+
+    return votingMap[groupId][voteTarget] = {
+        voteTarget,
+        shouldKick: 1,
+        shouldKeep: 0,
+        done: false,
+        votes: [{
+            voteActor,
+            votedForKick: true,
+        }],
+        votesNeeded: 5,
+    };
+};
+
+export const doVote = function(voteTarget, groupId, voteActorArg, kick=true){
+    let voting = getVoting(voteTarget, groupId);
+    let voteActor = toId(voteActorArg);
+    let vote = voting.votes.find(vote => vote.voteActor === voteActor);
+    if (vote){
+        throw new ZapError(`Seu voto já foi processado, você votou ${vote.votedForKick? 'a favor do ban': 'contra o ban'} do ${toMention(voteTarget)}.`);
+    }
+
+    voting.votes.push({
+        voteActor,
+        votedForKick: kick
+    });
+
+    if (kick) voting.shouldKick += 1;
+    else voting.shouldKeep += 1;
+
+    voting.done = (voting.shouldKick >= voting.votesNeeded) || (voting.shouldKeep >= voting.votesNeeded);
+    voting.kicked = voting.done && voting.shouldKick >= voting.votesNeeded;
+
+    return voting;
+};
+
+export const getVote = function(arg){
+    let vote = arg.trim().toLowerCase();
+
+    let shouldKickValidVotes = ['s', 'y', 'ss', 'sss', 'sim', 'yes', '👍', '👍🏿', '👍🏻', '👍🏽', '👍🏾', '👍🏼'],
+        shouldNotKickValidVotes = ['n', 'n', 'nn', 'no', 'nnn', 'nao', 'não', 'nem', 'ñ', '👎','👎🏻','👎🏼','👎🏽','👎🏾','👎🏿'];
+
+    if (shouldKickValidVotes.includes(vote)){
+        return true;
+    }
+
+    if (shouldNotKickValidVotes.includes(vote)){
+        return false;
+    }
+
+    throw new ZapError(fullTrim(`
+        Voto inválido.
+        
+        Votos válidos a favor:
+        ${shouldKickValidVotes.join(', ')}
+
+        Votos válidos contra:
+        ${shouldNotKickValidVotes.join(', ')}
+    `));
+};
 
 // Message Filter / Message Cooldowns
 const usedCommandRecently = new Set()

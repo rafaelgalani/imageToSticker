@@ -14,7 +14,7 @@ export class PromoteCommand extends ZapCommand {
             new AdminRule(), 
             new BotAdminRule(), 
             new AllowBotArgumentRule(false), 
-            new NArgumentsRule(1, ArgsOperator.EQ), 
+            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
             //new AdminRule(this.context.args[0]).override('Esse já é adm (teste)') ----> ERRO
         ];
     }
