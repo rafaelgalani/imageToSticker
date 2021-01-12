@@ -1,6 +1,7 @@
 import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
+import { getMemberNumber } from "../../utils";
 export class PromoteCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -14,7 +15,7 @@ export class PromoteCommand extends ZapCommand {
             new BotAdminRule(), 
             new AllowBotArgumentRule(false), 
             new NArgumentsRule(1, ArgsOperator.EQ), 
-            new AdminRule(this.context.args[0]).override('Esse já é adm (teste)')
+            //new AdminRule(this.context.args[0]).override('Esse já é adm (teste)') ----> ERRO
         ];
     }
 

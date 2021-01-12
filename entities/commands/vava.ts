@@ -1,5 +1,7 @@
 import { ZapCommand } from "./command";
 import { GroupOnlyRule } from "../rules";
+import * as path from 'path';
+import { resolvePath } from "../../utils";
 export class VavaCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -13,9 +15,7 @@ export class VavaCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { groupId, target, client, id } = this.context;
-        
-        let chepo = '@5513991769173@c.us'
-        return await client.sendReplyWithMentions(groupId, `${chepo}:\njoga vava?`, id);
+        let { target, id } = this.context;
+        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', 'vava.mp3'), 'vava', 'vava', id, false, true, false);
     }
 }

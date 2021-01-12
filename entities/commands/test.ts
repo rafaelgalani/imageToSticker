@@ -1,3 +1,4 @@
+import { getMemberList } from "../../utils";
 import { ZapCommand } from "./command";
 export class TestCommand extends ZapCommand {
     
