@@ -37,13 +37,13 @@ export class ZapContext {
         // let { body } = message
         // const { name, formattedTitle } = chat;
         this.client = client;
-        let { pushname, formattedName } = this.sender;
+        let { pushname, formattedName } = (this.sender ?? {});
         this.pushname = pushname || formattedName // verifiedName is the name of someone who uses a business account
     }
 
     private async setup(){
         this.botNumber = await this.client.getHostNumber() + '@c.us'
-        this.groupId = this.isGroupMsg? this.chat.groupMetadata.id : ''
+        this.groupId = this.isGroupMsg? (this.chat?.groupMetadata?.id ?? '') : ''
         this.groupAdmins = this.isGroupMsg? await this.client.getGroupAdmins(this.groupId) : []
         this.groupMembers = this.isGroupMsg? await this.client.getGroupMembersId(this.groupId) : []
         this.isSenderGroupAdmin = this.groupAdmins.includes(this.sender.id)
@@ -60,7 +60,7 @@ export class ZapContext {
         this.url = this.args.length !== 0 ? this.args[0] : ''
         this.uaOverride = process.env.UserAgent
 
-        this.target = this.isGroupMsg && this.fromMe? this.chatId : this.from;
+        this.target = this.fromMe? this.chatId : this.from;
     }
 
     public static async getContext(client, message: Message) : Promise<ZapContext>{

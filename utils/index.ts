@@ -7,7 +7,7 @@ const moment = require('moment-timezone')
 const updateJson = require('update-json-file')
 moment.tz.setDefault('Asia/Jakarta').locale('id')
 
-export const resolvePath = (...args) => resolve('..', ...args);
+export const resolvePath = (...args) => resolve(...args);
 // Color
 export const color = (text, color?) => {
     return !color ? chalk.green(text) : chalk.keyword(color)(text)
