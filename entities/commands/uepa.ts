@@ -2,6 +2,7 @@ import { ZapCommand } from "./command";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import * as path from 'path';
+import { resolvePath } from "../../utils";
 export class UepaCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -11,12 +12,15 @@ export class UepaCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule(), 
-            new NArgumentsRule(0, ArgsOperator.EQ), 
+            new NArgumentsRule({
+                target: 0,
+                operation: ArgsOperator.EQ
+            }), 
         ];
     }
 
     protected async runSpecificLogic() {
-        let { client, chatId } = this.context;
-        return await client.sendFile(chatId, path.resolve(__dirname, '../../assets/audios/uepa.mp3'), 'uepa', '', '', false, true, false);
+        let { client, target, id } = this.context;
+        return await client.sendFile(target, resolvePath('assets', 'audios', 'uepa.mp3'), 'uepa', 'uepa', id, false, true, false);
     }
 }

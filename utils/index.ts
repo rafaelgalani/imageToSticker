@@ -255,26 +255,17 @@ export const getShieldedList = () => {
 
 export const shieldMember = (author) => {
     const shieldedList = getShieldedList();
-    if(!shieldedList[0]) {
-        shieldedList[0] = author;
-        console.log("Adicionou o primeiro!");
-        console.log("Array completo:", shieldedList);
-        return false;
+    const isMemberShielded = !!shieldedList.find(i => i === author)
+    if(!isMemberShielded) {
+        shieldedList.push(author);
+        console.log("Membro protegido");
     } else {
-        for (let i = 0; i < shieldedList.length; i++) {
-            if (shieldedList[i] === author) {
-                console.log("Usuário já protegido.")
-                return true;
-            }
-            if (shieldedList[shieldedList.length] != author) {
-                shieldedList[shieldedList.length] = author;
-                console.log("O usuário foi protegido.")
-                console.log("Array completo:", shieldedList);
-                return false;
-            }
-        }
+        console.log("Membro já foi protegido");
     }
+    console.log(shieldedList);
+    return isMemberShielded;
 }
+
 let votingMap = {};
 export const getVoting = function(voteTarget, groupId){
     return votingMap?.[groupId]?.[voteTarget]
