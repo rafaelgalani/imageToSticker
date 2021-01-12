@@ -34,11 +34,22 @@ export const setup = (context: ZapContext) => {
     admins = context.groupAdmins;
 };
 
+const isId = number => !!number.match(new RegExp(/^\d+@c.us$/));
+const isMention = number => !!number.match(new RegExp(/^@\d+$/));
+
 export const toMention = (number) => {
-    if (number.match(new RegExp(/^@\d+$/))){
+    if (isMention(number)){
         return number;
-    } else if (number.match(new RegExp(/^\d+@c.us$/))){
+    } else if (isId(number)){
         return '@' + number.replace('@c.us', '');
+    }
+};
+
+export const toId = (number) => {
+    if (isId(number)) {
+        return number;
+    } else if (isMention(number)){
+        return number.substring(1) + '@c.us';
     }
 };
 
@@ -51,7 +62,8 @@ export const getTitle = function(number){
 };
 
 export const getMentionWithTitle = function(number){
-    return `${getTitle(number)} ${toMention(number)}`;
+    let targetNumber = toId(number);
+    return `${getTitle(targetNumber)} ${toMention(targetNumber)}`;
 };
 
 const sexSentences = [
@@ -92,6 +104,8 @@ export const msgFilter = {
 };
 
 export const is = {
+    Id: isId,
+    Mention: isMention,
     Url,
     Giphy,
     MediaGiphy

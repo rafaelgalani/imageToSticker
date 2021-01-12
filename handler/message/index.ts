@@ -1,13 +1,14 @@
 require('dotenv').config()
 import { Client, Message } from '@open-wa/wa-automate'
-import { KickCommand, StickerCommand, ZapContext, ZapError, CodeCommand, DemoteCommand, FuckBillyCommand, LoginCommand, MentionAllCommand, PoorCommand, PromoteCommand, SFCommand, SexCommand, TestCommand, VavaCommand } from '../../entities';
+import { KickCommand, StickerCommand, ZapContext, ZapError, CodeCommand, DemoteCommand, FuckBillyCommand, LoginCommand, MentionAllCommand, PoorCommand, PromoteCommand, SFCommand, SexCommand, TestCommand, VavaCommand, AssCommand } from '../../entities';
 import { TikTokCommand } from '../../entities/commands/tiktok';
 
 export default async (client: Client, message: Message) => {
+    let context = await ZapContext.getContext(client, message);
     try {
-        let context = await ZapContext.getContext(client, message);
 
         let commands = [
+            new AssCommand(context),
             new CodeCommand(context),
             new DemoteCommand(context),
             new FuckBillyCommand(context),
@@ -30,7 +31,7 @@ export default async (client: Client, message: Message) => {
 
     } catch (err) {
         if (err instanceof ZapError){
-            return await client.reply(message.from, err.message, message.id);
+            return await client.reply(context.target, err.message, message.id);
         }
     }
 }

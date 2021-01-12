@@ -1,3 +1,4 @@
+export { AssCommand } from './ass'
 export { CodeCommand } from './code'
 export { DemoteCommand } from './demote'
 export { FuckBillyCommand } from './fuck-billy'
