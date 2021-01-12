@@ -6,7 +6,7 @@ import { ZapError } from "../core";
 export class VotekickCommand extends ZapCommand {
     
     protected getPatterns(){
-        return ['votekick', 'vote', ];
+        return ['votekick', 'vote', 'voteban', 'votação', 'votar', 'voto'];
     }
 
     protected getRules(){
