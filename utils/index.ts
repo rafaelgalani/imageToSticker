@@ -249,21 +249,25 @@ export const getShieldedList = () => {
 
 export const shieldMember = (author) => {
     const shieldedList = getShieldedList();
-    if(shieldedList[0]) {
+    if(!shieldedList[0]) {
+        shieldedList[0] = author;
+        console.log("Adicionou o primeiro!");
+        console.log("Array completo:", shieldedList);
+        return false;
+    } else {
         for (let i = 0; i < shieldedList.length; i++) {
-            if (i === shieldedList.length && shieldedList[i] != author) {
-                shieldedList[shieldedList.length + 1] = author;
-                console.log("Novo adicionado");
-                return;
-            } else {
-                console.log("Já existe.");
-                return;
+            if (shieldedList[i] === author) {
+                console.log("Usuário já protegido.")
+                return true;
+            }
+            if (shieldedList[shieldedList.length] != author) {
+                shieldedList[shieldedList.length] = author;
+                console.log("O usuário foi protegido.")
+                console.log("Array completo:", shieldedList);
+                return false;
             }
         }
-    } else {
-        shieldedList[0] = author;
     }
-    console.log(shieldedList);
 }
 
 // Message Filter / Message Cooldowns
