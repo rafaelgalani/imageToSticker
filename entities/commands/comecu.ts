@@ -11,7 +11,7 @@ export class ComeCuCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule(), 
-            //new NArgumentsRule(1, ArgsOperator.EQ), 
+            //new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
         ];
     }
 

@@ -13,7 +13,7 @@ export class MuteCommand extends ZapCommand {
             new GroupOnlyRule().override('Grupo.'), 
             new AdminRule(), 
             new BotAdminRule(), 
-            new NArgumentsRule(1, ArgsOperator.EQ), 
+            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
             new AllowBotArgumentRule(false), 
         ];
     }

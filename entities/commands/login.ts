@@ -1,5 +1,5 @@
 import { ZapCommand } from "./command";
-import { GroupOnlyRule, NArgumentsRule } from "../rules";
+import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { random, toMention } from "../../handler/message/utils";
 import { ZapError } from "../core/error";
@@ -12,19 +12,20 @@ export class LoginCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule(), 
-            new NArgumentsRule(1, ArgsOperator.EQ), 
-            /*new ArgumentFormatRule([
-                ArgumentFormat.NUMBER,
-            ]),*/
+            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }).override('Só um número'), 
+            new ArgumentFormatterRule([
+                new ArgumentFormat(a => !isNaN(Number(a)), 0).override('Burrinho, só número'),
+            ]),
         ];
     }
 
     protected async runSpecificLogic() {
         let { args, sender, client, groupId, target, from } = this.context;
+        let minutes = Number(args[0]);
         let actor = sender.id;
         let randomMinutes = random(24, 260);
-        if (Number(args[0]) < 0) throw new ZapError('O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
+        if (minutes < 0) throw new ZapError('O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
 
-        return await client.sendReplyWithMentions(target, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + Number(args[0])} minutos.`, this.context.id);
+        return await client.sendReplyWithMentions(target, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + minutes} minutos.`, this.context.id);
     }
 }

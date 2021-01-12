@@ -14,7 +14,7 @@ export class DemoteCommand extends ZapCommand {
             //new AdminRule().reverse(true).override('Esse aí já é adm'), 
             new BotAdminRule(), 
             new AllowBotArgumentRule(false), 
-            new NArgumentsRule(1, ArgsOperator.EQ), 
+            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
         ];
     }
 

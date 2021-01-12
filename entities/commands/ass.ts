@@ -11,7 +11,7 @@ export class AssCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule().override('Mensagem precisa ser enviada em grupo.'), 
-            new NArgumentsRule(1, ArgsOperator.LTE).override('Um cú de cada vez, né chapa?'), 
+            new NArgumentsRule({ target: 1, operation: ArgsOperator.LTE }).override('Um cú de cada vez, né chapa?'), 
         ];
     }
 
