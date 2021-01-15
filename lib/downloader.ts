@@ -4,10 +4,10 @@ import { Downloader, PostCollector, Result, TikTokMetadata } from "tiktok-scrape
 const { getVideoMeta } = require('tiktok-scraper')
 const { fetchJson } = require('../utils/fetcher')
 const { promisify } = require('util')
-const { instagram, twitter } = require('video-url-link')
+const { instagram, twitter: tt } = require('video-url-link')
 
 const igGetInfo = promisify(instagram.getInfo)
-const twtGetInfo = promisify(twitter.getInfo)
+const twtGetInfo = promisify(tt.getInfo)
 
 /**
  * Get Tiktok Metadata
@@ -53,7 +53,7 @@ export const insta = (url) => new Promise((resolve, reject) => {
  *
  * @param  {String} url
  */
-export const tweet = (url) => new Promise((resolve, reject) => {
+export const twitter = (url) => new Promise((resolve, reject) => {
     console.log('Get metadata from =>', url)
     twtGetInfo(url, {})
         .then((content) => resolve(content))
