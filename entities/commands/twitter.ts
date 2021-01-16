@@ -7,6 +7,7 @@ import { AdminRule, ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from
 import { PostCollector, Result } from "tiktok-scraper";
 import { downloader, urlShortener } from "../../lib";
 import { ArgsOperator } from "../rules/group/n-arguments";
+import { ZapError } from "../core";
 
 export class TwitterCommand extends ZapCommand {
     
@@ -18,7 +19,7 @@ export class TwitterCommand extends ZapCommand {
         return [ 
             new NArgumentsRule({
                 target: 1,
-                operation: ArgsOperator.EQ,
+                operation: ArgsOperator.LTE,
             }),
             new ArgumentFormatterRule([
                 new ArgumentFormat(is.Url),
@@ -31,8 +32,20 @@ export class TwitterCommand extends ZapCommand {
 
         await client.reply(target, 'Pera...', id);
 
+        let targetUrl;
+
         try {
-            let downloadResult: any = await twitter(url);
+            if (args.length === 1){
+                targetUrl = url;
+            } else {
+                const targetMessage = quotedMsg;
+                if (targetMessage.type !== 'chat') throw new ZapError('A mensagem deve ser um link do twitter.');
+                if (!targetMessage.body.startsWith('https://twitter.com') || !targetMessage.body.startsWith('https://www.twitter.com')) throw new ZapError('O link deve ser do twitter.');
+
+                targetUrl = targetMessage.body;
+            }
+
+            let downloadResult: any = await twitter(targetUrl);
 
             const { type, variants } = downloadResult;
 

@@ -7,6 +7,7 @@ import { AdminRule, ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from
 import { PostCollector, Result } from "tiktok-scraper";
 import { downloader, urlShortener } from "../../lib";
 import { ArgsOperator } from "../rules/group/n-arguments";
+import { ZapError } from "../core/error";
 
 export class InstagramCommand extends ZapCommand {
     
@@ -18,7 +19,7 @@ export class InstagramCommand extends ZapCommand {
         return [ 
             new NArgumentsRule({
                 target: 1,
-                operation: ArgsOperator.EQ,
+                operation: ArgsOperator.LTE,
             }),
             new ArgumentFormatterRule([
                 new ArgumentFormat(is.Url),
@@ -32,7 +33,20 @@ export class InstagramCommand extends ZapCommand {
         await client.reply(target, 'Pera...', id);
 
         try {
-            let downloadResult: any = await insta(url);
+
+            let targetUrl;
+            
+            if (args.length === 1){
+                targetUrl = url;
+            } else {
+                const targetMessage = quotedMsg;
+                if (targetMessage.type !== 'chat') throw new ZapError('A mensagem deve ser um link do instagram.');
+                if (!targetMessage.body.startsWith('https://instagram.com') || !targetMessage.body.startsWith('https://www.instagram.com')) throw new ZapError('O link deve ser do instagram.');
+
+                targetUrl = targetMessage.body;
+            }
+
+            let downloadResult: any = await insta(targetUrl);
 
             const { type, image, video } = downloadResult;
 

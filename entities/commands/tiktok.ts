@@ -3,8 +3,10 @@ import { ZapCommand } from "./command";
 // WILL ALSO BE MOVED LATER.
 import { is } from "../../utils";
 import { tiktok } from '../../lib/downloader';
-import { AdminRule } from "../rules";
+import { AdminRule, ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "../rules";
 import { PostCollector, Result } from "tiktok-scraper";
+import { ZapError } from "../core/error";
+import { ArgsOperator } from "../rules/group/n-arguments";
 
 export class TikTokCommand extends ZapCommand {
     
@@ -13,19 +15,41 @@ export class TikTokCommand extends ZapCommand {
     }
 
     protected getRules(){
-        return [  ];
+        return [ 
+            new NArgumentsRule({
+                target: 1,
+                operation: ArgsOperator.LTE,
+            }),
+            new ArgumentFormatterRule([
+                new ArgumentFormat(is.Url),
+            ])
+        ];
     }
 
     protected async runSpecificLogic() {
         const { target, url, from, isMedia, isQuotedImage, isGroupMsg, groupId, id, chat, args, quotedMsg, mimetype, uaOverride, client } = this.context; // Not to good. Need to review it later... 
         //if (args.length !== 1) return client.reply(from, 'Maaf, format pesan salah silahkan periksa menu. [Wrong Format]', id)
         //if (!is.Url(url) && !url.includes('tiktok.com')) return client.reply(from, 'Maaf, link yang kamu kirim tidak valid. [Invalid Link]', id)
+        let targetUrl;
+        if (args.length === 1){
+            targetUrl = url;
+        } else {
+            const targetMessage = quotedMsg;
+            if (targetMessage.type !== 'chat') throw new ZapError('A mensagem deve ser um link do tiktok.');
+            if (!targetMessage.body.startsWith('https://tiktok.com') || 
+                !targetMessage.body.startsWith('https://www.tiktok.com') || 
+                !targetMessage.body.startsWith('https://vm.tiktok.com')
+            ) throw new ZapError('O link deve ser do tiktok.');
+
+            targetUrl = targetMessage.body;
+        }
+        
         try {
             await client.reply(target, 'Downloading...', id);
         } catch (e) {
             console.log(e);
         }
-        let downloadResult: PostCollector & { noWaterMark: boolean, url: string, headers: string} = await tiktok(url);
+        let downloadResult: PostCollector & { noWaterMark: boolean, url: string, headers: string} = await tiktok(targetUrl);
         const filename = downloadResult.authorMeta.name + '.mp4'
         const caption = `@${downloadResult.authorMeta.name} / ${downloadResult.musicMeta.musicName}`;
                         /*`${downloadResult.playCount.toLocaleString()}`+
@@ -36,13 +60,5 @@ export class TikTokCommand extends ZapCommand {
         await client.sendFileFromUrl(target, downloadResult.url, filename, caption, id, {
             headers: downloadResult.headers,
         }, true);
-
-        /*.then(async (videoMeta) => {
-            
-            
-            
-                //.then((serialized) => console.log(`Sukses Mengirim File dengan id: ${serialized} diproses selama ${processTime(t, moment())}`))
-                .catch((err) => console.error(err))
-        }).catch(() => client.reply(from, 'Gagal mengambil metadata, link yang kamu kirim tidak valid. [Invalid Link]', id))*/
     }
 }
