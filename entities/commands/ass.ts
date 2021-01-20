@@ -22,12 +22,24 @@ export class AssCommand extends ZapCommand {
             let randomizedPercentage = Math.floor(Math.random() * 101);     // returns a random integer from 0 to 100
             let actor = sender.id;
             let targetCuComido = args[0];
-            let natinho = '5511955541122@c.us'
-            if(actor != natinho){
-                return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
+            if (randomizedPercentage <= 65) {
+                return await client.sendReplyWithMentions(target, `Com apenas ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} não comeu o cú do ${getMentionWithTitle(targetCuComido)}`, id);
+            } else if (randomizedPercentage <= 75) {
+                return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} QUASE comeu o cú do ${getMentionWithTitle(targetCuComido)}`, id);
+            } else if (randomizedPercentage <= 85) {
+                return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} deu uma rapidinha com o cú do ${getMentionWithTitle(targetCuComido)}`, id);
+            } else if (randomizedPercentage <= 90) {
+                return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} comeu gostoso o cú do ${getMentionWithTitle(targetCuComido)}`, id);
+            } else if (randomizedPercentage <= 99) {
+                return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} comeu o cú do ${getMentionWithTitle(targetCuComido)} até esfarelar!`, id);
             } else {
-                return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de CHEIRAR o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
+                return await client.sendReplyWithMentions(target, `Com ilustres ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} ESTILHAÇOU o cuzão do ${getMentionWithTitle(targetCuComido)}`, id);
             }
+            // if(actor != natinho){
+            //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
+            // } else {
+            //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de CHEIRAR o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
+            // }
         } else {
             return await client.reply(target, 'marcou ninguém primo? come teu próprio cy aí então zé kkkkkjjjjjjjj.', id);
         }

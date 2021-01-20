@@ -5,7 +5,7 @@ import { resolvePath } from '../../utils';
 export class BocaLeiteCommand extends ZapCommand {
     
     protected getPatterns(){
-        return ['boca', 'leite', 'milk', 'mouth', 'milkmouth', 'bocaleite'];
+        return ['boca', 'leite', 'milk', 'mouth', 'milkmouth', 'bocaleite', 'bocadeleite'];
     }
 
     protected getRules(){
