@@ -13,14 +13,13 @@ export class DemoteCommand extends ZapCommand {
             new GroupOnlyRule(), 
             //new AdminRule().reverse(true).override('Esse aí já é adm'), 
             new BotAdminRule(), 
-            new AllowBotArgumentRule(false), 
             new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
         ];
     }
 
     protected async runSpecificLogic() {
         const { client, groupId, target, mentionedJidList } = this.context;
-        await client.promoteParticipant(groupId, mentionedJidList[0]);
+        await client.demoteParticipant(groupId, mentionedJidList[0]);
         return await client.sendReplyWithMentions(target, `Virou pobre @${mentionedJidList[0].replace('@c.us', '')}!!!`, this.context.id);
     }
 }
