@@ -1,19 +1,37 @@
-const sharp = require('sharp')
+import * as sharp from 'sharp';
 const { fromBuffer } = require('file-type')
 
 // eslint-disable-next-line no-async-promise-executor
-export default (buff, encode) => new Promise(async (resolve, reject) => {
-    console.log('Resizeing image...')
-    const { mime } = await fromBuffer(buff)
-    sharp(buff, { failOnError: false })
-        .resize(512, 512)
-        .toBuffer()
-        .then(resizedImageBuffer => {
-            if (!encode) return resolve(resizedImageBuffer)
-            console.log('Create base64 from resizedImageBuffer...')
-            const resizedImageData = resizedImageBuffer.toString('base64')
-            const resizedBase64 = `data:${mime};base64,${resizedImageData}`
-            resolve(resizedBase64)
-        })
-        .catch(error => reject(error))
-})
+const resizeImage = async (buff, encode) => {
+    console.log('Resizing image...')
+    try {
+        const { mime } = await fromBuffer(buff)
+        const resizedImageBuffer = await sharp(buff, { 
+            failOnError: false,
+        }).resize({
+            width: 512,
+            height: 512,
+            fit: sharp.fit.contain, 
+            background: {
+                alpha: 0,
+                r: 0, 
+                g: 0, 
+                b: 0
+            }
+        }).png().toBuffer();
+        
+        if (!encode) return resizedImageBuffer;
+        const resizedImageData = resizedImageBuffer.toString('base64')
+        const resizedBase64 = `data:image/png;base64,${resizedImageData}`
+        return resizedBase64
+    } catch (e) {
+        throw e;
+    }
+};
+
+export default async(buff) : Promise<string> => {
+    const result = await resizeImage(buff, true);
+    if (typeof result === 'string'){
+        return result;
+    }
+};

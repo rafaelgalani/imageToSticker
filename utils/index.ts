@@ -1,5 +1,6 @@
 import { ZapContext, ZapError } from "../entities"
 import { resolve } from 'path';
+export { default as resizeImage } from './imageProcessing';
 
 /* eslint-disable no-return-assign */
 const chalk = require('chalk')
