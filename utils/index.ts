@@ -266,6 +266,33 @@ export const shieldMember = (author) => {
     return isMemberShielded;
 }
 
+export let cuTimeout = [];
+
+export const getCuTimeout = () => {
+    return cuTimeout;
+}
+
+export const memberCuTimeout = (author, time) => {
+    const cuTimeout = getCuTimeout();
+    const isMemberTimedOut = !!cuTimeout.find(i => i.number === author);
+    if(!isMemberTimedOut) {
+        cuTimeout.push({"number": author, "time": time});
+        console.log("Adicionou")
+        return false;
+    } else {
+        const timeOutIndex = cuTimeout.findIndex(i => i.number === author);
+        const timeOutMoment = cuTimeout[timeOutIndex].time;
+        const timeLeft = moment().diff(timeOutMoment, 'seconds');
+        if (timeLeft <= 900) {
+            return (900 - timeLeft);
+        } else {
+            cuTimeout.splice(timeOutIndex, 1);
+            cuTimeout.push({"number": author, "time": time});
+            return false;
+        }
+    }
+}
+
 let votingMap = {};
 export const getVoting = function(voteTarget, groupId){
     return votingMap?.[groupId]?.[voteTarget]
