@@ -283,8 +283,8 @@ export const memberCuTimeout = (author, time) => {
         const timeOutIndex = cuTimeout.findIndex(i => i.number === author);
         const timeOutMoment = cuTimeout[timeOutIndex].time;
         const timeLeft = moment().diff(timeOutMoment, 'seconds');
-        if (timeLeft <= 900) {
-            return (900 - timeLeft);
+        if (timeLeft <= 300) {
+            return (300 - timeLeft);
         } else {
             cuTimeout.splice(timeOutIndex, 1);
             cuTimeout.push({"number": author, "time": time});
