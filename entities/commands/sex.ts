@@ -12,7 +12,7 @@ export class SexCommand extends ZapCommand {
         return [ 
             new GroupOnlyRule(), 
             new ArgumentFormatterRule([
-                new ArgumentFormat(is.Mention).override('Os argumentos do comando só podem ser números.'),
+                new ArgumentFormat(is.Mention).override('Os argumentos do comando só podem ser menções.'),
             ])
         ];
     }
