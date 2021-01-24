@@ -20,6 +20,7 @@ export class ZapContext {
     groupMembers: string[];
     isSenderGroupAdmin: boolean;
     isBotGroupAdmin: boolean;
+    isSuperAdmin: boolean;
 
     command: string;
     arg: string;
@@ -60,6 +61,8 @@ export class ZapContext {
         this.isSenderGroupAdmin = this.groupAdmins.includes(this.sender?.id)
         this.isBotGroupAdmin = this.groupAdmins.includes(this.botNumber)
         
+        this.isSuperAdmin = this.isGroupMsg && this.groupId && (this.chat?.groupMetadata?.owner === this.from);
+
         const prefix = ZapContext.COMMAND_PREFIX;
         
         this.body = (this.type === 'chat' && this.body.startsWith(prefix)) ? this.body : (((this.type === 'image' || this.type === 'video') && this.caption) && this.caption.startsWith(prefix)) ? this.caption : ''

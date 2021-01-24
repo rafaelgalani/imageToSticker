@@ -267,32 +267,28 @@ export const shieldMember = (author) => {
     return isMemberShielded;
 }
 
-export let cuTimeout = [];
+let cooldowns = {};
 
-export const getCuTimeout = () => {
-    return cuTimeout;
-}
+export const isMemberInCooldown = member => member in cooldowns;
+export const getMemberCooldown = member => (60 - moment().diff(cooldowns[member], 'seconds'));
+export const addMemberCooldown = (member) => cooldowns[member] = moment();
+export const removeMemberCooldown = (member) => delete cooldowns[member];
 
-export const memberCuTimeout = (author, time) => {
-    const cuTimeout = getCuTimeout();
-    const isMemberTimedOut = !!cuTimeout.find(i => i.number === author);
-    if(!isMemberTimedOut) {
-        cuTimeout.push({"number": author, "time": time});
-        console.log("Adicionou")
-        return false;
-    } else {
-        const timeOutIndex = cuTimeout.findIndex(i => i.number === author);
-        const timeOutMoment = cuTimeout[timeOutIndex].time;
-        const timeLeft = moment().diff(timeOutMoment, 'seconds');
-        if (timeLeft <= 300) {
-            return (300 - timeLeft);
-        } else {
-            cuTimeout.splice(timeOutIndex, 1);
-            cuTimeout.push({"number": author, "time": time});
-            return false;
-        }
-    }
-}
+let assStreak = {};
+let assStreakSentences = [
+    'Que fodelança maravilhosa!',
+    'Que gulosinho!!',
+    'Abre pro papai, abre!',
+    'Uiui DELICIA!',
+    'SEGUUUUUUUUUUUUUUUUURA PEÃOOOOOOO!! DOE A RODELA!',
+    'Arreganha o cu!',
+];
+
+export const isMemberInStreak = member => member in assStreak;
+export const addMemberStreak = member => assStreak[member] = (assStreak[member] || 0) + 1;
+export const getMemberStreak = member => assStreak[member];
+export const removeStreak = (member) => delete assStreak[member];
+export const getRandomStreakSentence = () => assStreakSentences[Math.floor((Math.random() * assStreakSentences.length))];
 
 let votingMap = {};
 export const getVoting = function(voteTarget, groupId){
