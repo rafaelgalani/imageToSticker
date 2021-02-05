@@ -1,15 +1,20 @@
 import { ZapCommand } from "./command";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { addMemberCooldown, addMemberStreak, getMemberCooldown, getMemberStreak, getMentionWithTitle, getRandomStreakSentence, isMemberInCooldown, isMemberInStreak, removeMemberCooldown, removeStreak, setup } from "../../utils";
+import { addMemberCooldown, addMemberStreak, fullTrim, getMemberCooldown, getMemberStreak, getMentionWithTitle, getRandomStreakSentence, isMemberInCooldown, isMemberInStreak, removeMemberCooldown, removeStreak, setup } from "../../utils";
 import moment = require("moment-timezone");
 import { random } from "../../lib/meme";
 
 let assDict = {};
 const initializeAssSentence = () => {
-    assDict[0] = `Com apenas {0}% de aproveitamento, o {1} foi tentar comer o cu do {2} e teve seu cuzinho comido!!! Uiuiui xD`
+
+    assDict[0] = `Com apenas {0}% de aproveitamento, o {1} foi tentar comer o cu do {2} e MORREU. SIM, MORREU. É um fudido do caralho, 0%? Vai tomar no cu, cara. Puta que pariu, desiste dessa merda. Dá /salesforce aí arrombado...`;
+
+    for (let i = 1; i <= 10; i++){
+        assDict[i] = `Com apenas {0}% de aproveitamento, o {1} foi tentar comer o cu do {2} e teve seu cuzinho comido!!! Uiuiui xD`;
+    }
     
-    for (let i = 1; i <= 65; i++){
+    for (let i = 11; i <= 65; i++){
         assDict[i] = `Com apenas {0}% de aproveitamento, o {1} não comeu o cu do {2}.`;
     }
 
@@ -36,6 +41,7 @@ initializeAssSentence();
 
 const getAssSentence = (percentage, member, target) => {
     let sentence = assDict[percentage];
+    sentence = sentence ?? assDict[100];
     return sentence.replace('{0}', percentage)
                    .replace('{1}', member)
                    .replace('{2}', target);
@@ -90,14 +96,23 @@ export class AssCommand extends ZapCommand {
                 }
 
                 if (randomizedPercentage >= 90){
-                    addMemberStreak(actor);
+                    const streakSequence = addMemberStreak(actor);
+                    if (streakSequence === 1){
+                        assSentence += '\n\n' + fullTrim(`
+                            O ${getMentionWithTitle(actor)} ENTROU EM FRENESI (CU STREAK)!!!
+
+                            - A próxima comida de cu será garantida 🥵🍆
+                            - Você tem 40% de chance de continuar em cu streak 💯💦
+                            - Você só broxa se sair do cu streak 👎😫
+                        `)
+                    }
                 }
 
-                if (getMemberStreak(actor) == 4){
+                /*if (getMemberStreak(actor) == 4){
                     addMemberCooldown(actor);
                     removeStreak(actor);
                     assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${getMentionWithTitle(actor)} broxou após degustar esse cuzinho.`;
-                }
+                }*/
 
                 return await client.sendReplyWithMentions(target, assSentence, id);
                 
