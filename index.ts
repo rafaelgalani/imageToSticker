@@ -31,7 +31,7 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
 
     // Force it to keep the current session
     client.onStateChanged((state) => {
-        console.log('[Client State]', state)
+        //console.log('[Client State]', state)
         if (state === 'CONFLICT' || state === 'DISCONNECTED') client.forceRefocus()
     })
 
