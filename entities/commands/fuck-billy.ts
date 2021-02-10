@@ -15,6 +15,6 @@ export class FuckBillyCommand extends ZapCommand {
         let { target, id } = this.context;
         let randomFuck = Math.floor(Math.random() * 3) + 1;
         let audio = `fuckbilly${randomFuck}.mp3`;
-        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', audio), 'fuckbilly', 'fuckbilly', id, false, true, false);
+        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', audio), 'fuckbilly', 'fuckbilly', id, false, true);
     }
 }

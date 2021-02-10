@@ -21,6 +21,6 @@ export class UepaCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         let { client, target, id } = this.context;
-        return await client.sendFile(target, resolvePath('assets', 'audios', 'uepa.mp3'), 'uepa', 'uepa', id, false, true, false);
+        return await client.sendFile(target, resolvePath('assets', 'audios', 'uepa.mp3'), 'uepa', 'uepa', id, false, true);
     }
 }

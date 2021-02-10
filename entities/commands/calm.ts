@@ -17,6 +17,6 @@ export class CalmCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         let { target, id } = this.context;
-        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', 'calm.mp3'), 'calma', 'calmou', id, false, true, false);
+        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', 'calm.mp3'), 'calma', 'calmou', id, false, true);
     }
 }

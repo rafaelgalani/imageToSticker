@@ -17,6 +17,6 @@ export class BocaLeiteCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         let { target, id } = this.context;
-        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', 'bocaleite.mp3'), 'boca-leite', 'boca-leite', id, false, true, false);
+        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', 'bocaleite.mp3'), 'boca-leite', 'boca-leite', id, false, true);
     }
 }
