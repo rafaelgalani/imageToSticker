@@ -1,12 +1,13 @@
+import { ContactId } from "@open-wa/wa-automate";
 import { Rule } from "..";
 import { ZapContext } from "../../core";
 
 export class AdminRule extends Rule {
     
-    target: string;
+    target: ContactId;
     errorMessage = "O membro não é um administrador do grupo.";
 
-    constructor(target?: string){
+    constructor(target?: ContactId){
         super();
         this.target = target;
     }

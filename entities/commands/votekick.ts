@@ -3,6 +3,7 @@ import { AdminRule, AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule,
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { doVote, fullTrim, getVote, toMention, createVoting, getMemberNumber, is, setup, getVoting, endVoting } from "../../utils";
 import { ZapError } from "../core";
+import { ContactId } from "@open-wa/wa-automate";
 export class VotekickCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -27,7 +28,7 @@ export class VotekickCommand extends ZapCommand {
     protected async runSpecificLogic() {
         setup(this.context);
         const { id, args, groupId, sender, client, target } = this.context;
-        let votingTarget = args[0];
+        let votingTarget = args[0] as ContactId;
         
         try {
             let voting = createVoting(args[0], groupId, sender.id);

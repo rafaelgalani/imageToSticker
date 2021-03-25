@@ -2,6 +2,7 @@ import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { getMemberNumber } from "../../utils";
+import { ContactId } from "@open-wa/wa-automate";
 export class DemoteCommand extends ZapCommand {
     
     protected getPatterns(){

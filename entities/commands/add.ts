@@ -2,6 +2,7 @@ import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { getMemberNumber, verifyMute } from "../../utils";
+import { ContactId } from "@open-wa/wa-automate";
 export class AddMemberCommand extends ZapCommand {
     
     protected getPatterns(){
@@ -20,7 +21,7 @@ export class AddMemberCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         const { client, groupId, mentionedJidList, args, author, from, id } = this.context;
-        const memberNumber = getMemberNumber(args[0]);
+        const memberNumber = getMemberNumber(args[0]) as ContactId;
         return await client.addParticipant(groupId, memberNumber);
     }
 }

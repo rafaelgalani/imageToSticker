@@ -1,4 +1,4 @@
-import { Message, Client } from '@open-wa/wa-automate';
+import { Message, Client, GroupChatId, ContactId } from '@open-wa/wa-automate';
 
 type PartialMessage = Partial<Message>;
 export interface ZapContext extends PartialMessage { }
@@ -13,11 +13,12 @@ export class ZapContext {
     pushname: string;
     formattedTitle: string;
     
-    botNumber: string;
+    botNumber: ContactId;
     
-    groupId: string;
-    groupAdmins: string[];
-    groupMembers: string[];
+    mentionedJidList: ContactId[];
+    groupId: GroupChatId;
+    groupAdmins: ContactId[];
+    groupMembers: ContactId[];
     isSenderGroupAdmin: boolean;
     isBotGroupAdmin: boolean;
     isSuperAdmin: boolean;
@@ -30,7 +31,7 @@ export class ZapContext {
     url: string;
     uaOverride: string;
     
-    target: string;
+    target: ContactId | GroupChatId;
     
     private message: Message;
 
@@ -54,14 +55,14 @@ export class ZapContext {
     }
 
     private async setup(){
-        this.botNumber = await this.client.getHostNumber() + '@c.us'
-        this.groupId = this.isGroupMsg? (this.chat?.groupMetadata?.id ?? '') : ''
+        this.botNumber = (await this.client.getHostNumber() + '@c.us') as ContactId;
+        this.groupId = this.chat?.groupMetadata?.id;
         this.groupAdmins = this.isGroupMsg && this.groupId?  ( await this.tryGet(this.client.getGroupAdmins.bind(this.client), this.groupId)    || [] ) : [];
         this.groupMembers = this.isGroupMsg && this.groupId? ( await this.tryGet(this.client.getGroupMembersId.bind(this.client), this.groupId) || [] ) : [];
         this.isSenderGroupAdmin = this.groupAdmins.includes(this.sender?.id)
         this.isBotGroupAdmin = this.groupAdmins.includes(this.botNumber)
         
-        this.isSuperAdmin = this.isGroupMsg && this.groupId && (this.chat?.groupMetadata?.owner === this.from);
+        this.isSuperAdmin = this.isGroupMsg && this.groupId && (this.chat?.groupMetadata?.owner._serialized === this.from);
 
         const prefix = ZapContext.COMMAND_PREFIX;
         

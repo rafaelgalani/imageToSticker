@@ -57,7 +57,7 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
             }))
 
     // listen paricipant event on group (wellcome message)
-    client.onGlobalParicipantsChanged(async (event) => {
+    client.onGlobalParticipantsChanged(async (event) => {
         // const host = await client.getHostNumber() + '@c.us'
         // if (event.action === 'add' && event.who !== host) client.sendTextWithMentions(event.chat, `Hello, Welcome to the group @${event.who.replace('@c.us', '')} \n\nHave fun with us✨`)
     })
