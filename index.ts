@@ -70,7 +70,7 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
 let endpoint;
 let a = (async _ => {
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         executablePath: require('chrome-launcher').Launcher.getInstallations()[0]
     });
 
@@ -89,7 +89,7 @@ let a = (async _ => {
 
     const options = {
         sessionId: 'Imperial',
-        headless: true,
+        headless: false,
         qrTimeout: 0,
         authTimeout: 0,
         restartOnCrash: start,

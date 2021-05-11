@@ -23,7 +23,9 @@ const resizeImage = async (buff, encode) => {
         if (!encode) return resizedImageBuffer;
         const resizedImageData = resizedImageBuffer.toString('base64')
         const resizedBase64 = `data:image/png;base64,${resizedImageData}`
-        return resizedBase64
+
+        const imageWithoutBackground = removeBg(resizedBase64);
+        return imageWithoutBackground
     } catch (e) {
         throw e;
     }
@@ -35,3 +37,21 @@ export default async(buff) : Promise<string> => {
         return result;
     }
 };
+
+import { RemoveBgError, removeBackgroundFromImageBase64 } from "remove.bg";
+
+export async function removeBg(base64img) {
+  try {
+    const result = await removeBackgroundFromImageBase64({
+      base64img,
+      apiKey: process.env.REMOVE_BG_API_KEY,
+      size: "regular",
+    });
+
+    return result.base64img;
+  } catch (e) {
+    const errors: Array<RemoveBgError> = e;
+    console.log("Error: " + JSON.stringify(errors));
+  }
+  return null;
+}

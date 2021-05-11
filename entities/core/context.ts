@@ -62,7 +62,7 @@ export class ZapContext {
         this.isSenderGroupAdmin = this.groupAdmins.includes(this.sender?.id)
         this.isBotGroupAdmin = this.groupAdmins.includes(this.botNumber)
         
-        this.isSuperAdmin = this.isGroupMsg && this.groupId && (this.chat?.groupMetadata?.owner._serialized === this.from);
+        this.isSuperAdmin = this.isGroupMsg && this.groupId && (this.chat?.groupMetadata?.owner?._serialized === this.from);
 
         const prefix = ZapContext.COMMAND_PREFIX;
         

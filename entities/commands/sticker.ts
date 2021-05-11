@@ -3,6 +3,7 @@ import { ZapCommand } from "./command";
 // WILL ALSO BE MOVED LATER.
 import { is, resizeImage } from "../../utils";
 import { AdminRule } from "../rules";
+import { removeBg } from "../../utils/imageProcessing";
 
 export class StickerCommand extends ZapCommand {
     
@@ -20,9 +21,8 @@ export class StickerCommand extends ZapCommand {
             const encryptMedia = isQuotedImage ? quotedMsg : this.context;
             const _mimetype = isQuotedImage ? quotedMsg.mimetype : mimetype
             const mediaData = await decryptMedia(encryptMedia, uaOverride)
-            const imageBase64 = `data:${_mimetype};base64,${mediaData.toString('base64')}`
-
             const imageResizedData = await resizeImage(mediaData);
+            
             let stickerTarget = isGroupMsg? groupId : chat.id; // THIS CAN ALSO BE MOVED.
             await client.sendImageAsSticker(stickerTarget, imageResizedData);
             //await client.sendImageAsStickerAsReply(target, imageBase64, id);
