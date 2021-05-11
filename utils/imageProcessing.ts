@@ -2,7 +2,7 @@ import * as sharp from 'sharp';
 const { fromBuffer } = require('file-type')
 
 // eslint-disable-next-line no-async-promise-executor
-const resizeImage = async (buff, encode) => {
+const resizeImage = async (buff, encode, shouldRemoveBg) => {
     console.log('Resizing image...')
     try {
         const { mime } = await fromBuffer(buff)
@@ -24,15 +24,14 @@ const resizeImage = async (buff, encode) => {
         const resizedImageData = resizedImageBuffer.toString('base64')
         const resizedBase64 = `data:image/png;base64,${resizedImageData}`
 
-        const imageWithoutBackground = removeBg(resizedBase64);
-        return imageWithoutBackground
+        return shouldRemoveBg? removeBg(resizedBase64) : resizedBase64;
     } catch (e) {
         throw e;
     }
 };
 
-export default async(buff) : Promise<string> => {
-    const result = await resizeImage(buff, true);
+export default async(buff, removeBg = false) : Promise<string> => {
+    const result = await resizeImage(buff, true, removeBg);
     if (typeof result === 'string'){
         return result;
     }
