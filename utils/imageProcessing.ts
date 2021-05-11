@@ -2,11 +2,22 @@ import * as sharp from 'sharp';
 const { fromBuffer } = require('file-type')
 
 // eslint-disable-next-line no-async-promise-executor
-const resizeImage = async (buff, encode, shouldRemoveBg) => {
+const resizeImage = async (buff: Buffer, encode, shouldRemoveBg) => {
     console.log('Resizing image...')
     try {
         const { mime } = await fromBuffer(buff)
-        const resizedImageBuffer = await sharp(buff, { 
+
+        const finalBuffer = (
+          shouldRemoveBg? 
+          
+          Buffer.from(
+            await removeBg(buff.toString('base64')),
+            'base64'
+          ) : 
+          buff
+        );
+
+        const resizedImageBuffer = await sharp(finalBuffer, { 
             failOnError: false,
         }).resize({
             width: 512,
@@ -24,7 +35,7 @@ const resizeImage = async (buff, encode, shouldRemoveBg) => {
         const resizedImageData = resizedImageBuffer.toString('base64')
         const resizedBase64 = `data:image/png;base64,${resizedImageData}`
 
-        return shouldRemoveBg? removeBg(resizedBase64) : resizedBase64;
+        return resizedBase64;
     } catch (e) {
         throw e;
     }
@@ -45,6 +56,7 @@ export async function removeBg(base64img) {
       base64img,
       apiKey: process.env.REMOVE_BG_API_KEY,
       size: "regular",
+      crop: true,
     });
 
     return result.base64img;
