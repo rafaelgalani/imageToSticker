@@ -67,8 +67,7 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
     })
 }
 
-let endpoint;
-let a = (async _ => {
+(async () => {
     const browser = await puppeteer.launch({
         headless: false,
         executablePath: require('chrome-launcher').Launcher.getInstallations()[0]
@@ -112,5 +111,5 @@ let a = (async _ => {
     
     create(options)
         .then((client) => start(client))
-        .catch((err) => new Error(err))
+        .catch((err) => console.error(err))
 })()
