@@ -3,12 +3,14 @@
     "configurations": [
       {
         "type": "node",
-        "request": "launch",
-        "name": "Launch Program",
-        "program": "${workspaceFolder}/index.ts",
-        "preLaunchTask": "tsc: build - tsconfig.json",
-        "outFiles": ["${workspaceFolder}/build/**/*.js"],
-        "envFile": "${workspaceFolder}/.env"
+        "request": "attach",
+        "port": 7001,
+        "address": "localhost",
+        "name": "Attach",
+        
+        "localRoot": "${workspaceFolder}",
+        "remoteRoot": "/app/"
+  
       }
     ]
   }

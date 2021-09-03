@@ -14,11 +14,11 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
         newReply, 
         sendReplyWithMentions,
     }) => {
-        eval(newReply)
-        eval(sendReplyWithMentions)
+        // eval(newReply)
+        // eval(sendReplyWithMentions)
 
-        eval('window.WAPI.reply = newReply')
-        eval('window.WAPI.sendReplyWithMentions = sendReplyWithMentions')
+        // eval('window.WAPI.reply = newReply')
+        // eval('window.WAPI.sendReplyWithMentions = sendReplyWithMentions')
     }, {
         newReply: newReply.toString() , 
         sendReplyWithMentions: sendReplyWithMentions.toString() ,
