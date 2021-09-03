@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
 import FormData from 'form-data';
 import * as fs from 'fs';
 import { fromBuffer } from 'file-type';
@@ -10,54 +10,43 @@ import resizeImage from './imageProcessing';
  *@param {String} url
  *@param {Object} options
  */
-export const fetchJson = (url, options) =>
-    new Promise((resolve, reject) =>
-        fetch(url, options)
-            .then(response => response.json())
-            .then(json => resolve(json))
-            .catch(err => {
-                console.error(err)
-                reject(err)
-            })
-    )
-
+export const fetchJson = async (url, options) => {
+    try {
+        const result = await axios.get(url, options);
+        return JSON.parse(result.data);
+    } catch (err){
+        console.log(err);
+    }
+}
+ 
 /**
  * Fetch Text from Url
  *
  * @param {String} url
  * @param {Object} options
  */
-export const fetchText = (url, options) => {
-    return new Promise((resolve, reject) => {
-        return fetch(url, options)
-            .then(response => response.text())
-            .then(text => resolve(text))
-            .catch(err => {
-                console.error(err)
-                reject(err)
-            })
-    })
+ export const fetchText = async (url, options) => {
+    try {
+        const result = await axios.get(url, options);
+        return result.data;
+    } catch (err){
+        console.log(err);
+    }
 }
 
 /**
  * Fetch base64 from url
  * @param {String} url
  */
+ export const fetchBase64 = async (url, mimetype?) => {
+    try {
+        const result = await axios.get(url);
+        const finalMimetype = mimetype ?? result.headers.get('content-type');
 
-export const fetchBase64 = (url, mimetype) => {
-    return new Promise((resolve, reject) => {
-        console.log('Get base64 from:', url)
-        return fetch(url)
-            .then((res) => {
-                const _mimetype = mimetype || res.headers.get('content-type');
-                (res as any).buffer()
-                    .then((result) => resolve(`data:${_mimetype};base64,` + result.toString('base64')))
-            })
-            .catch((err) => {
-                console.error(err)
-                reject(err)
-            })
-    })
+        return `data:${finalMimetype};base64,${Buffer.from(result.data, 'base64')}`;
+    } catch (err){
+        console.log(err);
+    }
 }
 
 /**

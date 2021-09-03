@@ -95,7 +95,7 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
         cacheEnabled: false,
         useChrome: true,
         browserWSEndpoint: browser.wsEndpoint(),
-        devtools: true,
+        devtools: false,
         killProcessOnBrowserClose: true,
         throwErrorOnTosBlock: false,
         chromiumArgs: [

@@ -4,6 +4,7 @@ import { ZapCommand } from "./command";
 import { is, resizeImage } from "../../utils";
 import { AdminRule } from "../rules";
 import { removeBg } from "../../utils/imageProcessing";
+import { Message } from '@open-wa/wa-automate';
 
 export class StickerCommand extends ZapCommand {
     
@@ -21,9 +22,9 @@ export class StickerCommand extends ZapCommand {
             const [removeBg] = args;
 
             const shouldRemoveBg = removeBg? removeBg.toLowerCase() === 'remove' : false;
-            const encryptMedia = isQuotedImage ? quotedMsg : this.context;
+            if (!isQuotedImage) return;
 
-            const mediaData = await decryptMedia(encryptMedia, uaOverride)
+            const mediaData = await decryptMedia(quotedMsg, uaOverride)
             const imageResizedData = await resizeImage(mediaData, shouldRemoveBg);
             
             let stickerTarget = isGroupMsg? groupId : chat.id; // THIS CAN ALSO BE MOVED.
@@ -33,8 +34,8 @@ export class StickerCommand extends ZapCommand {
             if (!is.Url(url)) { 
                 await client.reply(from, 'Link inválido...', id) 
             } else if (args[0].toLowerCase() === 'remove') {
-                const encryptMedia = isQuotedImage ? quotedMsg : this.context;
-                const mediaData = await decryptMedia(encryptMedia, uaOverride)
+                if (!isQuotedImage) return;
+                const mediaData = await decryptMedia(quotedMsg, uaOverride)
                 const imageResizedData = await resizeImage(mediaData, true);
                 
                 let stickerTarget = isGroupMsg? groupId : chat.id; // THIS CAN ALSO BE MOVED.
