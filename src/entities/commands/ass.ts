@@ -2,7 +2,6 @@ import { ZapCommand } from "./command";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { addMemberCooldown, addMemberStreak, fullTrim, getMemberCooldown, getMemberStreak, getMentionWithTitle, getRandomStreakSentence, isMemberInCooldown, isMemberInStreak, removeMemberCooldown, removeStreak, setup } from "../../utils";
-import moment = require("moment-timezone");
 export const random = (min, max) => Math.floor(Math.random()*max+min);
 
 let assDict = {};
