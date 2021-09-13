@@ -1,22 +1,33 @@
 import * as sharp from 'sharp';
-const { fromBuffer } = require('file-type')
+import { removeBackgroundFromImageBase64 } from "remove.bg";
 
-// eslint-disable-next-line no-async-promise-executor
-const resizeImage = async (buff: Buffer, encode, shouldRemoveBg) => {
+const removeBg = async (base64img: string): Promise<string | null> => {
+    try {
+        const result = await removeBackgroundFromImageBase64({
+            base64img,
+            apiKey: process.env.REMOVE_BG_API_KEY,
+            size: "regular",
+            crop: true,
+        });
+        
+        return result.base64img;
+    } catch (e) {
+        console.log("Error when removing background: " + JSON.stringify(e));
+        return null;
+    }
+}
+
+const resizeImage = async (buff: Buffer, shouldRemoveBg = false) : Promise<string> => {
     console.log('Resizing image...')
     try {
-        const { mime } = await fromBuffer(buff)
-
-        const finalBuffer = (
-          shouldRemoveBg? 
-          
-          Buffer.from(
-            await removeBg(buff.toString('base64')),
-            'base64'
-          ) : 
-          buff
-        );
-
+        let finalBuffer: Buffer;
+        if (shouldRemoveBg) {
+            const bufferWithoutBackground = await removeBg(buff.toString('base64'));
+            finalBuffer = Buffer.from(bufferWithoutBackground, 'base64');
+        } else {
+            finalBuffer = buff;
+        }
+        
         const resizedImageBuffer = await sharp(finalBuffer, { 
             failOnError: false,
         }).resize({
@@ -31,38 +42,15 @@ const resizeImage = async (buff: Buffer, encode, shouldRemoveBg) => {
             }
         }).png().toBuffer();
         
-        if (!encode) return resizedImageBuffer;
         const resizedImageData = resizedImageBuffer.toString('base64')
         const resizedBase64 = `data:image/png;base64,${resizedImageData}`
-
+        
         return resizedBase64;
     } catch (e) {
         throw e;
     }
 };
 
-export default async(buff, removeBg = false) : Promise<string> => {
-    const result = await resizeImage(buff, true, removeBg);
-    if (typeof result === 'string'){
-        return result;
-    }
+export default async (buff: Buffer, removeBg?: boolean) : Promise<string> => {
+    return await resizeImage(buff, removeBg);
 };
-
-import { RemoveBgError, removeBackgroundFromImageBase64 } from "remove.bg";
-
-export async function removeBg(base64img) {
-  try {
-    const result = await removeBackgroundFromImageBase64({
-      base64img,
-      apiKey: process.env.REMOVE_BG_API_KEY,
-      size: "regular",
-      crop: true,
-    });
-
-    return result.base64img;
-  } catch (e) {
-    const errors: Array<RemoveBgError> = e;
-    console.log("Error: " + JSON.stringify(errors));
-  }
-  return null;
-}

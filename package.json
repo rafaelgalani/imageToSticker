@@ -36,7 +36,9 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/file-type": "^10.9.1",
     "@types/puppeteer": "^5.4.4",
+    "@types/sharp": "^0.29.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.1",
     "eslint-plugin-import": "^2.24.2",

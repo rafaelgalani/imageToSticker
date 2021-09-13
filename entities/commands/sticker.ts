@@ -1,10 +1,7 @@
 import { decryptMedia } from "@open-wa/wa-automate";
-import { ZapCommand } from "./command";
 // WILL ALSO BE MOVED LATER.
 import { is, resizeImage } from "../../utils";
-import { AdminRule } from "../rules";
-import { removeBg } from "../../utils/imageProcessing";
-import { Message } from '@open-wa/wa-automate';
+import { ZapCommand } from "./command";
 
 export class StickerCommand extends ZapCommand {
     
@@ -12,14 +9,10 @@ export class StickerCommand extends ZapCommand {
         return ['sticker', 'stiker',];
     }
 
-    protected getRules(){
-        return [  ];
-    }
-
     protected async runSpecificLogic() {
         const { target, url, from, isMedia, isQuotedImage, isGroupMsg, groupId, id, chat, args, quotedMsg, mimetype, uaOverride, client } = this.context; // Not to good. Need to review it later... 
         if ((isMedia || isQuotedImage) && args.length <= 1) {
-            const [removeBg] = args;
+            const [ removeBg ] = args;
 
             const shouldRemoveBg = removeBg? removeBg.toLowerCase() === 'remove' : false;
             if (!isQuotedImage) return;
@@ -31,9 +24,11 @@ export class StickerCommand extends ZapCommand {
             await client.sendImageAsSticker(stickerTarget, imageResizedData);
 
         } else if (args.length === 1) {
-            if (!is.Url(url)) { 
-                await client.reply(from, 'Link inválido...', id) 
-            } else if (args[0].toLowerCase() === 'remove') {
+            const [ arg ] = args;
+
+            if (!is.Url(arg)) { 
+                await client.reply(from, 'Link inválido...', id);
+            } else if (arg.toLowerCase() === 'remove') {
                 if (!isQuotedImage) return;
                 const mediaData = await decryptMedia(quotedMsg, uaOverride)
                 const imageResizedData = await resizeImage(mediaData, true);

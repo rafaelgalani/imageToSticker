@@ -36,7 +36,9 @@ export abstract class ZapCommand {
     }
 
     protected abstract getPatterns(): string[];
-    protected abstract getRules(): Rule[];
+    protected getRules(): Rule[] {
+        return []
+    };
 
     protected abstract runSpecificLogic();
 }
