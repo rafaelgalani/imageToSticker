@@ -5,12 +5,13 @@ export abstract class ZapCommand {
     private eligible: boolean;
     protected context: ZapContext;
 
-    constructor(context: ZapContext){
+    constructor(context?: ZapContext){
         this.context = context;
-        this.checkEligibility(context.command);
+        this.checkEligibility(context?.command);
     }
 
-    private checkEligibility(userPattern: string) : boolean{
+    private checkEligibility(userPattern?: string) : boolean{
+        if (!userPattern) return this.eligible = false;
         this.eligible = false;
         for (let pattern of this.getPatterns()){
             if (userPattern.toLowerCase().trim() === pattern){
@@ -36,6 +37,11 @@ export abstract class ZapCommand {
     }
 
     protected abstract getPatterns(): string[];
+
+    public getPatternsAsString(): string {
+        return this.getPatterns().map(a => `/${a}`).join(' - ');
+    }
+
     protected getRules(): Rule[] {
         return []
     };

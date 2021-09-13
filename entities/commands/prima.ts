@@ -1,8 +1,7 @@
-import { ZapCommand } from "./command";
-import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
+import { getMentionWithTitle } from "../../utils";
+import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMentionWithTitle, getRandomSexSentence, setup, getMemberNumber, is } from "../../utils";
-import { ContactId } from "@open-wa/wa-automate";
+import { ZapCommand } from "./command";
 export class PrimaCommand extends ZapCommand {
     
     protected getPatterns(){
