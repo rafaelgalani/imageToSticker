@@ -18,7 +18,7 @@ export class ZapContext {
     mentionedJidList: ContactId[];
     groupId: GroupChatId;
     groupAdmins: ContactId[];
-    groupMembers: ContactId[];
+    groupMembers: Array<ContactId>;
     isSenderGroupAdmin: boolean;
     isBotGroupAdmin: boolean;
     isSuperAdmin: boolean;

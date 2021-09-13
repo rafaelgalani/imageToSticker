@@ -405,3 +405,6 @@ export const is = {
     Giphy,
     MediaGiphy
 };
+
+
+export const randomInt = (max, min=0) => Math.floor(Math.random() * (max - min + 1)) + min;

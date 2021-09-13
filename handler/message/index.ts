@@ -1,6 +1,6 @@
 require('dotenv').config()
 import { Client, Message } from '@open-wa/wa-automate'
-import { KickCommand, StickerCommand, ZapContext, ZapError, CodeCommand, DemoteCommand, FuckBillyCommand, LoginCommand, MentionAllCommand, PoorCommand, PromoteCommand, SFCommand, SexCommand, TestCommand, VavaCommand, BocaLeiteCommand, AddMemberCommand, MuteCommand, UnmuteCommand, TikTokCommand, AssCommand, VotekickCommand, ShieldCommand, UepaCommand, PoctCommand, TwitterCommand, InstagramCommand, CalmCommand, FacebookCommand } from '../../entities';
+import { KickCommand, StickerCommand, ZapContext, ZapError, CodeCommand, DemoteCommand, FuckBillyCommand, LoginCommand, MentionAllCommand, PoorCommand, PromoteCommand, SFCommand, SexCommand, TestCommand, VavaCommand, BocaLeiteCommand, AddMemberCommand, MuteCommand, UnmuteCommand, TikTokCommand, AssCommand, VotekickCommand, ShieldCommand, UepaCommand, PoctCommand, TwitterCommand, InstagramCommand, CalmCommand, FacebookCommand, PrimaCommand } from '../../entities';
 import { fullTrim, verifyMute } from '../../utils';
 
 export default async (client: Client, message: Message) => {
@@ -22,6 +22,7 @@ export default async (client: Client, message: Message) => {
             new SFCommand(context),
             new SexCommand(context),
             new StickerCommand(context),
+            new PrimaCommand(context),
             new TestCommand(context),
             new VavaCommand(context),
             new TwitterCommand(context),

@@ -1,3 +1,4 @@
+import { randomInt } from './utils';
 import { create, Client } from '@open-wa/wa-automate';
 import { color, messageLog } from './utils';
 import msgHandler from './handler/message';
@@ -113,3 +114,12 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
         .then((client) => start(client))
         .catch((err) => console.error(err))
 })()
+declare global {
+    interface Array<T> {
+        random(): T;
+    }
+}
+
+Array.prototype.random = function () {
+    return this[randomInt(0, this.length - 1)];
+};
