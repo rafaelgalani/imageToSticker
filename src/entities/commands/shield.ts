@@ -1,7 +1,7 @@
-import { ZapCommand } from "./command";
-import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
 import { shieldMember } from "../../utils";
+import { GroupOnlyRule, NArgumentsRule } from "../rules";
+import { ArgsOperator } from "../rules/group/n-arguments";
+import { ZapCommand } from "./command";
 export class ShieldCommand extends ZapCommand {
     
     protected getPatterns(){

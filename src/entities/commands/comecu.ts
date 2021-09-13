@@ -1,7 +1,6 @@
+import { getMemberNumber, getMentionWithTitle, setup } from "../../utils";
+import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
-import { GroupOnlyRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMentionWithTitle, setup, getMemberNumber } from "../../utils";
 export class ComeCuCommand extends ZapCommand {
     
     protected getPatterns(){

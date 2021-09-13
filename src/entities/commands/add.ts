@@ -1,8 +1,8 @@
-import { ZapCommand } from "./command";
+import { ContactId } from "@open-wa/wa-automate";
+import { getMemberNumber } from "../../utils";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMemberNumber, verifyMute } from "../../utils";
-import { ContactId } from "@open-wa/wa-automate";
+import { ZapCommand } from "./command";
 export class AddMemberCommand extends ZapCommand {
     
     protected getPatterns(){

@@ -1,6 +1,6 @@
-import { ZapCommand } from "./command";
-import { GroupOnlyRule } from "../rules";
 import { resolvePath } from "../../utils";
+import { GroupOnlyRule } from "../rules";
+import { ZapCommand } from "./command";
 export class VavaCommand extends ZapCommand {
     
     protected getPatterns(){

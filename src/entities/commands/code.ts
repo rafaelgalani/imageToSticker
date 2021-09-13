@@ -1,6 +1,6 @@
-import { ZapCommand } from "./command";
-import { GroupOnlyRule } from "../rules";
 import { getId, getMentionWithTitle } from "../../handler/message/utils"; // TODO: THIS MUST BE MOVED.
+import { GroupOnlyRule } from "../rules";
+import { ZapCommand } from "./command";
 export class CodeCommand extends ZapCommand {
     
     protected getPatterns(){

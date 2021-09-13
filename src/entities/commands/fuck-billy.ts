@@ -1,6 +1,6 @@
+import { resolvePath } from "../../utils";
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
-import { resolvePath } from "../../utils";
 export class FuckBillyCommand extends ZapCommand {
     
     protected getPatterns(){

@@ -1,9 +1,9 @@
-import { ZapCommand } from "./command";
-import { AdminRule, AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
-import { doVote, fullTrim, getVote, toMention, createVoting, getMemberNumber, is, setup, getVoting, endVoting } from "../../utils";
-import { ZapError } from "../core";
 import { ContactId } from "@open-wa/wa-automate";
+import { createVoting, doVote, endVoting, fullTrim, getVote, is, setup, toMention } from "../../utils";
+import { ZapError } from "../core";
+import { AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
+import { ArgsOperator } from "../rules/group/n-arguments";
+import { ZapCommand } from "./command";
 export class VotekickCommand extends ZapCommand {
     
     protected getPatterns(){

@@ -1,7 +1,7 @@
-import { ZapCommand } from "./command";
+import { addMemberCooldown, addMemberStreak, fullTrim, getMemberCooldown, getMentionWithTitle, getRandomStreakSentence, isMemberInCooldown, isMemberInStreak, removeMemberCooldown, removeStreak, setup } from "../../utils";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { addMemberCooldown, addMemberStreak, fullTrim, getMemberCooldown, getMemberStreak, getMentionWithTitle, getRandomStreakSentence, isMemberInCooldown, isMemberInStreak, removeMemberCooldown, removeStreak, setup } from "../../utils";
+import { ZapCommand } from "./command";
 export const random = (min, max) => Math.floor(Math.random()*max+min);
 
 let assDict = {};

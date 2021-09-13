@@ -1,7 +1,7 @@
-import { ZapCommand } from "./command";
+import { unmuteMember } from "../../utils";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { unmuteMember } from "../../utils";
+import { ZapCommand } from "./command";
 export class UnmuteCommand extends ZapCommand {
     
     protected getPatterns(){

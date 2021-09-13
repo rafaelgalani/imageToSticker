@@ -1,6 +1,6 @@
 import { GroupOnlyRule } from "entities/rules";
-import { ZapCommand } from "./command";
 import { resolvePath } from 'utils';
+import { ZapCommand } from "./command";
 export class PoorCommand extends ZapCommand {
     
     protected getPatterns(){

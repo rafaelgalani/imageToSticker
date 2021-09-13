@@ -1,8 +1,8 @@
-import { ZapCommand } from "./command";
-import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
 import { random, toMention } from "../../handler/message/utils";
 import { ZapError } from "../core/error";
+import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
+import { ArgsOperator } from "../rules/group/n-arguments";
+import { ZapCommand } from "./command";
 export class LoginCommand extends ZapCommand {
     
     protected getPatterns(){

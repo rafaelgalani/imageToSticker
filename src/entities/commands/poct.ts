@@ -1,8 +1,7 @@
-import { ZapCommand } from "./command";
+import { resolvePath } from "../../utils";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import * as path from 'path';
-import { resolvePath } from "../../utils";
+import { ZapCommand } from "./command";
 export class PoctCommand extends ZapCommand {
     
     protected getPatterns(){

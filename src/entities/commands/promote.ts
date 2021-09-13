@@ -1,7 +1,6 @@
-import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMemberNumber } from "../../utils";
+import { ZapCommand } from "./command";
 export class PromoteCommand extends ZapCommand {
     
     protected getPatterns(){

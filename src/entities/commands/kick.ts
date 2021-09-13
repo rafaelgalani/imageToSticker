@@ -1,8 +1,6 @@
-import { ZapCommand } from "./command";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMemberNumber } from "../../utils";
-import { ContactId } from "@open-wa/wa-automate";
+import { ZapCommand } from "./command";
 export class KickCommand extends ZapCommand {
     
     protected getPatterns(){

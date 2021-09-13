@@ -1,7 +1,6 @@
+import { getMentionWithTitle, getRandomSexSentence, is, setup } from "../../utils";
+import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
-import { AdminRule, AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
-import { getMentionWithTitle, getRandomSexSentence, setup, getMemberNumber, is } from "../../utils";
 export class SexCommand extends ZapCommand {
     
     protected getPatterns(){

@@ -1,7 +1,7 @@
+import * as allCommands from 'entities/commands';
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 
-import * as allCommands from 'entities/commands';
 
 export class HelpCommand extends ZapCommand {
     
