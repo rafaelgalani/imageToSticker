@@ -39,7 +39,7 @@ export abstract class ZapCommand {
     protected abstract getPatterns(): string[];
 
     public getPatternsAsString(): string {
-        return this.getPatterns().map(a => `/${a}`).join(' - ');
+        return this.getPatterns().map(a => `${ZapContext.COMMAND_PREFIX}${a}`).join(' - ');
     }
 
     protected getRules(): Rule[] {

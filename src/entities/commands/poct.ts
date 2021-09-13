@@ -19,7 +19,6 @@ export class PoctCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { client, id, target } = this.context;
-        return await client.sendFile(target, resolvePath('assets', 'audios', 'poct.mp3'), 'poct', 'poct', id, false, true);
+        return await this.context.sendFile('audios/poct.mp3');
     }
 }

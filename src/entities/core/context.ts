@@ -1,4 +1,5 @@
-import { Message, Client, GroupChatId, ContactId } from '@open-wa/wa-automate';
+import { resolvePath } from "utils";
+import { Message, Client, GroupChatId, ContactId, FilePath } from '@open-wa/wa-automate';
 
 type PartialMessage = Partial<Message>;
 export interface ZapContext extends PartialMessage { }
@@ -83,4 +84,18 @@ export class ZapContext {
         await instance.setup();
         return instance;
     }
+
+    public async reply(content: string){
+        return await this.client.sendReplyWithMentions(this.to, content, this.id);
+    }
+
+    public async send(content: string){
+        return await this.client.sendReplyWithMentions(this.to, content, this.id);
+    }
+    
+    public async sendFile(filePath: `${string}/${string}.${string}`){
+        const [ folder, fileName ] = filePath.split('/');
+        return await this.client.sendFile(this.target, resolvePath('assets', folder, fileName), fileName, fileName, this.id, false, true);
+    }
+    
 }

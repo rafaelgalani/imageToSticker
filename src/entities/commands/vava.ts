@@ -1,4 +1,3 @@
-import { resolvePath } from "../../utils";
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class VavaCommand extends ZapCommand {
@@ -14,7 +13,6 @@ export class VavaCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { target, id } = this.context;
-        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', 'vava.mp3'), 'vava', 'vava', id, false, true);
+        return await this.context.sendFile('audios/vava.mp3');
     }
 }

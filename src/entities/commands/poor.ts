@@ -12,7 +12,6 @@ export class PoorCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { target, id } = this.context;
-        return await this.context.client.sendFile(target, resolvePath('assets', 'audios', 'pobre.mp3'), 'pobre', 'pobrinho', id, false, true);
+        return await this.context.sendFile('audios/pobre.mp3');
     }
 }
