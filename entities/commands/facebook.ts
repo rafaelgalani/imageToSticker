@@ -1,13 +1,10 @@
-import { decryptMedia } from "@open-wa/wa-automate";
-import { ZapCommand } from "./command";
+import { facebookDownloader } from '../../lib/downloaders';
 // WILL ALSO BE MOVED LATER.
 import { is } from "../../utils";
-import { facebook, insta, tiktok, twitter } from '../../lib/downloader';
-import { AdminRule, ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "../rules";
-import { PostCollector, Result } from "tiktok-scraper";
-import { downloader, urlShortener } from "../../lib";
-import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapError } from "../core/error";
+import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "../rules";
+import { ArgsOperator } from "../rules/group/n-arguments";
+import { ZapCommand } from "./command";
 
 export class FacebookCommand extends ZapCommand {
     
@@ -46,7 +43,7 @@ export class FacebookCommand extends ZapCommand {
                 targetUrl = targetMessage.body;
             }
 
-            let downloadResult: any = await facebook(targetUrl);
+            let downloadResult: any = await facebookDownloader(targetUrl);
 
             const { type, image, video } = downloadResult;
 

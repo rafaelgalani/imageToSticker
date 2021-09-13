@@ -3,7 +3,7 @@ import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { addMemberCooldown, addMemberStreak, fullTrim, getMemberCooldown, getMemberStreak, getMentionWithTitle, getRandomStreakSentence, isMemberInCooldown, isMemberInStreak, removeMemberCooldown, removeStreak, setup } from "../../utils";
 import moment = require("moment-timezone");
-import { random } from "../../lib/meme";
+export const random = (min, max) => Math.floor(Math.random()*max+min);
 
 let assDict = {};
 const initializeAssSentence = () => {

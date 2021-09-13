@@ -93,5 +93,17 @@ export const getVote = function(arg){
         return false;
     }
 
-    throw new Error('Voto inválido.');
+    const messages = [
+        'Voto inválido.',
+        '',
+        'Votos válidos: ',
+        '',
+        'A favor:',
+        shouldKickValidVotes.join(` | `),
+        '',
+        'Contra: ',
+        shouldNotKickValidVotes.join(` | `),
+    ];
+
+    throw new Error(messages.join('\n'));
 };

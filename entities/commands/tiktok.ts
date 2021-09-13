@@ -1,12 +1,11 @@
-import { decryptMedia } from "@open-wa/wa-automate";
-import { ZapCommand } from "./command";
+import { PostCollector } from "tiktok-scraper";
+import { tiktokDownloader } from '../../lib/downloaders';
 // WILL ALSO BE MOVED LATER.
 import { is } from "../../utils";
-import { tiktok } from '../../lib/downloader';
-import { AdminRule, ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "../rules";
-import { PostCollector, Result } from "tiktok-scraper";
 import { ZapError } from "../core/error";
+import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
+import { ZapCommand } from "./command";
 
 export class TikTokCommand extends ZapCommand {
     
@@ -49,7 +48,7 @@ export class TikTokCommand extends ZapCommand {
         } catch (e) {
             console.log(e);
         }
-        let downloadResult: PostCollector & { noWaterMark: boolean, url: string, headers: string} = await tiktok(targetUrl);
+        let downloadResult: PostCollector & { noWaterMark: boolean, url: string, headers: string} = await tiktokDownloader(targetUrl);
         const filename = downloadResult.authorMeta.name + '.mp4'
         const caption = `@${downloadResult.authorMeta.name} / ${downloadResult.musicMeta.musicName}`;
                         /*`${downloadResult.playCount.toLocaleString()}`+
