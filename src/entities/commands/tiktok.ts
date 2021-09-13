@@ -1,10 +1,10 @@
 import { PostCollector } from "tiktok-scraper";
-import { tiktokDownloader } from '../../lib/downloaders';
+import { tiktokDownloader } from 'lib/downloaders';
 // WILL ALSO BE MOVED LATER.
-import { is } from "../../utils";
-import { ZapError } from "../core/error";
-import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
+import { is } from "utils";
+import { ZapError } from "entities/core/error";
+import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "entities/rules";
+import { ArgsOperator } from "entities/rules/group/n-arguments";
 import { ZapCommand } from "./command";
 
 export class TikTokCommand extends ZapCommand {

@@ -1,7 +1,7 @@
-import { GroupOnlyRule, NArgumentsRule } from "../rules";
+import { GroupOnlyRule, NArgumentsRule } from "entities/rules";
 import { ZapCommand } from "./command";
-import { resolvePath } from '../../utils';
-import { ArgsOperator } from "../rules/group/n-arguments";
+import { resolvePath } from 'utils';
+import { ArgsOperator } from "entities/rules/group/n-arguments";
 export class CalmCommand extends ZapCommand {
     
     protected getPatterns(){

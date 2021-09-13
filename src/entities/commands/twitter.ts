@@ -1,9 +1,9 @@
-import { twitterDownloader } from '../../lib/downloaders';
+import { twitterDownloader } from 'lib/downloaders';
 // WILL ALSO BE MOVED LATER.
-import { is } from "../../utils";
-import { ZapError } from "../core";
-import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
+import { is } from "utils";
+import { ZapError } from "entities/core";
+import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "entities/rules";
+import { ArgsOperator } from "entities/rules/group/n-arguments";
 import { ZapCommand } from "./command";
 
 export class TwitterCommand extends ZapCommand {

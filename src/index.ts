@@ -1,10 +1,10 @@
-import { randomInt } from './utils';
+import { randomInt } from 'utils';
 import { create, Client } from '@open-wa/wa-automate';
-import { color, messageLog } from './utils';
-import msgHandler from './handler/message';
+import { color, messageLog } from 'utils';
+import msgHandler from 'handler/message';
 import * as puppeteer from 'puppeteer';
 
-import { freeze, sendReplyWithMentions, newReply } from './lib/additional-content.js';
+import { freeze, sendReplyWithMentions, newReply } from 'lib/additional-content.js';
 
 const start = async (client = new Client(void 0, void 0, void 0)) => {
     
