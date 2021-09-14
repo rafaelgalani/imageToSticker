@@ -10,7 +10,7 @@ export default async (client: Client, message: Message) => {
     let context = await ZapContext.getContext(client, message);
     try {
         
-        let commands: ZapCommand[] = Object.keys(allCommands).map(a => new allCommands[a](context));
+        let commands: ZapCommand[] = Object.keys(allCommands).map(a => new allCommands[a](context, allCommands[a].cooldownOptions));
         
         for (let command of commands){
             const mute = verifyMute(context.author || context.from);

@@ -1,4 +1,5 @@
-import { isMention } from "src/utils";
+import { CooldownOptions } from "src/types";
+import { isMention, pickRandom } from "src/utils";
 import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 
@@ -29,7 +30,7 @@ export class SexCommand extends ZapCommand {
 
     private buildSexSentence(membersSentence?: string) {
         const messageChunks = [
-            `O ${this.context.getSenderTitleAndMention()} ${this.sentences.random()}`,
+            `O ${this.context.getSenderTitleAndMention()} ${ pickRandom( this.sentences ) }`,
             (membersSentence? ` com o ${membersSentence} 🥵🥵🥵🥵🥵`: '') + '. ',
             'AHHHHHNNNNN AWNNNNNN AHHHHHHHNNNNN (sexo)'
         ];

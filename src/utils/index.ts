@@ -2,7 +2,7 @@ import { ZapContext, ZapError } from "../entities"
 import { resolve } from 'path';
 export { default as resizeImage } from './imageProcessing';
 
-import { writeFileSync, readFileSync } from 'fs'
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs'
 
 
 import * as chalk from 'chalk'
@@ -45,13 +45,15 @@ export const toMention   = (id: ContactId):    Mention   => `@${id.replace('@c.u
 export const toContactId = (mention: Mention): ContactId => `${mention.substring(1)}@c.us` as ContactId;
 
 export const loadJSON = (jsonFilename: string): any | null => {
+    const validateDataFolder = () => !existsSync(resolvePath('data')) && mkdirSync(resolvePath('data'));
+    
     try {
-        return JSON.parse(
-            readFileSync(
-                resolvePath('data', `${jsonFilename}.json`), 
-                'utf8'
-            )
-        );
+        validateDataFolder();
+        const fileContent = readFileSync(
+            resolvePath('data', `${jsonFilename}.json`), 
+            'utf8'
+        )
+        return JSON.parse(fileContent);
     } catch {
         return null;
     }
@@ -280,6 +282,8 @@ export const addMemberStreak = member => assStreak[member] = (assStreak[member] 
 export const getMemberStreak = member => assStreak[member];
 export const removeStreak = (member) => delete assStreak[member];
 export const getRandomStreakSentence = () => assStreakSentences[Math.floor((Math.random() * assStreakSentences.length))];
+
+export const pickRandom = <T>(arr: Array<T>): T => arr[ randomInt(arr.length - 1) ];
 
 // let votingMap = {};
 // export const getVoting = function(voteTarget, groupId){

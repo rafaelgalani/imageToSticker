@@ -83,11 +83,11 @@ export class ZapContext {
     }
 
     public async reply(content: string){
-        return await this.client.sendReplyWithMentions(this.to, content, this.id);
+        return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.from, content, this.id);
     }
 
     public async send(content: string){
-        return await this.client.sendReplyWithMentions(this.to, content, this.id);
+        return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.from, content, this.id);
     }
     
     public async sendFile(filePath: `${string}/${string}.${string}`){

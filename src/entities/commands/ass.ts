@@ -1,4 +1,5 @@
 import { ContactId } from "@open-wa/wa-automate";
+import { CooldownOptions } from "src/types";
 import { isMention, randomInt } from "../../utils";
 import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
@@ -48,6 +49,10 @@ const getAssSentence = (percentage, member, target) => {
 
 export class AssCommand extends ZapCommand {
     
+    static cooldownOptions: CooldownOptions = {
+        seconds: 5,
+    }
+
     protected getPatterns(){
         return ['ass', 'cu', 'cy', 'cuzin', 'brioco', 'cuzao', 'cuzão' ];
     }
@@ -62,9 +67,8 @@ export class AssCommand extends ZapCommand {
         ];
     }
 
-    protected getCooldownMessage() {
-        const [, cooldownInSeconds ] = this.checkForCooldown();
-        return `Você está broxa. Aguarde ${cooldownInSeconds} segundos para que a pipa suba novamente.`
+    protected override getCooldownMessage(seconds: number) {
+        return `Você está broxa. Aguarde ${seconds} segundos para que a pipa suba novamente.`
     }
 
     protected async runSpecificLogic() {

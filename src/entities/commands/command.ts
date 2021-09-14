@@ -1,5 +1,4 @@
 import { ChatId } from "@open-wa/wa-automate";
-import moment = require("moment");
 import { CooldownOptions } from "src/types";
 import { fullTrim, loadJSON, saveJSON } from "src/utils";
 import { Rule } from "..";
@@ -40,9 +39,9 @@ export abstract class ZapCommand {
         }
 
         if (this.cooldownOptions) {
-            const isCooldownPeriod = this.checkForCooldown();
+            const [ isCooldownPeriod, seconds ] = this.checkForCooldown();
             if ( !isCooldownPeriod ) return await this.runSpecificLogic();
-            else return await this.sendCooldownMessage();
+            else return await this.sendCooldownMessage( seconds );
         } else {
             await this.runSpecificLogic();
         }
@@ -50,8 +49,8 @@ export abstract class ZapCommand {
 
     protected abstract getPatterns(): string[];
     
-    protected getCooldownMessage(): string {
-        return 'Aguarde para poder executar o comando novamente.';
+    protected getCooldownMessage(seconds: number): string {
+        return `Aguarde ${seconds} segundos para poder executar o comando novamente.`;
     };
 
     // Returns [true, cooldownTimeInSeconds] if the sender is in cooldown state. 
@@ -63,8 +62,8 @@ export abstract class ZapCommand {
         const member = this.context.from;
 
         const isMemberInCooldown = member in cooldownHashMap;
-        const cooldownTime       = 60 - moment().diff(cooldownHashMap[member], 'seconds');
-        const resetCooldown      = () => cooldownHashMap[member] = moment().unix();
+        const cooldownTime       = Math.ceil( Math.abs( (new Date().getTime() - new Date(cooldownHashMap[member]).getTime()) / 1000 ) ) ;
+        const resetCooldown      = () => cooldownHashMap[member] = new Date().getTime();
 
         let isCoolingDown;
         // adds/resets cooldown if member never used the command.
@@ -76,21 +75,23 @@ export abstract class ZapCommand {
         } else {
 
             // Checks whether enough time has passed. If so, then reset the cooldown...
-            if ( cooldownTime <= 0 ) {
+            if ( cooldownTime >= this.cooldownOptions.seconds ) {
                 resetCooldown();
                 isCoolingDown = false;
-            }
 
             // Otherwise, just return that the member is *still* cooling down.
-            isCoolingDown = true;
+            } else {
+                isCoolingDown = true;
+            }
+            
         }
 
         saveJSON( this.getCooldownHashmapName(), cooldownHashMap );
-        return [ isCoolingDown, Math.min(cooldownTime, 0) ];
+        return [ isCoolingDown, Math.max(Math.abs(cooldownTime - this.cooldownOptions.seconds), 1) ];
     }
 
-    protected async sendCooldownMessage() {
-        return await this.context.reply( this.getCooldownMessage() );
+    protected async sendCooldownMessage(seconds: number) {
+        return await this.context.reply( this.getCooldownMessage( seconds ) );
     }
 
     public getPatternsAsString(): string {
@@ -98,7 +99,7 @@ export abstract class ZapCommand {
     }
 
     protected getCooldownHashmapName() {
-        return this.constructor.name + '-cooldown-hashmap.json';
+        return this.constructor.name + '-cooldown-hashmap';
     }
 
     protected getRules(): Rule[] {
