@@ -15,7 +15,6 @@ export class MentionAllCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let { client, target, groupMembers } = this.context;
-        return await client.sendReplyWithMentions(target, 'Os seguintes membros tomaram no cu: ' + groupMembers.map(a => '@' + a.replace('@c.us', '') ).join(', ') , this.context.id);
+        return await this.context.reply(`Os seguintes membros tomaram no cu: ${this.context.getAllMembersMentioned()}`);
     }
 }

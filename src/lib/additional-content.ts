@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*
  * DO NOT TOUCH THIS FILE.
  * .

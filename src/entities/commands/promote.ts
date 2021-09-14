@@ -1,4 +1,5 @@
-import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
+import { isMention, toMention } from "src/utils";
+import { AdminRule, AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class PromoteCommand extends ZapCommand {
@@ -13,14 +14,16 @@ export class PromoteCommand extends ZapCommand {
             new AdminRule(), 
             new BotAdminRule(), 
             new AllowBotArgumentRule(false), 
-            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
-            //new AdminRule(this.context.args[0]).override('Esse já é adm (teste)') ----> ERRO
+            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }).override('Só um membro de cada vez'), 
+            new ArgumentFormatterRule([
+                new ArgumentFormat(isMention).override('Os argumentos do comando só podem ser menções.'),
+            ])
         ];
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, mentionedJidList, target, id } = this.context;
-        await client.promoteParticipant(groupId, mentionedJidList[0]);
-        return await client.sendReplyWithMentions(target, `Parabenizem o novo adm, @${mentionedJidList[0].replace('@c.us', '')}!!!`, id)
+        const [ target ] = this.context.mentionedJidList;
+        await this.context.promote(target);
+        return await this.context.reply(`Parabenizem o novo adm, ${toMention(target)}`)
     }
 }

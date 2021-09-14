@@ -1,6 +1,6 @@
-import { GroupOnlyRule, NArgumentsRule } from "entities/rules";
-import { ArgsOperator } from "entities/rules/group/n-arguments";
-import { resolvePath } from 'utils';
+import { GroupOnlyRule, NArgumentsRule } from "src/entities/rules";
+import { ArgsOperator } from "src/entities/rules/group/n-arguments";
+import { resolvePath } from 'src/utils';
 import { ZapCommand } from "./command";
 export class BocaLeiteCommand extends ZapCommand {
     

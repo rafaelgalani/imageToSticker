@@ -1,17 +1,20 @@
 
 {
     "compilerOptions": {
-        "baseUrl": "./src",
-        "module": "CommonJS",
-        "target": "ES2017",
+        "baseUrl": "./",
         "sourceMap": true,
-        "allowJs": true,
         "outDir": "./build",
         "skipLibCheck": true,
+        "paths": {
+            "src/*" : [
+                "./src/*"
+            ]
+        }
     },
-    "esModuleInterop": true,
-    "exclude": [
+    "include": [ "src/**/*.ts" ],
+     "esModuleInterop": true,
+     "exclude": [
         "./node_modules/**/*",
-        "./build/**/*",
+         "./build/**/*",
     ]
 }

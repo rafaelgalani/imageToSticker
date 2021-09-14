@@ -2,8 +2,12 @@ import { ZapContext, ZapError } from "../entities"
 import { resolve } from 'path';
 export { default as resizeImage } from './imageProcessing';
 
-/* eslint-disable no-return-assign */
-const chalk = require('chalk')
+import { writeFileSync, readFileSync } from 'fs'
+
+
+import * as chalk from 'chalk'
+import { ContactId } from "@open-wa/wa-automate";
+import { Mention } from "src/types";
 const moment = require('moment-timezone')
 const updateJson = require('update-json-file')
 moment.tz.setDefault('Asia/Jakarta').locale('id')
@@ -22,57 +26,44 @@ export const processTime = (timestamp, now) => {
     return moment.duration(now - moment(timestamp * 1000)).asSeconds()
 }
 
-// is Url?
-const Url = (url) => {
-    return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi'))
+export const Regexes = {
+    URL: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/,
+    Giphy: /https?:\/\/(www\.)?giphy.com/,
+    MediaGiphy: /https?:\/\/media.giphy.com\/media/,
+    Id: /^\d+@c.us$/,
+    Mention: /^@\d+$/,
 }
 
-const Giphy = (url) => {
-    return url.match(new RegExp(/https?:\/\/(www\.)?giphy.com/, 'gi'))
-}
+export const isUrl = (url: string) => Boolean(url.match(new RegExp(Regexes.URL, 'gi')));
+export const isGiphy = (url: string) => Boolean(url.match(new RegExp(Regexes.Giphy, 'gi')));
+export const isMediaGiphy = (url: string) => Boolean(url.match(new RegExp(Regexes.MediaGiphy, 'gi')));
+export const isId = (number: string) => Boolean( number.match(new RegExp(Regexes.Id)) );
+export const isMention = (number: string) => Boolean( number.match(new RegExp(Regexes.Mention)) );
 
-const MediaGiphy = (url) => {
-    return url.match(new RegExp(/https?:\/\/media.giphy.com\/media/, 'gi'))
-}
 
-let admins = [];
-let members = [];
+export const toMention   = (id: ContactId):    Mention   => `@${id.replace('@c.us', '')}` as Mention;
+export const toContactId = (mention: Mention): ContactId => `${mention.substring(1)}@c.us` as ContactId;
 
-export const setup = (context: ZapContext) => {
-    admins = context.groupAdmins;
-    members = context.groupMembers;
-};
-
-const isId = number => !!number.match(new RegExp(/^\d+@c.us$/));
-const isMention = number => !!number.match(new RegExp(/^@\d+$/));
-
-export const toMention = (number) => {
-    if (isMention(number)){
-        return number;
-    } else if (isId(number)){
-        return '@' + number.replace('@c.us', '');
+export const loadJSON = (jsonFilename: string): any | null => {
+    try {
+        return JSON.parse(
+            readFileSync(
+                resolvePath('data', `${jsonFilename}.json`), 
+                'utf8'
+            )
+        );
+    } catch {
+        return null;
     }
 };
 
-export const toId = (number) => {
-    if (isId(number)) {
-        return number;
-    } else if (isMention(number)){
-        return number.substring(1) + '@c.us';
-    }
-};
-
-export const isAdmin = function(number){
-    return admins.includes(number);
-};
-
-export const getTitle = function(number){
-    return isAdmin(number)? 'admin' : 'membro comum';
-};
-
-export const getMentionWithTitle = function(number){
-    let targetNumber = toId(number);
-    return `${getTitle(targetNumber)} ${toMention(targetNumber)}`;
+export const saveJSON = (jsonFilename: string, content: any) => {
+    const contentSerialized = JSON.stringify(content);
+    return writeFileSync(
+        resolvePath('data', `${jsonFilename}.json`),
+        contentSerialized,
+        'utf8'
+    );
 };
 
 const sexSentences = [
@@ -290,88 +281,88 @@ export const getMemberStreak = member => assStreak[member];
 export const removeStreak = (member) => delete assStreak[member];
 export const getRandomStreakSentence = () => assStreakSentences[Math.floor((Math.random() * assStreakSentences.length))];
 
-let votingMap = {};
-export const getVoting = function(voteTarget, groupId){
-    return votingMap?.[groupId]?.[voteTarget]
-}
+// let votingMap = {};
+// export const getVoting = function(voteTarget, groupId){
+//     return votingMap?.[groupId]?.[voteTarget]
+// }
 
-export const endVoting = function(voteTarget, groupId){
-    return delete votingMap[groupId][voteTarget]
-};
+// export const endVoting = function(voteTarget, groupId){
+//     return delete votingMap[groupId][voteTarget]
+// };
 
-export const createVoting = function(voteTarget, groupId, voteActor){
-    let voting = getVoting(voteTarget, groupId);
-    if (voting){
-        throw new ZapError(fullTrim(
-            `Já há um votekick para ${toMention(voteTarget)}. Votação:
+// export const createVoting = function(voteTarget, groupId, voteActor){
+//     let voting = getVoting(voteTarget, groupId);
+//     if (voting){
+//         throw new ZapError(fullTrim(
+//             `Já há um votekick para ${toMention(voteTarget)}. Votação:
 
-            Banir: ${voting.shouldKick}/${voting.votesNeeded}
-            Não banir: ${voting.shouldKeep}/${voting.votesNeeded}`
-        ));
-    }
+//             Banir: ${voting.shouldKick}/${voting.votesNeeded}
+//             Não banir: ${voting.shouldKeep}/${voting.votesNeeded}`
+//         ));
+//     }
 
-    let votesNeeded = Math.floor( (members.length/2)+1 );
-    if (!votingMap[groupId]) votingMap[groupId] = {}
+//     let votesNeeded = Math.floor( (members.length/2)+1 );
+//     if (!votingMap[groupId]) votingMap[groupId] = {}
 
-    return votingMap[groupId][voteTarget] = {
-        voteTarget,
-        shouldKick: 1,
-        shouldKeep: 0,
-        done: false,
-        votes: [{
-            voteActor,
-            votedForKick: true,
-        }],
-        votesNeeded: 5,
-    };
-};
+//     return votingMap[groupId][voteTarget] = {
+//         voteTarget,
+//         shouldKick: 1,
+//         shouldKeep: 0,
+//         done: false,
+//         votes: [{
+//             voteActor,
+//             votedForKick: true,
+//         }],
+//         votesNeeded: 5,
+//     };
+// };
 
-export const doVote = function(voteTarget, groupId, voteActorArg, kick=true){
-    let voting = getVoting(voteTarget, groupId);
-    let voteActor = toId(voteActorArg);
-    let vote = voting.votes.find(vote => vote.voteActor === voteActor);
-    if (vote){
-        throw new ZapError(`Seu voto já foi processado, você votou ${vote.votedForKick? 'a favor do ban': 'contra o ban'} do ${toMention(voteTarget)}.`);
-    }
+// export const doVote = function(voteTarget, groupId, voteActorArg, kick=true){
+//     let voting = getVoting(voteTarget, groupId);
+//     let voteActor = toId(voteActorArg);
+//     let vote = voting.votes.find(vote => vote.voteActor === voteActor);
+//     if (vote){
+//         throw new ZapError(`Seu voto já foi processado, você votou ${vote.votedForKick? 'a favor do ban': 'contra o ban'} do ${toMention(voteTarget)}.`);
+//     }
 
-    voting.votes.push({
-        voteActor,
-        votedForKick: kick
-    });
+//     voting.votes.push({
+//         voteActor,
+//         votedForKick: kick
+//     });
 
-    if (kick) voting.shouldKick += 1;
-    else voting.shouldKeep += 1;
+//     if (kick) voting.shouldKick += 1;
+//     else voting.shouldKeep += 1;
 
-    voting.done = (voting.shouldKick >= voting.votesNeeded) || (voting.shouldKeep >= voting.votesNeeded);
-    voting.kicked = voting.done && voting.shouldKick >= voting.votesNeeded;
+//     voting.done = (voting.shouldKick >= voting.votesNeeded) || (voting.shouldKeep >= voting.votesNeeded);
+//     voting.kicked = voting.done && voting.shouldKick >= voting.votesNeeded;
 
-    return voting;
-};
+//     return voting;
+// };
 
-export const getVote = function(arg){
-    let vote = arg.trim().toLowerCase();
+// export const getVote = function(arg){
+//     let vote = arg.trim().toLowerCase();
 
-    let shouldKickValidVotes = ['s', 'y', 'ss', 'sss', 'sim', 'yes', '👍', '👍🏿', '👍🏻', '👍🏽', '👍🏾', '👍🏼'],
-        shouldNotKickValidVotes = ['n', 'n', 'nn', 'no', 'nnn', 'nao', 'não', 'nem', 'ñ', '👎','👎🏻','👎🏼','👎🏽','👎🏾','👎🏿'];
+//     let shouldKickValidVotes = ['s', 'y', 'ss', 'sss', 'sim', 'yes', '👍', '👍🏿', '👍🏻', '👍🏽', '👍🏾', '👍🏼'],
+//         shouldNotKickValidVotes = ['n', 'n', 'nn', 'no', 'nnn', 'nao', 'não', 'nem', 'ñ', '👎','👎🏻','👎🏼','👎🏽','👎🏾','👎🏿'];
 
-    if (shouldKickValidVotes.includes(vote)){
-        return true;
-    }
+//     if (shouldKickValidVotes.includes(vote)){
+//         return true;
+//     }
 
-    if (shouldNotKickValidVotes.includes(vote)){
-        return false;
-    }
+//     if (shouldNotKickValidVotes.includes(vote)){
+//         return false;
+//     }
 
-    throw new ZapError(fullTrim(`
-        Voto inválido.
+//     throw new ZapError(fullTrim(`
+//         Voto inválido.
         
-        Votos válidos a favor:
-        ${shouldKickValidVotes.join(', ')}
+//         Votos válidos a favor:
+//         ${shouldKickValidVotes.join(', ')}
 
-        Votos válidos contra:
-        ${shouldNotKickValidVotes.join(', ')}
-    `));
-};
+//         Votos válidos contra:
+//         ${shouldNotKickValidVotes.join(', ')}
+//     `));
+// };
 
 // Message Filter / Message Cooldowns
 const usedCommandRecently = new Set()
@@ -396,14 +387,6 @@ export const messageLog = (fromMe, type) => updateJson('utils/stat.json', (data)
 export const msgFilter = {
     isFiltered,
     addFilter
-};
-
-export const is = {
-    Id: isId,
-    Mention: isMention,
-    Url,
-    Giphy,
-    MediaGiphy
 };
 
 

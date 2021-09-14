@@ -1,6 +1,6 @@
 import { decryptMedia } from "@open-wa/wa-automate";
 // WILL ALSO BE MOVED LATER.
-import { is, resizeImage } from "../../utils";
+import { isUrl, resizeImage } from "../../utils";
 import { ZapCommand } from "./command";
 
 export class StickerCommand extends ZapCommand {
@@ -26,7 +26,7 @@ export class StickerCommand extends ZapCommand {
         } else if (args.length === 1) {
             const [ arg ] = args;
 
-            if (!is.Url(arg)) { 
+            if (!isUrl(arg)) { 
                 await client.reply(from, 'Link inválido...', id);
             } else if (arg.toLowerCase() === 'remove') {
                 if (!isQuotedImage) return;

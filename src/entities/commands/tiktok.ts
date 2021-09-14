@@ -1,10 +1,10 @@
-import { ZapError } from "entities/core/error";
-import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "entities/rules";
-import { ArgsOperator } from "entities/rules/group/n-arguments";
-import { tiktokDownloader } from 'lib/downloaders';
+import { ZapError } from "src/entities/core/error";
+import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "src/entities/rules";
+import { ArgsOperator } from "src/entities/rules/group/n-arguments";
+import { tiktokDownloader } from 'src/lib/downloaders';
 import { PostCollector } from "tiktok-scraper";
 // WILL ALSO BE MOVED LATER.
-import { is } from "utils";
+import { isUrl } from "src/utils";
 import { ZapCommand } from "./command";
 
 export class TikTokCommand extends ZapCommand {
@@ -20,7 +20,7 @@ export class TikTokCommand extends ZapCommand {
                 operation: ArgsOperator.LTE,
             }),
             new ArgumentFormatterRule([
-                new ArgumentFormat(is.Url),
+                new ArgumentFormat(isUrl),
             ])
         ];
     }

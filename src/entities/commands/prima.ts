@@ -1,4 +1,3 @@
-import { getMentionWithTitle } from "../../utils";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
@@ -16,8 +15,7 @@ export class PrimaCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, target, mentionedJidList, sender } = this.context;
         const randomGroupMember = this.context.groupMembers.random();
-        await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(sender.id)} cacetou a rola na prima do ${getMentionWithTitle(randomGroupMember)}.`, this.context.id)
+        await this.context.reply(`O ${this.context.getSenderTitleAndMention()} cacetou a rola na prima do ${this.context.getTitleAndMention(randomGroupMember)}.`)
     }
 }

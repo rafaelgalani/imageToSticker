@@ -1,5 +1,5 @@
-import { GroupOnlyRule } from "entities/rules";
-import { resolvePath } from 'utils';
+import { GroupOnlyRule } from "src/entities/rules";
+import { resolvePath } from 'src/utils';
 import { ZapCommand } from "./command";
 export class PoorCommand extends ZapCommand {
     

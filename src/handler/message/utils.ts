@@ -1,24 +1,7 @@
+import { fullTrim } from "src/utils";
+
 /* eslint-disable */ 
 let votingCounts = 0;
-
-export const toMention = function (a) {
-    if (typeof a === 'string') {
-        return '@' + a.replace('@c.us', '')
-    }
-}
-
-export const isAdmin = function(number, admins){
-    return admins.includes(number);
-}
-
-export const getTitle = function(number, admins){
-    return isAdmin(number, admins)? 'admin' : 'membro comum';
-}
-
-export const getMentionWithTitle = function(number, admins){
-    let title = isAdmin(number, admins)? 'admin' : 'membro comum';
-    return `${getTitle(number, admins)} ${toMention(number)}`;
-}
 
 export const random = (min, max) => Math.floor(Math.random()*max+min);
 
@@ -93,17 +76,19 @@ export const getVote = function(arg){
         return false;
     }
 
-    const messages = [
-        'Voto inválido.',
-        '',
-        'Votos válidos: ',
-        '',
-        'A favor:',
-        shouldKickValidVotes.join(` | `),
-        '',
-        'Contra: ',
-        shouldNotKickValidVotes.join(` | `),
-    ];
+    const invalidVoteMessage = fullTrim(`
+        Voto inválido.
+        
+        Votos válidos: 
+        
+        A favor:
+        
+        ${shouldKickValidVotes.join(` | `)}
+        
+        Contra: 
+        
+        ${shouldNotKickValidVotes.join(` | `)}
+    `);
 
-    throw new Error(messages.join('\n'));
+    throw new Error(invalidVoteMessage);
 };

@@ -1,4 +1,5 @@
-import * as allCommands from 'entities/commands';
+import * as allCommands from 'src/entities/commands';
+import { fullTrim } from 'src/utils';
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 
@@ -16,17 +17,15 @@ export class HelpCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, target } = this.context;
-
         let commands: ZapCommand[] = Object.keys(allCommands).map(a => new allCommands[a](null));        
         let commandsPatterns = commands.map(a => a.getPatternsAsString());
 
-        const message = [
-            'Comandos disponíveis:',
-            '',
-            commandsPatterns.join('\n\n')
-        ];
+        const message = fullTrim(`
+            Comandos disponíveis:
+            
+            ${commandsPatterns.join('\n\n')}
+        `);
 
-        await client.sendReplyWithMentions(target, message.join('\n'), this.context.id)
+        await this.context.reply(message);
     }
 }

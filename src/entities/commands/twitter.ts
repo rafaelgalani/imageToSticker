@@ -1,9 +1,9 @@
-import { ZapError } from "entities/core";
-import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "entities/rules";
-import { ArgsOperator } from "entities/rules/group/n-arguments";
-import { twitterDownloader } from 'lib/downloaders';
+import { ZapError } from "src/entities/core";
+import { ArgumentFormat, ArgumentFormatterRule, NArgumentsRule } from "src/entities/rules";
+import { ArgsOperator } from "src/entities/rules/group/n-arguments";
+import { twitterDownloader } from 'src/lib/downloaders';
 // WILL ALSO BE MOVED LATER.
-import { is } from "utils";
+import { isUrl } from "src/utils";
 import { ZapCommand } from "./command";
 
 export class TwitterCommand extends ZapCommand {
@@ -19,7 +19,7 @@ export class TwitterCommand extends ZapCommand {
                 operation: ArgsOperator.LTE,
             }),
             new ArgumentFormatterRule([
-                new ArgumentFormat(is.Url),
+                new ArgumentFormat(isUrl),
             ])
         ];
     }

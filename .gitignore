@@ -28,6 +28,7 @@ lib/giphy.js
 lib/*.json
 lib/instaStory.js
 lib/jiwa.js
+data
 utils/anu.js
 
 # managed by open-wa

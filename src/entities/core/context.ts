@@ -1,5 +1,6 @@
-import { resolvePath } from "utils";
+import { resolvePath, toMention } from "src/utils";
 import { Message, Client, GroupChatId, ContactId, FilePath } from '@open-wa/wa-automate';
+import { Mention, Title } from "src/types";
 
 type PartialMessage = Partial<Message>;
 export interface ZapContext extends PartialMessage { }
@@ -33,15 +34,9 @@ export class ZapContext {
     uaOverride: string;
     
     target: ContactId | GroupChatId;
-    
-    private message: Message;
 
     private constructor(client: Client, message: Message){
-        this.message = message;
         Object.assign(this, message);
-        // let  type, id, from, fromMe, to, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg, quotedMsgObj, mentionedJidList } = message;
-        // let { body } = message
-        // const { name, formattedTitle } = chat;
         this.client = client;
         let { pushname, formattedName } = (this.sender ?? {});
         this.pushname = pushname || formattedName // verifiedName is the name of someone who uses a business account
@@ -75,6 +70,8 @@ export class ZapContext {
         this.isQuotedImage = this.quotedMsg && this.quotedMsg.type === 'image'
         this.url = this.args.length !== 0 ? this.args[0] : ''
         this.uaOverride = process.env.UserAgent
+        
+        this.uaOverride = process.env.UserAgent
 
         this.target = this.fromMe? this.chatId : this.from;
     }
@@ -97,5 +94,48 @@ export class ZapContext {
         const [ folder, fileName ] = filePath.split('/');
         return await this.client.sendFile(this.target, resolvePath('assets', folder, fileName), fileName, fileName, this.id, false, true);
     }
+
+    public async getAllMembersMentioned() {
+        return this.groupMembers.map(toMention);
+    }
+
+    public isAdmin(id: ContactId) {
+        return this.groupAdmins.includes(id);
+    }
+
+    public getTitle(id: ContactId): Title  {
+        return this.isAdmin(id)? 'admin' : 'membro(a) comum';
+    }
+
+    public getTitleAndMention(id: ContactId): `${Title} ${Mention}` {
+        return `${this.getTitle(id)} ${toMention(id)}`
+    }
+
+    public getSenderMention() {
+        return toMention(this.sender.id);
+    }
+
+    public getSenderTitle() {
+        return this.getTitle(this.sender.id);
+    }
     
+    public getSenderTitleAndMention(): `${Title} ${Mention}` {
+        return `${this.getSenderTitle()} ${this.getSenderMention()}`
+    }
+
+    public getMentions(){
+        return this.mentionedJidList.map(toMention)
+    }
+
+    public async removeSender(){
+        return await this.client.removeParticipant(this.groupId, this.sender.id);
+    }
+    
+    public async promote(id: ContactId){
+        return await this.client.promoteParticipant(this.groupId, id);
+    }
+    
+    public async demote(id: ContactId){
+        return await this.client.demoteParticipant(this.groupId, id);
+    }
 }

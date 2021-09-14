@@ -1,8 +1,8 @@
-import { addMemberCooldown, addMemberStreak, fullTrim, getMemberCooldown, getMentionWithTitle, getRandomStreakSentence, isMemberInCooldown, isMemberInStreak, removeMemberCooldown, removeStreak, setup } from "../../utils";
-import { GroupOnlyRule, NArgumentsRule } from "../rules";
+import { ContactId } from "@open-wa/wa-automate";
+import { isMention, randomInt } from "../../utils";
+import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
-export const random = (min, max) => Math.floor(Math.random()*max+min);
 
 let assDict = {};
 const initializeAssSentence = () => {
@@ -39,8 +39,8 @@ const initializeAssSentence = () => {
 initializeAssSentence();
 
 const getAssSentence = (percentage, member, target) => {
-    let sentence = assDict[percentage];
-    sentence = sentence ?? assDict[100];
+    let sentence = assDict[percentage] ?? assDict[100];
+
     return sentence.replace('{0}', percentage)
                    .replace('{1}', member)
                    .replace('{2}', target);
@@ -56,76 +56,73 @@ export class AssCommand extends ZapCommand {
         return [ 
             new GroupOnlyRule().override('Mensagem precisa ser enviada em grupo.'), 
             new NArgumentsRule({ target: 1, operation: ArgsOperator.LTE }).override('Um cú de cada vez, né chapa?'), 
+            new ArgumentFormatterRule([
+                new ArgumentFormat(isMention).override('Os argumentos do comando só podem ser menções.'),
+            ])
         ];
     }
 
+    protected getCooldownMessage() {
+        const [, cooldownInSeconds ] = this.checkForCooldown();
+        return `Você está broxa. Aguarde ${cooldownInSeconds} segundos para que a pipa suba novamente.`
+    }
+
     protected async runSpecificLogic() {
-        const { sender, args, id, target, client, isSuperAdmin } = this.context;
-        setup(this.context);
+        const { args } = this.context;
+        if( args.length === 1 ){
 
-        let actor = sender.id;
+            let randomizedPercentage = randomInt(100);
 
-        if (isMemberInCooldown(actor) && getMemberCooldown(actor) < 0){
-            removeMemberCooldown(actor);
-        }
+            // if ( this.isMemberInStreak() ){
+            //     randomizedPercentage = randomInt(100, 76);
+            // }
 
-        if(!isMemberInCooldown(actor)) {
-            if(args.length === 1){
+            let [ target ] = args as ContactId[];
 
-                let randomizedPercentage = Math.floor(Math.random() * 101); // returns a random integer from 0 to 100
+            let assSentence = getAssSentence(randomizedPercentage, this.context.getSenderTitleAndMention(), this.context.getTitleAndMention( target ) );
 
-                if (isMemberInStreak(actor)){
-                    randomizedPercentage = Math.floor(Math.random() * (100 - 76 + 1) + 76);
-                }
+            // if (randomizedPercentage < 90){
+            //     addMemberCooldown(actor);
+            //     if (isMemberInStreak(actor)){
+            //         removeStreak(actor);
+            //         assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${getMentionWithTitle(actor)} broxou após degustar esse cuzinho.`;
+            //     }
+            // } 
+            
+            // if (isMemberInStreak(actor)){
+            //     assSentence += ' ' + getRandomStreakSentence();
+            // }
 
-                let targetCuComido = args[0];
+            // if (randomizedPercentage >= 90){
+            //     const streakSequence = addMemberStreak(actor);
+            //     if (streakSequence === 1){
+            //         assSentence += '\n\n' + fullTrim(`
+            //             O ${this.context.getSenderTitleAndMention()} ENTROU EM FRENESI (CU STREAK)!!!
 
-                let assSentence = getAssSentence(randomizedPercentage, getMentionWithTitle(actor), getMentionWithTitle(targetCuComido));
+            //             - A próxima comida de cu será garantida 🥵🍆
+            //             - Você tem 40% de chance de continuar em cu streak 💯💦
+            //             - Você só broxa se sair do cu streak 👎😫
+            //         `)
+            //     }
+            // }
 
-                if (randomizedPercentage < 90){
-                    addMemberCooldown(actor);
-                    if (isMemberInStreak(actor)){
-                        removeStreak(actor);
-                        assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${getMentionWithTitle(actor)} broxou após degustar esse cuzinho.`;
-                    }
-                } 
-                
-                if (isMemberInStreak(actor)){
-                    assSentence += ' ' + getRandomStreakSentence();
-                }
+            /*if (getMemberStreak(actor) == 4){
+                addMemberCooldown(actor);
+                removeStreak(actor);
+                assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${getMentionWithTitle(actor)} broxou após degustar esse cuzinho.`;
+            }*/
 
-                if (randomizedPercentage >= 90){
-                    const streakSequence = addMemberStreak(actor);
-                    if (streakSequence === 1){
-                        assSentence += '\n\n' + fullTrim(`
-                            O ${getMentionWithTitle(actor)} ENTROU EM FRENESI (CU STREAK)!!!
-
-                            - A próxima comida de cu será garantida 🥵🍆
-                            - Você tem 40% de chance de continuar em cu streak 💯💦
-                            - Você só broxa se sair do cu streak 👎😫
-                        `)
-                    }
-                }
-
-                /*if (getMemberStreak(actor) == 4){
-                    addMemberCooldown(actor);
-                    removeStreak(actor);
-                    assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${getMentionWithTitle(actor)} broxou após degustar esse cuzinho.`;
-                }*/
-
-                return await client.sendReplyWithMentions(target, assSentence, id);
-                
-                // if(actor != natinho){
-                //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
-                // } else {
-                //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de CHEIRAR o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
-                // }
-            } else {
-                return await client.reply(target, 'marcou ninguém primo? come teu próprio cy aí então zé kkkkkjjjjjjjj.', id);
-            }
+            return await this.context.reply(assSentence);
+            
+            // if(actor != natinho){
+            //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
+            // } else {
+            //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de CHEIRAR o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
+            // }
         } else {
-            return await client.reply(target, `Você está broxa. Aguarde ${getMemberCooldown(actor)} segundos para que a pipa suba novamente.`, id);
+            return await this.context.reply('marcou ninguém primo? come teu próprio cy aí então zé kkkkkjjjjjjjj.');
         }
+         
     }
     //     return;
     //     if(args.length === 1){

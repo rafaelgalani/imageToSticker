@@ -1,4 +1,5 @@
-import { BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
+import { isMention, toMention } from "src/utils";
+import { AdminRule, AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class DemoteCommand extends ZapCommand {
@@ -10,15 +11,19 @@ export class DemoteCommand extends ZapCommand {
     protected getRules(){
         return [ 
             new GroupOnlyRule(), 
-            //new AdminRule().reverse(true).override('Esse aí já é adm'), 
+            new AdminRule(), 
             new BotAdminRule(), 
-            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
+            new AllowBotArgumentRule(false), 
+            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }).override('Só um membro de cada vez'), 
+            new ArgumentFormatterRule([
+                new ArgumentFormat(isMention).override('Os argumentos do comando só podem ser menções.'),
+            ])
         ];
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, target, mentionedJidList } = this.context;
-        await client.demoteParticipant(groupId, mentionedJidList[0]);
-        return await client.sendReplyWithMentions(target, `Virou pobre @${mentionedJidList[0].replace('@c.us', '')}!!!`, this.context.id);
+        const [ target ] = this.context.mentionedJidList;
+        await this.context.promote(target);
+        return await this.context.reply(`Virou pobre, ${toMention(target)}!!! Perdeu tudo e está morando de aluguel.`)
     }
 }
