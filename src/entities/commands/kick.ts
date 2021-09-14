@@ -19,7 +19,8 @@ export class KickCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         const { client, groupId, target, mentionedJidList } = this.context;
-        await client.sendReplyWithMentions(target, `Xauuu ${mentionedJidList.map(x => `@${x.replace('@c.us', '')}`).join('\n')} xD`, this.context.id)
+        await this.context.reply(`Xauuu:\n${this.context.getMentions().join(`\n`)}\n\nxD`)
+
         for (let i = 0; i < mentionedJidList.length; i++) {
             await client.removeParticipant(groupId, mentionedJidList[i])
         }

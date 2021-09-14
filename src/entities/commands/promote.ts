@@ -23,6 +23,7 @@ export class PromoteCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         const [ target ] = this.context.mentionedJidList;
+        if (this.context.isAdmin(target)) return await this.context.reply(`O ${toMention(target)} já é adm.`);
         await this.context.promote(target);
         return await this.context.reply(`Parabenizem o novo adm, ${toMention(target)}`)
     }

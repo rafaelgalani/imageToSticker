@@ -23,6 +23,7 @@ export class DemoteCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         const [ target ] = this.context.mentionedJidList;
+        if (!this.context.isAdmin(target)) return await this.context.reply(`O ${toMention(target)} já é pobre.`);
         await this.context.demote(target);
         return await this.context.reply(`Virou pobre, ${toMention(target)}!!! Perdeu tudo e está morando de aluguel.`)
     }

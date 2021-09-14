@@ -128,6 +128,10 @@ export class ZapContext {
         return this.mentionedJidList.map(toMention)
     }
 
+    public getMentionsWithTitle(){
+        return this.mentionedJidList.map(a => `${this.getTitle(a)} ${toMention(a)}`)
+    }
+
     public async removeSender(){
         return await this.client.removeParticipant(this.groupId, this.sender.id);
     }

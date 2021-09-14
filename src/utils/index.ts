@@ -68,19 +68,21 @@ export const saveJSON = (jsonFilename: string, content: any) => {
     );
 };
 
-const sexSentences = [
-    `bateu uma punhetinha`, 
-    `deu uma gozada gostosa`,
-    `gozou tudão`,
-    `alcançou o orgasmo`,
-    `se deleitou sexualmente`,
-    `fez uma surubinha safadinha`,
-    `descabelou o palhaço`,
-]
-
-export const getRandomSexSentence = () => {
-    return sexSentences[Math.floor((Math.random() * sexSentences.length))];
-};
+export const getRandomString = function() {
+    const result           = [];
+    const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 4; i++){
+        result.push([]);
+        for (var j = 0; j < 4; j++ ) {
+            result[result.length - 1].push(
+                characters.charAt(Math.floor(Math.random() * charactersLength))
+            )
+        }
+        result[result.length - 1] = result[result.length - 1].join('')
+    }
+    return result.join('-');
+}
 
 const membersList = [
     {

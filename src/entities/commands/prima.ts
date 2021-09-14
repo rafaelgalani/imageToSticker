@@ -1,3 +1,4 @@
+import { pickRandom } from "src/utils";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
@@ -15,7 +16,7 @@ export class PrimaCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const randomGroupMember = this.context.groupMembers.random();
+        const randomGroupMember = pickRandom( this.context.groupMembers );
         await this.context.reply(`O ${this.context.getSenderTitleAndMention()} cacetou a rola na prima do ${this.context.getTitleAndMention(randomGroupMember)}.`)
     }
 }

@@ -5,22 +5,6 @@ let votingCounts = 0;
 
 export const random = (min, max) => Math.floor(Math.random()*max+min);
 
-export const getId = function() {
-    let result           = [];
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (let i = 0; i < 4; i++){
-        result.push([]);
-        for (var j = 0; j < 4; j++ ) {
-            result[result.length - 1].push(
-                characters.charAt(Math.floor(Math.random() * charactersLength))
-            )
-        }
-        result[result.length - 1] = result[result.length - 1].join('')
-    }
-    return result.join('-');
-}
-
 export const createVoting = function(votingMap, target, members, from){
     if (votingMap[target]){
         let voting = votingMap[target];

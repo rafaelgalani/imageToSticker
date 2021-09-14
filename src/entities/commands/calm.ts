@@ -1,6 +1,5 @@
 import { GroupOnlyRule, NArgumentsRule } from "src/entities/rules";
 import { ArgsOperator } from "src/entities/rules/group/n-arguments";
-import { resolvePath } from 'src/utils';
 import { ZapCommand } from "./command";
 export class CalmCommand extends ZapCommand {
     
@@ -10,8 +9,8 @@ export class CalmCommand extends ZapCommand {
 
     protected getRules(){
         return [ 
-        new GroupOnlyRule(),
-        new NArgumentsRule({ target: 0, operation: ArgsOperator.EQ }).override('O cara pede calma mas tá emocionado kkkkkjj'), 
+            new GroupOnlyRule(),
+            new NArgumentsRule({ target: 0, operation: ArgsOperator.EQ }).override('O cara pede calma mas tá emocionado kkkkkjj'), 
         ];
     }
 

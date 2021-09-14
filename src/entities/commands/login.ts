@@ -1,4 +1,4 @@
-import { random } from "../../handler/message/utils";
+import { randomInt } from "src/utils";
 import { ZapError } from "../core/error";
 import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
@@ -20,12 +20,13 @@ export class LoginCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        // let { args, sender, client, groupId, target, from } = this.context;
-        // let minutes = Number(args[0]);
-        // let actor = sender.id;
-        // let randomMinutes = random(24, 260);
-        // if (minutes < 0) throw new ZapError('O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
+        const { args } = this.context;
+        const [ minutes ] = args;
+        if (Number(minutes) < 0) throw new ZapError('O cara meteu do loco. Quer voltar no tempo filhão? kkjkjjjjjjj???');
 
-        // return await client.sendReplyWithMentions(target, `${toMention(from)} irá logar em aproximadamente ${randomMinutes + minutes} minutos.`, this.context.id);
+        const actualMinute = +minutes + 40;
+        const randomMinuteDuration = randomInt(actualMinute*5, actualMinute)
+
+        return await this.context.reply(`${this.context.getSenderMention()} irá logar em aproximadamente ${randomMinuteDuration} minutos.`);
     }
 }

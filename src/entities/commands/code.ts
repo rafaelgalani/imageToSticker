@@ -1,4 +1,4 @@
-import { getId } from "../../handler/message/utils"; // TODO: THIS MUST BE MOVED.
+import { getRandomString } from "src/utils"; // TODO: THIS MUST BE MOVED.
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class CodeCommand extends ZapCommand {
@@ -13,21 +13,31 @@ export class CodeCommand extends ZapCommand {
         ];
     }
 
-    protected async runSpecificLogic() {
-        let { client, args, sender, mentionedJidList, target, groupAdmins } = this.context;
-        let code = getId();
-        let actor = sender.id;
+    private buildSentence(code: string, membersSentence?: string) {
+        const messageChunks = [
+            `O ${this.context.getSenderTitleAndMention()} `,
+            (membersSentence? 
+                `enviou um codiguin para ${ membersSentence }.\n` : 
+                `solicitou um codiguin.\n`
+            ),
+            `Tá aí tropinha!\n`,
+            `Codiguin:\n`,
+            code.toUpperCase(),
+        ];
 
-        // if (args.length > 1) {
-        //     let members = mentionedJidList.map(number => getMentionWithTitle(number, groupAdmins)),
-        //         lastMember = members.pop();
-                
-        //     let membersSentence = members.length >= 2? `${members.join(', ')} e o ${lastMember}` : `${members[0]} e o ${lastMember}`;
-        //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor, groupAdmins)} enviou um codiguin para o ${membersSentence}. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`, this.context.id)
-        // } else if (args.length === 1){
-        //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor, groupAdmins)} enviou um codiguin para o ${getMentionWithTitle(mentionedJidList[0], groupAdmins)}. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`, this.context.id)
-        // } else if (args.length === 0){
-        //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor, groupAdmins)} solicitou um codiguin. Tá aí tropinha!\nCodiguin: \n${code.toUpperCase()}`, this.context.id)
-        // }
+        return messageChunks.join('');
+    }
+
+    protected async runSpecificLogic() {
+        const code = getRandomString();
+
+        const members = this.context.getMentionsWithTitle();
+        const lastMember = members.pop();
+
+        const membersSentence = members.length? `${members.join(', ')} e o(a) ${lastMember}` : lastMember;
+
+        return await this.context.reply(
+            this.buildSentence(code, membersSentence)
+        )
     }
 }

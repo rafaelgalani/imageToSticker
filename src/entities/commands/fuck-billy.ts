@@ -1,4 +1,4 @@
-import { resolvePath } from "../../utils";
+import { randomInt } from "src/utils";
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class FuckBillyCommand extends ZapCommand {
@@ -12,7 +12,7 @@ export class FuckBillyCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let randomFuck = Math.floor(Math.random() * 3) + 1;
+        let randomFuck = randomInt(3);
         return await this.context.sendFile(`audios/fuckbilly${randomFuck}.mp3}`);
     }
 }
