@@ -23,7 +23,7 @@ export class DemoteCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         const [ target ] = this.context.mentionedJidList;
-        await this.context.promote(target);
+        await this.context.demote(target);
         return await this.context.reply(`Virou pobre, ${toMention(target)}!!! Perdeu tudo e está morando de aluguel.`)
     }
 }

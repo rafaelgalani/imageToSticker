@@ -1,5 +1,5 @@
 import { ContactId } from "@open-wa/wa-automate";
-import { CooldownOptions } from "src/types";
+import { CooldownOptions, Mention } from "src/types";
 import { isMention, randomInt } from "../../utils";
 import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
@@ -81,7 +81,7 @@ export class AssCommand extends ZapCommand {
             //     randomizedPercentage = randomInt(100, 76);
             // }
 
-            let [ target ] = args as ContactId[];
+            let [ target ] = args as Mention[];
 
             let assSentence = getAssSentence(randomizedPercentage, this.context.getSenderTitleAndMention(), this.context.getTitleAndMention( target ) );
 

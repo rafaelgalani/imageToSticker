@@ -1,4 +1,4 @@
-import { resolvePath, toMention } from "src/utils";
+import { isMention, resolvePath, toContactId, toMention } from "src/utils";
 import { Message, Client, GroupChatId, ContactId, FilePath } from '@open-wa/wa-automate';
 import { Mention, Title } from "src/types";
 
@@ -92,7 +92,7 @@ export class ZapContext {
     
     public async sendFile(filePath: `${string}/${string}.${string}`){
         const [ folder, fileName ] = filePath.split('/');
-        return await this.client.sendFile(this.target, resolvePath('assets', folder, fileName), fileName, fileName, this.id, false, true);
+        return await this.client.sendFile(this.target, resolvePath('src', 'assets', folder, fileName), fileName, fileName, this.id, false, true);
     }
 
     public async getAllMembersMentioned() {
@@ -107,8 +107,9 @@ export class ZapContext {
         return this.isAdmin(id)? 'admin' : 'membro(a) comum';
     }
 
-    public getTitleAndMention(id: ContactId): `${Title} ${Mention}` {
-        return `${this.getTitle(id)} ${toMention(id)}`
+    public getTitleAndMention(id: ContactId | Mention): `${Title} ${Mention}` {
+        if (isMention(id)) return `${this.getTitle( toContactId(id as Mention) )} ${id as Mention}`;
+        else return `${this.getTitle(id as ContactId)} ${toMention(id as ContactId)}`
     }
 
     public getSenderMention() {
