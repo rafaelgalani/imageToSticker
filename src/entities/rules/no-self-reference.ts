@@ -17,6 +17,7 @@ export class SelfReferenceRule extends Rule {
     validate(context: ZapContext): boolean{
         const [ who ] = context.args;
 
+        if ( !who ) return true;
         // Can't self reference.
         if ( toContactId( who as Mention ) === context.sender.id ) return false; 
 

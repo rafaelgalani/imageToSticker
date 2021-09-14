@@ -1,4 +1,5 @@
-import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
+import { isMention } from "src/utils";
+import { AdminRule, AllowBotArgumentRule, ArgumentFormat, ArgumentFormatterRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class KickCommand extends ZapCommand {
@@ -14,6 +15,9 @@ export class KickCommand extends ZapCommand {
             new BotAdminRule(), 
             new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
             new AllowBotArgumentRule(false), 
+            new ArgumentFormatterRule([
+                new ArgumentFormat(isMention).override('Os parâmetros do comando só podem ser menções à outros membros.'),
+            ])
         ];
     }
 

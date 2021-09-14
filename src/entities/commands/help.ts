@@ -12,7 +12,7 @@ export class HelpCommand extends ZapCommand {
 
     protected getRules(){
         return [ 
-            new GroupOnlyRule().override('Só funciona no grupo.'), 
+            new GroupOnlyRule()
         ];
     }
 

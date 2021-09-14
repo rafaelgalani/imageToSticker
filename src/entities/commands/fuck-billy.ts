@@ -13,6 +13,6 @@ export class FuckBillyCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         let randomFuck = randomInt(3);
-        return await this.context.sendFile(`audios/fuckbilly${randomFuck}.mp3}`);
+        return await this.context.sendFile(`audios/fuckbilly${randomFuck}.mp3`);
     }
 }

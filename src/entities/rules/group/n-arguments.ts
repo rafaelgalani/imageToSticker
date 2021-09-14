@@ -43,10 +43,10 @@ export class NArgumentsRule extends Rule {
         this.optionalExpression = optionalExpression;
 
         if (!this.optionalExpression){
-            this.errorMessage = `O número de argumentos deve ser ${argsLabelMap.get(this.expression.operation)} ${this.expression.target}.`;
+            this.errorMessage = `O número de parâmetros deve ser ${argsLabelMap.get(this.expression.operation)} ${this.expression.target}.`;
         } else {
             this.errorMessage = `
-            O número de argumentos deve ser ${argsLabelMap.get(this.expression.operation)} ${this.expression.target} e ${argsLabelMap.get(this.optionalExpression.operation)} ${this.optionalExpression.target}
+            O número de parâmetros deve ser ${argsLabelMap.get(this.expression.operation)} ${this.expression.target} e ${argsLabelMap.get(this.optionalExpression.operation)} ${this.optionalExpression.target}
             `;
         }
     }

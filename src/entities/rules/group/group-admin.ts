@@ -5,7 +5,7 @@ import { ZapContext } from "../../core";
 export class AdminRule extends Rule {
     
     target: ContactId;
-    errorMessage = "O membro não é um administrador do grupo.";
+    errorMessage = "O membro que usou o comando não é um administrador do grupo.";
 
     constructor(target?: ContactId){
         super();

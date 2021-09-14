@@ -62,7 +62,7 @@ export class AssCommand extends ZapCommand {
     private data: Record<Mention, Streak>;
     
     static cooldownOptions: CooldownOptions = {
-        seconds: 9999,
+        seconds: 30,
         groupCooldown: true,
     }
 

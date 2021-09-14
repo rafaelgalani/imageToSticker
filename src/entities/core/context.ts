@@ -10,6 +10,7 @@ export class ZapContext {
     public static readonly COMMAND_PREFIX = '/';
 
     client: Client;
+    message: Message;
 
     name: string;
     pushname: string;
@@ -37,6 +38,7 @@ export class ZapContext {
 
     private constructor(client: Client, message: Message){
         Object.assign(this, message);
+        this.message = message;
         this.client = client;
         let { pushname, formattedName } = (this.sender ?? {});
         this.pushname = pushname || formattedName // verifiedName is the name of someone who uses a business account

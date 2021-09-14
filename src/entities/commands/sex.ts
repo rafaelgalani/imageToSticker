@@ -23,7 +23,7 @@ export class SexCommand extends ZapCommand {
             new GroupOnlyRule(), 
             new SelfReferenceRule(), 
             new ArgumentFormatterRule([
-                new ArgumentFormat(isMention).override('Os argumentos do comando só podem ser menções.'),
+                new ArgumentFormat(isMention).override('Os parâmetros do comando só podem ser menções à outros membros.'),
             ])
         ];
     }

@@ -5,10 +5,6 @@ export class TestCommand extends ZapCommand {
         return [ 'test', 'teste', ];
     }
 
-    protected getRules(){
-        return [ ];
-    }
-
     protected async runSpecificLogic() {
         let { isGroupMsg, chat, target, client, id, groupId } = this.context;
         await client.setGroupEditToAdminsOnly(groupId, true);
