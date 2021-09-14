@@ -31,7 +31,7 @@ export class CodeCommand extends ZapCommand {
     protected async runSpecificLogic() {
         const code = getRandomString();
 
-        const members = this.context.getMentionsWithTitle();
+        const members = this.context.getMentionsWithTitle(true);
         const lastMember = members.pop();
 
         const membersSentence = members.length? `${members.join(', ')} e o(a) ${lastMember}` : lastMember;

@@ -1,5 +1,5 @@
 import { color, randomInt } from 'src/utils';
-import { CountryCode } from "@open-wa/wa-automate"
+import { ContactId, CountryCode, GroupChatId } from "@open-wa/wa-automate"
 import { PostCollector } from "tiktok-scraper"
 
 export type TiktokContent = PostCollector & { noWaterMark: boolean, url: string, headers: string }
@@ -14,18 +14,36 @@ type Cooldown = {
 
 export type CooldownOptions = Cooldown & {
     customCooldown?: CustomCooldownOptions;
+    groupCooldown?: boolean;
 };
 
 export type CustomCooldownOptions = Cooldown & {
     identifier: string;
 };
 
-declare global {
-    interface Array<T> {
-        random(): T;
-    }
+export type VotingResult = {
+    target: Mention,
+    shouldKick: number,
+    shouldKeep: number,
+    done: boolean,
+    votes: ContactId[],
+    votesNeeded: number,
+    kicked?: boolean;
 }
 
-Array.prototype.random = function () {
-    return this[randomInt(0, this.length - 1)];
-};
+export type VoteOption = {
+    valid: boolean;
+    option?: boolean;
+    errorMessage?: string;
+}
+
+export type Vote = {
+    updatedResult?: VotingResult;
+    valid: boolean;
+    errorMessage?: string;
+}
+
+export type Streak = {
+    times: number;
+    finished: boolean;
+}

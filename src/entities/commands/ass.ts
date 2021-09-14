@@ -1,11 +1,11 @@
 import { ContactId } from "@open-wa/wa-automate";
-import { CooldownOptions, Mention } from "src/types";
-import { isMention, randomInt } from "../../utils";
+import { CooldownOptions, Mention, Streak } from "src/types";
+import { fullTrim, isMention, loadJSON, pickRandom, randomInt, saveJSON, toContactId } from "src/utils";
 import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 
-let assDict = {};
+let assDict: Record<number, string> = {};
 const initializeAssSentence = () => {
 
     assDict[0] = `Com apenas {0}% de aproveitamento, o {1} foi tentar comer o cu do {2} e MORREU. SIM, MORREU. É um fudido do caralho, 0%? Vai tomar no cu, cara. Puta que pariu, desiste dessa merda. Dá /salesforce aí arrombado...`;
@@ -39,19 +39,34 @@ const initializeAssSentence = () => {
 
 initializeAssSentence();
 
-const getAssSentence = (percentage, member, target) => {
+const getAssSentence = (percentage: number, member: string, target: string) => {
     let sentence = assDict[percentage] ?? assDict[100];
 
-    return sentence.replace('{0}', percentage)
+    return sentence.replace('{0}', percentage.toString())
                    .replace('{1}', member)
                    .replace('{2}', target);
 };
 
+const assStreakSentences = [
+    'Que fodelança maravilhosa!',
+    'Que gulosinho!!',
+    'Abre pro papai, abre!',
+    'Uiui DELICIA!',
+    'SEGUUUUUUUUUUUUUUUUURA PEÃOOOOOOO!! DOE A RODELA!',
+    'Arreganha o cu!',
+];
+
+export const getRandomStreakSentence = () => pickRandom( assStreakSentences );
+
 export class AssCommand extends ZapCommand {
+    private data: Record<Mention, Streak>;
     
     static cooldownOptions: CooldownOptions = {
-        seconds: 5,
+        seconds: 9999,
+        groupCooldown: true,
     }
+
+    private maxStreaks = 4;
 
     protected getPatterns(){
         return ['ass', 'cu', 'cy', 'cuzin', 'brioco', 'cuzao', 'cuzão' ];
@@ -71,88 +86,86 @@ export class AssCommand extends ZapCommand {
         return `Você está broxa. Aguarde ${seconds} segundos para que a pipa suba novamente.`
     }
 
+    addSenderStreak(): Streak{
+        this.removeCooldown( this.context.sender.id );
+        let previousStreakValue = this.data[this.context.sender.id]?.times ?? 0;
+        return this.data[this.context.sender.id] = {
+            times: ++previousStreakValue, 
+            finished: false,
+        };
+    }
+    
+    isSenderInStreak(){
+        return this.data[this.context.sender.id] != null;
+    }
+    
+    stopSenderStreak(){
+        this.addCooldown( this.context.sender.id );
+        return delete this.data[this.context.sender.id];
+    }
+    
+    getSenderStreak(): Streak | null{
+        return this.data[this.context.sender.id];
+    }
+
     protected async runSpecificLogic() {
-        const { args } = this.context;
+        const { groupId, sender, args } = this.context;
+
+        this.data = loadJSON(`ass-group-${groupId}`) as Record<Mention, Streak>;
+        if (!this.data) this.data = {};
+
         if( args.length === 1 ){
 
             let randomizedPercentage = randomInt(100);
 
-            // if ( this.isMemberInStreak() ){
-            //     randomizedPercentage = randomInt(100, 76);
-            // }
+            if ( this.isSenderInStreak() ){
+                randomizedPercentage = randomInt(100, 76);
+            }
 
             let [ target ] = args as Mention[];
 
             let assSentence = getAssSentence(randomizedPercentage, this.context.getSenderTitleAndMention(), this.context.getTitleAndMention( target ) );
 
-            // if (randomizedPercentage < 90){
-            //     addMemberCooldown(actor);
-            //     if (isMemberInStreak(actor)){
-            //         removeStreak(actor);
-            //         assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${getMentionWithTitle(actor)} broxou após degustar esse cuzinho.`;
-            //     }
-            // } 
+            if (randomizedPercentage < 90){
+                if ( this.isSenderInStreak() ){
+                    this.stopSenderStreak();
+                    assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${ this.context.getSenderTitleAndMention() } broxou após degustar esse cuzinho.`;
+                }
+            } 
             
-            // if (isMemberInStreak(actor)){
-            //     assSentence += ' ' + getRandomStreakSentence();
-            // }
+            if ( this.isSenderInStreak() ) {
+                assSentence += ' ' + getRandomStreakSentence();
+            }
 
-            // if (randomizedPercentage >= 90){
-            //     const streakSequence = addMemberStreak(actor);
-            //     if (streakSequence === 1){
-            //         assSentence += '\n\n' + fullTrim(`
-            //             O ${this.context.getSenderTitleAndMention()} ENTROU EM FRENESI (CU STREAK)!!!
+            if (randomizedPercentage >= 90){
+                const streakSequence = this.addSenderStreak();
+                if (streakSequence.times === 1){
+                    assSentence += '\n\n' + fullTrim(`
+                        O ${this.context.getSenderTitleAndMention()} ENTROU EM FRENESI (CU STREAK)!!!
 
-            //             - A próxima comida de cu será garantida 🥵🍆
-            //             - Você tem 40% de chance de continuar em cu streak 💯💦
-            //             - Você só broxa se sair do cu streak 👎😫
-            //         `)
-            //     }
-            // }
+                        - A próxima comida de cu será garantida 🥵🍆
+                        - Você tem 40% de chance de continuar em cu streak 💯💦
+                        - Você só broxa se sair do cu streak 👎😫
+                    `)
+                }
+            }
 
-            /*if (getMemberStreak(actor) == 4){
-                addMemberCooldown(actor);
-                removeStreak(actor);
-                assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${getMentionWithTitle(actor)} broxou após degustar esse cuzinho.`;
-            }*/
+            if ( this.getSenderStreak()?.times === this.maxStreaks){
+                this.stopSenderStreak();
 
-            return await this.context.reply(assSentence);
-            
-            // if(actor != natinho){
-            //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
-            // } else {
-            //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de CHEIRAR o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
-            // }
+                assSentence += `\n\nTudo que é bom tem um fim: acabou a sequência de vapo vapo. O ${this.context.getSenderTitleAndMention()} broxou após degustar esse cuzinho.`;
+            }
+
+            return await this.saveWithReply(assSentence);
         } else {
-            return await this.context.reply('marcou ninguém primo? come teu próprio cy aí então zé kkkkkjjjjjjjj.');
+            return await this.saveWithReply('marcou ninguém primo? come teu próprio cy aí então zé kkkkkjjjjjjjj.');
         }
          
     }
-    //     return;
-    //     if(args.length === 1){
-    //         let randomizedPercentage = Math.floor(Math.random() * 101);     // returns a random integer from 0 to 100
-    //         let actor = sender.id;
-    //         let targetCuComido = args[0];
-    //         if (randomizedPercentage <= 65) {
-    //             return await client.sendReplyWithMentions(target, `Com apenas ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} não comeu o cú do ${getMentionWithTitle(targetCuComido)}`, id);
-    //         } else if (randomizedPercentage <= 75) {
-    //             return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} QUASE comeu o cú do ${getMentionWithTitle(targetCuComido)}`, id);
-    //         } else if (randomizedPercentage <= 85) {
-    //             return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} deu uma rapidinha com o cú do ${getMentionWithTitle(targetCuComido)}`, id);
-    //         } else if (randomizedPercentage <= 90) {
-    //             return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} comeu gostoso o cú do ${getMentionWithTitle(targetCuComido)}`, id);
-    //         } else if (randomizedPercentage <= 99) {
-    //             return await client.sendReplyWithMentions(target, `Com ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} comeu o cú do ${getMentionWithTitle(targetCuComido)} até esfarelar!`, id);
-    //         } else {
-    //             return await client.sendReplyWithMentions(target, `Com ilustres ${randomizedPercentage}% de aproveitamento, o ${getMentionWithTitle(actor)} ESTILHAÇOU o cuzão do ${getMentionWithTitle(targetCuComido)}`, id);
-    //         }
-    //         // if(actor != natinho){
-    //         //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de comer o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
-    //         // } else {
-    //         //     return await client.sendReplyWithMentions(target, `O ${getMentionWithTitle(actor)} possui ${randomizedPercentage}% de chance de CHEIRAR o cu do ${getMentionWithTitle(targetCuComido)}. Boa sorte!`, id)
-    //         // }
-    //     } else {
-    //         return await client.reply(target, 'marcou ninguém primo? come teu próprio cy aí então zé kkkkkjjjjjjjj.', id);
-    //     }
-    // }
+
+    private async saveWithReply(message: string){
+        saveJSON(`ass-group-${this.context.groupId}`, this.data);
+        return await this.context.reply(message);
+    }
+
 }

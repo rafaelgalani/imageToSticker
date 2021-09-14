@@ -1,6 +1,8 @@
 import { ContactId } from "@open-wa/wa-automate";
 import { Rule } from "..";
 import { ZapContext } from "src/entities/core";
+import { isMention, toContactId, toMention } from "src/utils";
+import { Mention } from "src/types";
 
 export class SelfReferenceRule extends Rule {
     
@@ -13,8 +15,11 @@ export class SelfReferenceRule extends Rule {
     }
 
     validate(context: ZapContext): boolean{
-        let target = this.target;
+        const [ who ] = context.args;
 
-        return !target || (context.sender.id !== target)
+        // Can't self reference.
+        if ( toContactId( who as Mention ) === context.sender.id ) return false; 
+
+        return true;
     }
 }

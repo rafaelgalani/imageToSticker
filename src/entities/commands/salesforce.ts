@@ -1,4 +1,4 @@
-import { GroupOnlyRule } from "../rules";
+import { AllowBotArgumentRule, GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class SFCommand extends ZapCommand {
     

@@ -59,7 +59,7 @@ export abstract class ZapCommand {
         let cooldownHashMap: Record<ChatId, number> = loadJSON( this.getCooldownHashmapName() );
         if ( !cooldownHashMap ) cooldownHashMap = {};
 
-        const member = this.context.from;
+        const member = this.context.sender.id;
 
         const isMemberInCooldown = member in cooldownHashMap;
         const cooldownTime       = Math.ceil( Math.abs( (new Date().getTime() - new Date(cooldownHashMap[member]).getTime()) / 1000 ) ) ;
@@ -90,6 +90,23 @@ export abstract class ZapCommand {
         return [ isCoolingDown, Math.max(Math.abs(cooldownTime - this.cooldownOptions.seconds), 1) ];
     }
 
+    protected async removeCooldown(member: ChatId){
+        let cooldownHashMap: Record<ChatId, number> = loadJSON( this.getCooldownHashmapName() );
+        if ( !cooldownHashMap ) cooldownHashMap = {};
+
+        delete cooldownHashMap[member];
+        saveJSON( this.getCooldownHashmapName(), cooldownHashMap );
+    }
+    
+    protected async addCooldown(member: ChatId){
+        let cooldownHashMap: Record<ChatId, number> = loadJSON( this.getCooldownHashmapName() );
+        if ( !cooldownHashMap ) cooldownHashMap = {};
+
+        cooldownHashMap[member] = new Date().getTime();
+        
+        saveJSON( this.getCooldownHashmapName(), cooldownHashMap );
+    }
+
     protected async sendCooldownMessage(seconds: number) {
         return await this.context.reply( this.getCooldownMessage( seconds ) );
     }
@@ -99,7 +116,7 @@ export abstract class ZapCommand {
     }
 
     protected getCooldownHashmapName() {
-        return this.constructor.name + '-cooldown-hashmap';
+        return this.constructor.name + (this.cooldownOptions.groupCooldown? this.context.groupId : '') + '-cooldown-hashmap';
     }
 
     protected getRules(): Rule[] {
@@ -108,132 +125,3 @@ export abstract class ZapCommand {
 
     protected abstract runSpecificLogic();
 }
-
-
-
-// let assStreak = {};
-// let assStreakSentences = [
-//     'Que fodelança maravilhosa!',
-//     'Que gulosinho!!',
-//     'Abre pro papai, abre!',
-//     'Uiui DELICIA!',
-//     'SEGUUUUUUUUUUUUUUUUURA PEÃOOOOOOO!! DOE A RODELA!',
-//     'Arreganha o cu!',
-// ];
-
-// export const isMemberInStreak = member => member in assStreak;
-// export const addMemberStreak = member => assStreak[member] = (assStreak[member] || 0) + 1;
-// export const getMemberStreak = member => assStreak[member];
-// export const removeStreak = (member) => delete assStreak[member];
-// export const getRandomStreakSentence = () => assStreakSentences[Math.floor((Math.random() * assStreakSentences.length))];
-
-// let votingMap = {};
-// export const getVoting = function(voteTarget, groupId){
-//     return votingMap?.[groupId]?.[voteTarget]
-// }
-
-// export const endVoting = function(voteTarget, groupId){
-//     return delete votingMap[groupId][voteTarget]
-// };
-
-// export const createVoting = function(voteTarget, groupId, voteActor){
-//     let voting = getVoting(voteTarget, groupId);
-//     if (voting){
-//         throw new ZapError(fullTrim(
-//             `Já há um votekick para ${toMention(voteTarget)}. Votação:
-
-//             Banir: ${voting.shouldKick}/${voting.votesNeeded}
-//             Não banir: ${voting.shouldKeep}/${voting.votesNeeded}`
-//         ));
-//     }
-
-//     let votesNeeded = Math.floor( (members.length/2)+1 );
-//     if (!votingMap[groupId]) votingMap[groupId] = {}
-
-//     return votingMap[groupId][voteTarget] = {
-//         voteTarget,
-//         shouldKick: 1,
-//         shouldKeep: 0,
-//         done: false,
-//         votes: [{
-//             voteActor,
-//             votedForKick: true,
-//         }],
-//         votesNeeded: 5,
-//     };
-// };
-
-// export const doVote = function(voteTarget, groupId, voteActorArg, kick=true){
-//     let voting = getVoting(voteTarget, groupId);
-//     let voteActor = toId(voteActorArg);
-//     let vote = voting.votes.find(vote => vote.voteActor === voteActor);
-//     if (vote){
-//         throw new ZapError(`Seu voto já foi processado, você votou ${vote.votedForKick? 'a favor do ban': 'contra o ban'} do ${toMention(voteTarget)}.`);
-//     }
-
-//     voting.votes.push({
-//         voteActor,
-//         votedForKick: kick
-//     });
-
-//     if (kick) voting.shouldKick += 1;
-//     else voting.shouldKeep += 1;
-
-//     voting.done = (voting.shouldKick >= voting.votesNeeded) || (voting.shouldKeep >= voting.votesNeeded);
-//     voting.kicked = voting.done && voting.shouldKick >= voting.votesNeeded;
-
-//     return voting;
-// };
-
-// export const getVote = function(arg){
-//     let vote = arg.trim().toLowerCase();
-
-//     let shouldKickValidVotes = ['s', 'y', 'ss', 'sss', 'sim', 'yes', '👍', '👍🏿', '👍🏻', '👍🏽', '👍🏾', '👍🏼'],
-//         shouldNotKickValidVotes = ['n', 'n', 'nn', 'no', 'nnn', 'nao', 'não', 'nem', 'ñ', '👎','👎🏻','👎🏼','👎🏽','👎🏾','👎🏿'];
-
-//     if (shouldKickValidVotes.includes(vote)){
-//         return true;
-//     }
-
-//     if (shouldNotKickValidVotes.includes(vote)){
-//         return false;
-//     }
-
-//     throw new ZapError(fullTrim(`
-//         Voto inválido.
-        
-//         Votos válidos a favor:
-//         ${shouldKickValidVotes.join(', ')}
-
-//         Votos válidos contra:
-//         ${shouldNotKickValidVotes.join(', ')}
-//     `));
-// };
-
-// // Message Filter / Message Cooldowns
-// const usedCommandRecently = new Set()
-
-// const isFiltered = (from) => {
-//     return !!usedCommandRecently.has(from)
-// }
-
-// const addFilter = (from) => {
-//     usedCommandRecently.add(from)
-//     setTimeout(() => {
-//         return usedCommandRecently.delete(from)
-//     }, 5000) // 5sec is delay before processing next command
-// }
-
-// // Message type Log
-// // export const messageLog = (fromMe, type) => updateJson('utils/stat.json', (data) => {
-// //     (fromMe) ? (data.sent[type]) ? data.sent[type] += 1 : data.sent[type] = 1 : (data.receive[type]) ? data.receive[type] += 1 : data.receive[type] = 1
-// //     return data
-// // })
-
-// export const msgFilter = {
-//     isFiltered,
-//     addFilter
-// };
-
-
-// export const randomInt = (max, min=0) => Math.floor(Math.random() * (max - min + 1)) + min;

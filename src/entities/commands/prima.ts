@@ -10,13 +10,13 @@ export class PrimaCommand extends ZapCommand {
 
     protected getRules(){
         return [ 
-            new GroupOnlyRule().override('Só em grupo.'), 
+            new GroupOnlyRule().override('Só é permitido em grupos.'), 
             new NArgumentsRule({ target: 0, operation: ArgsOperator.EQ }), 
         ];
     }
 
     protected async runSpecificLogic() {
         const randomGroupMember = pickRandom( this.context.groupMembers );
-        await this.context.reply(`O ${this.context.getSenderTitleAndMention()} cacetou a rola na prima do ${this.context.getTitleAndMention(randomGroupMember)}.`)
+        await this.context.reply(`O ${this.context.getSenderTitleAndMention()} cacetou a rola na prima do(a) ${this.context.getTitleAndMention(randomGroupMember)}.`)
     }
 }

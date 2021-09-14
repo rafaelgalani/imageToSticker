@@ -5,6 +5,7 @@
         "sourceMap": true,
         "outDir": "./build",
         "skipLibCheck": true,
+        "downlevelIteration": true,
         "paths": {
             "src/*" : [
                 "./src/*"

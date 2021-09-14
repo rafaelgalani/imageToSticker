@@ -83,11 +83,11 @@ export class ZapContext {
     }
 
     public async reply(content: string){
-        return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.from, content, this.id);
+        return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.chat.id, content, this.id);
     }
 
     public async send(content: string){
-        return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.from, content, this.id);
+        return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.chat.id, content, this.id);
     }
     
     public async sendFile(filePath: `${string}/${string}.${string}`){
@@ -124,12 +124,14 @@ export class ZapContext {
         return `${this.getSenderTitle()} ${this.getSenderMention()}`
     }
 
-    public getMentions(){
-        return this.mentionedJidList.map(toMention)
+    public getMentions(unique?: boolean){
+        const list = unique? [ ...new Set(this.mentionedJidList) ] : this.mentionedJidList;
+        return list.map(toMention)
     }
 
-    public getMentionsWithTitle(){
-        return this.mentionedJidList.map(a => `${this.getTitle(a)} ${toMention(a)}`)
+    public getMentionsWithTitle(unique?: boolean){
+        const list = unique? [ ...new Set(this.mentionedJidList) ] : this.mentionedJidList;
+        return list.map(a => `${this.getTitle(a)} ${toMention(a)}`)
     }
 
     public async removeSender(){
