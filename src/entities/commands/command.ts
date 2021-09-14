@@ -54,7 +54,7 @@ export abstract class ZapCommand {
     };
 
     // Returns [true, cooldownTimeInSeconds] if the sender is in cooldown state. 
-    // Otherwise, adds cooldown to the sender and returns [ false, 0 ].
+    // Otherwise, adds cooldown to the sender and returns [ false, 1 ].
     protected checkForCooldown(): [boolean, number] {
         let cooldownHashMap: Record<ChatId, number> = loadJSON( this.getCooldownHashmapName() );
         if ( !cooldownHashMap ) cooldownHashMap = {};
