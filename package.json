@@ -35,8 +35,6 @@
     "video-url-link": "git+https://github.com/YogaSakti/video-url-link.git"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
-    "@types/file-type": "^10.9.1",
     "@types/puppeteer": "^5.4.4",
     "@types/sharp": "^0.29.1",
     "eslint": "^7.32.0",
@@ -44,7 +42,6 @@
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-standard": "^5.0.0",
     "nodemon": "^2.0.12",
     "rimraf": "^3.0.2",
     "ts-node": "^10.2.1",
