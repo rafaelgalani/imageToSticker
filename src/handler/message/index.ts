@@ -8,6 +8,7 @@ import { ZapCommand } from '../../entities/commands/command';
 
 export default async (client: Client, message: Message) => {
     let context = await ZapContext.getContext(client, message);
+    if (!context.command) return;
     try {
         
         let commands: ZapCommand[] = Object.keys(allCommands).map(a => new allCommands[a](context, allCommands[a].cooldownOptions));
@@ -15,7 +16,11 @@ export default async (client: Client, message: Message) => {
         for (let command of commands){
             const mute = verifyMute(context.author || context.from);
             if (mute) return;
-            await command.run();
+
+            const result = await command.run();
+            console.log(
+                'Command result: ', result
+            );
         }
 
     } catch (err) {

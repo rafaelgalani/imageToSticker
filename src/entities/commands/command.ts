@@ -43,7 +43,7 @@ export abstract class ZapCommand {
             if ( !isCooldownPeriod ) return await this.runSpecificLogic();
             else return await this.sendCooldownMessage( seconds );
         } else {
-            await this.runSpecificLogic();
+            return await this.runSpecificLogic();
         }
     }
 
