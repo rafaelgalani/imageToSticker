@@ -4,13 +4,15 @@
       {
         "type": "node",
         "request": "attach",
-        "port": 7001,
+        "port": 9999,
         "address": "localhost",
         "name": "Attach",
         
         "localRoot": "${workspaceFolder}",
-        "remoteRoot": "/app/"
-  
+        "remoteRoot": "/app/",
+        "sourceMapPathOverrides": {
+          "/app/*": "${workspaceRoot}/*"
+        }
       }
     ]
   }

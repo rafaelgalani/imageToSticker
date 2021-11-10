@@ -4,7 +4,7 @@
   "description": "Whatsapp Bot - sticker creator",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --inspect=0.0.0.0:7001 --exit-child --respawn -r tsconfig-paths/register src/index.ts",
+    "dev": "ts-node-dev --inspect=0.0.0.0:9999 --respawn -r tsconfig-paths/register src/index.ts",
     "cleanup": "rimraf Imperial.data.json && rimraf ./logs && rimraf yarn.lock"
   },
   "author": "Yoga Sakti",
