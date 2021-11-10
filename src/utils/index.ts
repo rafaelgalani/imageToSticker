@@ -6,8 +6,8 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs'
 
 
 import * as chalk from 'chalk'
-import { ContactId } from "@open-wa/wa-automate";
-import { Mention } from "src/types";
+import { ContactId, GroupChatId } from "@open-wa/wa-automate";
+import { Alias, Mention } from "src/types";
 const moment = require('moment-timezone')
 const updateJson = require('update-json-file')
 moment.tz.setDefault('Asia/Jakarta').locale('id')
@@ -44,7 +44,12 @@ export const isMention = (number: string) => Boolean( number.match(new RegExp(Re
 export const toMention   = (id: ContactId):    Mention   => `@${id.replace('@c.us', '')}` as Mention;
 export const toContactId = (mention: Mention): ContactId => `${mention.substring(1)}@c.us` as ContactId;
 
-export const loadJSON = (jsonFilename: string): any | null => {
+export const toAliasOrMention = (id: ContactId, groupId: GroupChatId): Alias | Mention => {
+    const aliases = loadJSON(`aliases-group-${groupId}`);
+    return aliases[ id ] ?? `@${id.replace('@c.us', '')}` as Mention;
+}
+
+export const loadJSON = (jsonFilename: string): Record<string, any> | null => {
     const validateDataFolder = () => !existsSync(resolvePath('data')) && mkdirSync(resolvePath('data'));
     
     try {

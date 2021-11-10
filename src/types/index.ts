@@ -4,6 +4,7 @@ import { PostCollector } from "tiktok-scraper"
 
 export type TiktokContent = PostCollector & { noWaterMark: boolean, url: string, headers: string }
 
+export type Alias = string;
 export type Mention = `@${CountryCode}${number}`
 
 export type Title = 'admin' | 'membro(a) comum';

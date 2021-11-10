@@ -1,6 +1,6 @@
-import { isMention, resolvePath, toContactId, toMention } from "src/utils";
+import { isMention, resolvePath, toContactId, toMention, toAliasOrMention } from "src/utils";
 import { Message, Client, GroupChatId, ContactId, FilePath } from '@open-wa/wa-automate';
-import { Mention, Title } from "src/types";
+import { Alias, Mention, Title } from "src/types";
 
 type PartialMessage = Partial<Message>;
 export interface ZapContext extends PartialMessage { }
@@ -98,7 +98,7 @@ export class ZapContext {
     }
 
     public async getAllMembersMentioned() {
-        return this.groupMembers.map(toMention);
+        return this.groupMembers.map(member => toAliasOrMention(member, this.groupId));
     }
 
     public isAdmin(id: ContactId) {
@@ -109,31 +109,31 @@ export class ZapContext {
         return this.isAdmin(id)? 'admin' : 'membro(a) comum';
     }
 
-    public getTitleAndMention(id: ContactId | Mention): `${Title} ${Mention}` {
+    public getTitleAndMention(id: ContactId | Mention): `${Title} ${Alias|Mention}` {
         if (isMention(id)) return `${this.getTitle( toContactId(id as Mention) )} ${id as Mention}`;
-        else return `${this.getTitle(id as ContactId)} ${toMention(id as ContactId)}`
+        else return `${this.getTitle(id as ContactId)} ${toAliasOrMention(id as ContactId, this.groupId)}`
     }
 
     public getSenderMention() {
-        return toMention(this.sender.id);
+        return toAliasOrMention(this.sender.id, this.groupId);
     }
 
     public getSenderTitle() {
         return this.getTitle(this.sender.id);
     }
     
-    public getSenderTitleAndMention(): `${Title} ${Mention}` {
+    public getSenderTitleAndMention(): `${Title} ${Alias|Mention}` {
         return `${this.getSenderTitle()} ${this.getSenderMention()}`
     }
 
     public getMentions(unique?: boolean){
         const list = unique? [ ...new Set(this.mentionedJidList) ] : this.mentionedJidList;
-        return list.map(toMention)
+        return list.map(a => toAliasOrMention(a, this.groupId))
     }
 
     public getMentionsWithTitle(unique?: boolean){
         const list = unique? [ ...new Set(this.mentionedJidList) ] : this.mentionedJidList;
-        return list.map(a => `${this.getTitle(a)} ${toMention(a)}`)
+        return list.map(a => `${this.getTitle(a)} ${toAliasOrMention(a, this.groupId)}`)
     }
 
     public async removeSender(){
