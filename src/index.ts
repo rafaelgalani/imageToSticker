@@ -97,16 +97,8 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
         browserWSEndpoint: browser.wsEndpoint(),
         devtools: false,
         killProcessOnBrowserClose: true,
+        multiDevice: true,
         throwErrorOnTosBlock: false,
-        chromiumArgs: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--aggressive-cache-discard',
-            '--disable-cache',
-            '--disable-application-cache',
-            '--disable-offline-load-stale-cache',
-            '--disk-cache-size=0'
-        ]
     }
     
     create(options)
