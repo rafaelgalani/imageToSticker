@@ -1,6 +1,7 @@
 export { AddMemberCommand } from './add'
 export { AliasCommand } from './alias'
 export { AssCommand } from './ass'
+export { AssRoyaleCommand } from './ass-royale'
 export { BocaLeiteCommand } from './boca-leite'
 export { CalmCommand } from './calm'
 export { CodeCommand } from './code'

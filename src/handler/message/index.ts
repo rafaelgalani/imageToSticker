@@ -18,9 +18,9 @@ export default async (client: Client, message: Message) => {
             if (mute) return;
 
             const result = await command.run();
-            console.log(
-                'Command result: ', result
-            );
+            // console.log(
+            //     'Command result: ', result
+            // );
         }
 
     } catch (err) {
