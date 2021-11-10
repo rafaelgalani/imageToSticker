@@ -45,7 +45,7 @@ export const toMention   = (id: ContactId):    Mention   => `@${id.replace('@c.u
 export const toContactId = (mention: Mention): ContactId => `${mention.substring(1)}@c.us` as ContactId;
 
 export const toAliasOrMention = (id: ContactId, groupId: GroupChatId): Alias | Mention => {
-    const aliases = loadJSON(`aliases-group-${groupId}`);
+    const aliases = loadJSON(`aliases-group-${groupId}`) ?? {};
     return aliases[ id ] ?? `@${id.replace('@c.us', '')}` as Mention;
 }
 

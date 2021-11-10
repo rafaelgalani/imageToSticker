@@ -16,18 +16,18 @@ export class AliasCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { args, groupId, getSenderMention } = this.context;
+        const { args, groupId, sender } = this.context;
         const [ chosenAlias ] = args;
         const filename = `aliases-group-${groupId}`;
         
-        const aliasesHashmap = loadJSON(filename);
+        const aliasesHashmap = loadJSON(filename) ?? {};
         const normalizedAliases = Object.values( aliasesHashmap ).map(a => a.toLowerCase());
         
         if ( normalizedAliases.includes( chosenAlias ) ) {
             return await this.context.reply(`O apelido ${chosenAlias} já foi escolhido por outro membro. Escolha outro apelido.`);
         }
 
-        aliasesHashmap[ getSenderMention() ] = chosenAlias;
+        aliasesHashmap[ sender.id ] = chosenAlias;
         saveJSON( filename, aliasesHashmap );
 
         return await this.context.reply(`Seu apelido foi definido como "${chosenAlias}".`);
