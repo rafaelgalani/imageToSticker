@@ -10,21 +10,21 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
     console.log('[DEV]', color('Red Emperor', 'yellow'))
     console.log('[CLIENT] CLIENT Started!')
 
-    await client.getPage().evaluate( ({
-        newReply, 
-        sendReplyWithMentions,
-    }) => {
-        // eval(newReply)
-        // eval(sendReplyWithMentions)
+    // await client.getPage().evaluate( ({
+    //     newReply, 
+    //     sendReplyWithMentions,
+    // }) => {
+    //     // eval(newReply)
+    //     // eval(sendReplyWithMentions)
 
-        // eval('window.WAPI.reply = newReply')
-        // eval('window.WAPI.sendReplyWithMentions = sendReplyWithMentions')
-    }, {
-        newReply: newReply.toString() , 
-        sendReplyWithMentions: sendReplyWithMentions.toString() ,
-    }); 
+    //     // eval('window.WAPI.reply = newReply')
+    //     // eval('window.WAPI.sendReplyWithMentions = sendReplyWithMentions')
+    // }, {
+    //     newReply: newReply.toString() , 
+    //     sendReplyWithMentions: sendReplyWithMentions.toString() ,
+    // }); 
     
-    console.log('[CLIENT] INJECTED EXTERNAL LIB XDDDDDDDDDDDDDDDDDDDDDDDDDDD!')
+    // console.log('[CLIENT] INJECTED EXTERNAL LIB XDDDDDDDDDDDDDDDDDDDDDDDDDDD!')
 
     // Message log for analytic
     //client.onAnyMessage((fn) => messageLog(fn.fromMe, fn.type))
@@ -68,37 +68,34 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
 }
 
 (async () => {
-    const browser = await puppeteer.launch({
-        headless: false,
-        executablePath: require('chrome-launcher').Launcher.getInstallations()[0]
-    });
+    // const browser = await puppeteer.launch({
+    //     headless: false,
+    //     executablePath: require('chrome-launcher').Launcher.getInstallations()[0]
+    // });
 
-    let injector = setInterval(async _ => {
-        let pages = await browser.pages();
-        let whatsAppPage = pages[0];
+    // let injector = setInterval(async _ => {
+    //     let pages = await browser.pages();
+    //     let whatsAppPage = pages[0];
 
-        if (whatsAppPage.url().includes('whatsapp')){
-            whatsAppPage.evaluate( _ => {
-                window.Object.freeze = o => o;
-            })
-            clearInterval(injector);
-        }
+    //     if (whatsAppPage.url().includes('whatsapp')){
+    //         whatsAppPage.evaluate( _ => {
+    //             window.Object.freeze = o => o;
+    //         })
+    //         clearInterval(injector);
+    //     }
 
-    }, 50);
+    // }, 50);
 
     const options = {
-        sessionId: 'Imperial',
+        sessionId: 'botzim',
         headless: false,
         qrTimeout: 0,
         authTimeout: 0,
-        restartOnCrash: start,
-        cacheEnabled: false,
-        useChrome: true,
-        browserWSEndpoint: browser.wsEndpoint(),
+        // browserWSEndpoint: browser.wsEndpoint(),
         devtools: false,
+        useChrome: true, 
         killProcessOnBrowserClose: true,
         multiDevice: true,
-        throwErrorOnTosBlock: false,
     }
     
     create(options)
