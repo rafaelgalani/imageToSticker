@@ -1,6 +1,7 @@
 import { isMention, resolvePath, toContactId, toMention, toAliasOrMention } from "src/utils";
 import { Message, Client, GroupChatId, ContactId, FilePath } from '@open-wa/wa-automate';
 import { Alias, Mention, Title } from "src/types";
+import { loadJSON } from "src/utils";
 
 type PartialMessage = Partial<Message>;
 export interface ZapContext extends PartialMessage { }
@@ -36,12 +37,16 @@ export class ZapContext {
     
     target: ContactId | GroupChatId;
 
+    disabledCommands: string[];
+
     private constructor(client: Client, message: Message){
         Object.assign(this, message);
         this.message = message;
         this.client = client;
         let { pushname, formattedName } = (this.sender ?? {});
         this.pushname = pushname || formattedName // verifiedName is the name of someone who uses a business account
+
+        this.disabledCommands = loadJSON(`${this.groupId}-disabled-commands`) as string[] || [];
     }
 
     private tryGet = async(fn: Function, ...args) : Promise<any> => {

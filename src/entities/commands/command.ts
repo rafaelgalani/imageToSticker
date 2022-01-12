@@ -28,9 +28,12 @@ export abstract class ZapCommand {
     }
 
     public async run(){
+        const rules = this.getRules();
         if (!this.eligible) return;
 
-        for (let rule of this.getRules()){
+        if ( rules.every( rule => this.context.disabledCommands.includes( rule )) ) return;
+
+        for (let rule of rules){
             let isValid = rule.validate(this.context);
             isValid = (rule.reversed? !isValid : isValid)
             if (!isValid){
@@ -47,7 +50,7 @@ export abstract class ZapCommand {
         }
     }
 
-    protected abstract getPatterns(): string[];
+    public abstract getPatterns(): string[];
     
     protected getCooldownMessage(seconds: number): string {
         return `Aguarde ${seconds} segundos para poder executar o comando novamente.`;

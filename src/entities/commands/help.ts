@@ -18,7 +18,11 @@ export class HelpCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         let commands: ZapCommand[] = Object.keys(allCommands).map(a => new allCommands[a](null));        
-        let commandsPatterns = commands.map(a => a.getPatternsAsString());
+
+        const isCommandEnabled = (command: ZapCommand) => ( 
+            ! command.getPatterns().every( pattern => this.context.disabledCommands.includes( pattern ) )
+        )
+        let commandsPatterns = commands.filter( isCommandEnabled ).map(a => a.getPatternsAsString());
 
         const message = fullTrim(`
             Comandos disponíveis:
