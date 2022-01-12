@@ -5,7 +5,7 @@ import { ZapCommand } from "./command";
 export class PromoteCommand extends ZapCommand {
     
     public getPatterns(){
-        return ['promote', ];
+        return ['promote', 'admin' ];
     }
 
     protected getRules(){
