@@ -46,7 +46,7 @@ export class ZapContext {
         let { pushname, formattedName } = (this.sender ?? {});
         this.pushname = pushname || formattedName // verifiedName is the name of someone who uses a business account
 
-        this.disabledCommands = loadJSON(`${this.groupId}-disabled-commands`) as string[] || [];
+        this.disabledCommands = loadJSON(`${this.chat?.groupMetadata?.id}-disabled-commands`) as string[] || [];
     }
 
     private tryGet = async(fn: Function, ...args) : Promise<any> => {
