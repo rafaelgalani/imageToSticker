@@ -28,12 +28,11 @@ export abstract class ZapCommand {
     }
 
     public async run(){
-        const rules = this.getRules();
         if (!this.eligible) return;
 
-        if ( rules.every( rule => this.context.disabledCommands.includes( rule )) ) return;
+        if ( this.getPatterns().every( rule => this.context.disabledCommands.includes( rule )) ) return;
 
-        for (let rule of rules){
+        for (let rule of this.getRules()){
             let isValid = rule.validate(this.context);
             isValid = (rule.reversed? !isValid : isValid)
             if (!isValid){
