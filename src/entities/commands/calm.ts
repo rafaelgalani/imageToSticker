@@ -3,7 +3,7 @@ import { ArgsOperator } from "src/entities/rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class CalmCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['calma', 'calmo', 'calmou', ];
     }
 

@@ -4,7 +4,7 @@ import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class MuteCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['mute', 'mutar', 'timeout'];
     }
 

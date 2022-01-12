@@ -68,7 +68,7 @@ export class AssCommand extends ZapCommand {
 
     private maxStreaks = 4;
 
-    protected getPatterns(){
+    public getPatterns(){
         return ['ass', 'cu', 'cy', 'cuzin', 'brioco', 'cuzao', 'cuzão' ];
     }
 

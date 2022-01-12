@@ -8,7 +8,7 @@ import { ZapCommand } from "./command";
 
 export class TwitterCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['twitter', 'tt', 'tweet', 'tw', 'tweet',];
     }
 

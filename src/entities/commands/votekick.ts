@@ -9,7 +9,7 @@ export class VotekickCommand extends ZapCommand {
     private data: Record<Mention, VotingResult>;
     private defaultVote = 'sim';
 
-    protected getPatterns(){
+    public getPatterns(){
         return ['votekick', 'vote', 'voteban', 'votação', 'votar', 'voto'];
     }
 

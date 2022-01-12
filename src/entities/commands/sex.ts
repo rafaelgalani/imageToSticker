@@ -4,7 +4,7 @@ import { ZapCommand } from "./command";
 
 export class SexCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['sexo', 'sex', 'transa', 'punheta', ];
     }
 

@@ -3,7 +3,7 @@ import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class CodeCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['code', 'codigo', 'codiguin', ];
     }
 

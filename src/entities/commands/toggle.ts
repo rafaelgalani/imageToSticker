@@ -5,7 +5,7 @@ import { loadJSON, saveJSON } from "src/utils";
 
 export class ToggleCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['toggle', ];
     }
 

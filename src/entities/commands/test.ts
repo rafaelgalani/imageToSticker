@@ -1,7 +1,7 @@
 import { ZapCommand } from "./command";
 export class TestCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return [ 'test', 'teste', ];
     }
 

@@ -5,7 +5,7 @@ import { ZapCommand } from "./command";
 
 export class StickerCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['sticker', 'stiker',];
     }
 

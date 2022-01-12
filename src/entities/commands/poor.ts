@@ -3,7 +3,7 @@ import { resolvePath } from 'src/utils';
 import { ZapCommand } from "./command";
 export class PoorCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['poor', 'pobre', 'pobrinho', ];
     }
 

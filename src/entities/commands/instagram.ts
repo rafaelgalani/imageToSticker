@@ -8,7 +8,7 @@ import { ZapCommand } from "./command";
 
 export class InstagramCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['insta', 'instagram', 'ig',];
     }
 

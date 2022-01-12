@@ -2,7 +2,7 @@ import { GroupOnlyRule, IsFromBotRule } from "../rules";
 import { ZapCommand } from "./command";
 export class StartRinhaCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['rinha', ];
     }
 

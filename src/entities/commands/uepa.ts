@@ -4,7 +4,7 @@ import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class UepaCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['uepa'];
     }
 

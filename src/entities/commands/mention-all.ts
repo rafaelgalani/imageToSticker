@@ -3,7 +3,7 @@ import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class MentionAllCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['tnc', 'mentionall', 'all', 'todos',];
     }
 

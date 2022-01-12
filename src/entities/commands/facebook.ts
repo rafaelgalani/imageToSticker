@@ -8,7 +8,7 @@ import { ZapCommand } from "./command";
 
 export class FacebookCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['face', 'facebook', 'fb',];
     }
 

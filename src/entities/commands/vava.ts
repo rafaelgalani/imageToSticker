@@ -2,7 +2,7 @@ import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class VavaCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['vv', 'vava', 'vavá', ];
     }
 

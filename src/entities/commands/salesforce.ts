@@ -2,7 +2,7 @@ import { AllowBotArgumentRule, GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class SFCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['sf', 'salesforce', ];
     }
 
