@@ -18,10 +18,16 @@ export class AliasCommand extends ZapCommand {
     protected async runSpecificLogic() {
         const { args, groupId, sender } = this.context;
         const [ chosenAlias ] = args;
+        if (chosenAlias.length >= 30 || Array.from(chosenAlias)[0] == '@') {
+          return await this.context.reply(`Apelido inválido!`);
+        }
         const filename = `aliases-group-${groupId}`;
         
         const aliasesHashmap = loadJSON(filename) ?? {};
         const normalizedAliases = Object.values( aliasesHashmap ).map(a => a.toLowerCase());
+        if (args[0] === 'list') {
+          return await this.context.reply(`${Object.values( aliasesHashmap ).join('\n')}`);
+        }
         
         if ( normalizedAliases.includes( chosenAlias ) ) {
             return await this.context.reply(`O apelido ${chosenAlias} já foi escolhido por outro membro. Escolha outro apelido.`);

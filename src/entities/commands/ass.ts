@@ -1,4 +1,5 @@
 import { ContactId } from "@open-wa/wa-automate";
+import { random } from "src/handler/message/utils";
 import { CooldownOptions, Mention, Streak } from "src/types";
 import { fullTrim, isMention, loadJSON, pickRandom, randomInt, saveJSON, toContactId } from "src/utils";
 import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
@@ -117,6 +118,10 @@ export class AssCommand extends ZapCommand {
         if( args.length === 1 ){
 
             let randomizedPercentage = randomInt(100);
+            if (sender.id === '5511991399669@c.us' && randomizedPercentage <= 75) {
+              randomizedPercentage = randomInt(100);
+              this.context.reply('A MARI COMEU ESSE CÚ COM SUA CHANCE EXTRA! MUITO BOM!');
+            }
 
             if ( this.isSenderInStreak() ){
                 randomizedPercentage = randomInt(100, 76);
