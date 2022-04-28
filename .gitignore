@@ -40,3 +40,4 @@ _IGNORE_*
 **_IGNORE_**
 # end managed by open-wa
 logs
+.tool-versions
