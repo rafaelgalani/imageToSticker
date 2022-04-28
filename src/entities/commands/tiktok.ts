@@ -48,7 +48,7 @@ export class TikTokCommand extends ZapCommand {
         } catch (e) {
             console.log(e);
         }
-        let downloadResult: PostCollector & { noWaterMark: boolean, url: string, headers: string} = await tiktokDownloader(targetUrl);
+        let downloadResult: PostCollector & { noWaterMark: boolean, url: string, headers: Record<string, string>} = await tiktokDownloader(targetUrl);
         const filename = downloadResult.authorMeta.name + '.mp4'
         const caption = `@${downloadResult.authorMeta.name} / ${downloadResult.musicMeta.musicName}`;
                         /*`${downloadResult.playCount.toLocaleString()}`+

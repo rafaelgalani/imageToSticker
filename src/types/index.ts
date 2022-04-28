@@ -2,7 +2,7 @@ import { color, randomInt } from 'src/utils';
 import { ContactId, CountryCode, GroupChatId } from "@open-wa/wa-automate"
 import { PostCollector } from "tiktok-scraper"
 
-export type TiktokContent = PostCollector & { noWaterMark: boolean, url: string, headers: string }
+export type TiktokContent = PostCollector & { noWaterMark: boolean, url: string, headers: Record<string, string> }
 
 export type Alias = string;
 export type Mention = `@${CountryCode}${number}`
