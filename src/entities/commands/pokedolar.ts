@@ -5,7 +5,7 @@ import axios from "axios";
 
 export class PokedolarCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['pokedolar'];
     }
 

@@ -3,7 +3,7 @@ import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
 export class OddCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['chance', 'qualachancede', 'chance', 'odd', 'whataretheodds'];
     }
 

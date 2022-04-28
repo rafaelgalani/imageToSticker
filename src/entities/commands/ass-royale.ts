@@ -74,7 +74,7 @@ const parseScore = score => {
 
 export class AssRoyaleCommand extends ZapCommand {
     
-    protected getPatterns(){
+    public getPatterns(){
         return ['royale', 'ass-royale', 'roundsex'];
     }
 
