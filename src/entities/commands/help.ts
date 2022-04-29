@@ -19,6 +19,8 @@ export class HelpCommand extends ZapCommand {
     protected async runSpecificLogic() {
         let commands: ZapCommand[] = Object.keys(allCommands).map(a => new allCommands[a](null));        
 
+        const { sender } = this.context;
+
         const isCommandEnabled = (command: ZapCommand) => ( 
             ! command.getPatterns().every( pattern => this.context.disabledCommands.includes( pattern ) )
         )
@@ -30,6 +32,6 @@ export class HelpCommand extends ZapCommand {
             ${commandsPatterns.join('\n\n')}
         `);
 
-        await this.context.reply(message);
+        await this.context.sendText( sender.id, message );
     }
 }

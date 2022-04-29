@@ -1,5 +1,5 @@
 import { isMention, resolvePath, toContactId, toMention, toAliasOrMention } from "src/utils";
-import { Message, Client, GroupChatId, ContactId, FilePath } from '@open-wa/wa-automate';
+import { Message, Client, GroupChatId, ContactId, FilePath, ChatId } from '@open-wa/wa-automate';
 import { Alias, Mention, Title } from "src/types";
 import { loadJSON } from "src/utils";
 
@@ -93,10 +93,10 @@ export class ZapContext {
         return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.chat.id, content, this.id);
     }
 
-    public async send(content: string){
-        return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.chat.id, content, this.id);
+    public async sendText( chat: ChatId, text: string){
+        return await this.client.sendText( chat, text );
     }
-    
+
     public async sendFile(filePath: `${string}/${string}.${string}`){
         const [ folder, fileName ] = filePath.split('/');
         return await this.client.sendFile(this.target, resolvePath('src', 'assets', folder, fileName), fileName, fileName, this.id, false, true);
