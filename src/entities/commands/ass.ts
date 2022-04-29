@@ -1,7 +1,7 @@
 import { ContactId } from "@open-wa/wa-automate";
 import { random } from "src/handler/message/utils";
 import { CooldownOptions, Mention, Streak } from "src/types";
-import { fullTrim, isMention, loadJSON, pickRandom, randomInt, saveJSON, toContactId } from "src/utils";
+import { fullTrim, isMention, loadJSON, pickRandom, randomInt, saveJSON, toContactId, toMention } from "src/utils";
 import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
@@ -117,6 +117,14 @@ export class AssCommand extends ZapCommand {
 
         if( args.length === 1 ){
 
+            let [ target ] = args as Mention[];
+
+            if ( toMention( sender.id ) === target ) {
+                return await this.saveWithReply(
+                  "se marcou? come teu próprio cy aí então zé kkkkkjjjjjjjj."
+                );
+            }
+
             let randomizedPercentage = randomInt(100);
             if (sender.id === '5511991399669@c.us' && randomizedPercentage <= 75) {
               randomizedPercentage = randomInt(100);
@@ -126,8 +134,6 @@ export class AssCommand extends ZapCommand {
             if ( this.isSenderInStreak() ){
                 randomizedPercentage = randomInt(100, 76);
             }
-
-            let [ target ] = args as Mention[];
 
             let assSentence = getAssSentence(randomizedPercentage, this.context.getSenderTitleAndMention(), this.context.getTitleAndMention( target ) );
 
