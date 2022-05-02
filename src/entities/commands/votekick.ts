@@ -36,7 +36,7 @@ export class VotekickCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         const { groupId, sender, args } = this.context;
-        this.data = loadJSON(`votekick-group-${groupId}`) as Record<Mention, VotingResult>;
+        this.data = loadJSON < Record<Mention, VotingResult> >(`votekick-group-${groupId}`);
         if (!this.data) this.data = {};
 
         const votingTarget = args[0] as Mention;

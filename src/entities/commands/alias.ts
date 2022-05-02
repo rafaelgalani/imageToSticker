@@ -23,7 +23,7 @@ export class AliasCommand extends ZapCommand {
         }
         const filename = `aliases-group-${groupId}`;
         
-        const aliasesHashmap = loadJSON(filename) ?? {};
+        const aliasesHashmap = loadJSON<Record<string, string>>(filename) ?? {};
         const normalizedAliases = Object.values( aliasesHashmap ).map(a => a.toLowerCase());
         if (args[0] === 'list') {
           return await this.context.reply(`${Object.values( aliasesHashmap ).join('\n')}`);

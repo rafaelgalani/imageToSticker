@@ -17,7 +17,7 @@ export class ToggleCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        let disabledCommands = loadJSON(`${ this.context.groupId }-disabled-commands`) as string[] || [];
+        let disabledCommands = loadJSON< string[] >(`${ this.context.groupId }-disabled-commands`) ?? [];
 
         const [ commandToToggle ] = this.context.args;
 

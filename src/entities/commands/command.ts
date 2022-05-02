@@ -58,7 +58,7 @@ export abstract class ZapCommand {
     // Returns [true, cooldownTimeInSeconds] if the sender is in cooldown state. 
     // Otherwise, adds cooldown to the sender and returns [ false, 1 ].
     protected checkForCooldown(): [boolean, number] {
-        let cooldownHashMap: Record<ChatId, number> = loadJSON( this.getCooldownHashmapName() );
+        let cooldownHashMap = loadJSON < Record<ChatId, number> >(this.getCooldownHashmapName());
         if ( !cooldownHashMap ) cooldownHashMap = {};
 
         const member = this.context.sender.id;
@@ -93,7 +93,7 @@ export abstract class ZapCommand {
     }
 
     protected async removeCooldown(member: ChatId){
-        let cooldownHashMap: Record<ChatId, number> = loadJSON( this.getCooldownHashmapName() );
+        let cooldownHashMap = loadJSON< Record<ChatId, number> >( this.getCooldownHashmapName() );
         if ( !cooldownHashMap ) cooldownHashMap = {};
 
         delete cooldownHashMap[member];
@@ -101,7 +101,7 @@ export abstract class ZapCommand {
     }
     
     protected async addCooldown(member: ChatId){
-        let cooldownHashMap: Record<ChatId, number> = loadJSON( this.getCooldownHashmapName() );
+        let cooldownHashMap = loadJSON< Record<ChatId, number> >( this.getCooldownHashmapName() );
         if ( !cooldownHashMap ) cooldownHashMap = {};
 
         cooldownHashMap[member] = new Date().getTime();

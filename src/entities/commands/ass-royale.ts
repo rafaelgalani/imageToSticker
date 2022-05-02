@@ -58,7 +58,7 @@ const checkAliveMembers = target => {
 
 const checkMemberAlias = (member, groupId) => {
   const filename = `aliases-group-${groupId}`;
-  const aliasesHashmap = loadJSON(filename);
+  const aliasesHashmap = loadJSON<Record<string, string>>(filename);
   const parsedMember = `${member.replace('@', '')}@c.us`
   const aliasesArray = Object.entries(aliasesHashmap);
   for (let i=0; i < aliasesArray.length; i++) {

@@ -112,7 +112,7 @@ export class AssCommand extends ZapCommand {
     protected async runSpecificLogic() {
         const { groupId, sender, args } = this.context;
 
-        this.data = loadJSON(`ass-group-${groupId}`) as Record<Mention, Streak>;
+        this.data = loadJSON< Record<Mention, Streak> >(`ass-group-${groupId}`);
         if (!this.data) this.data = {};
 
         if( args.length === 1 ){
