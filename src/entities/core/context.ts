@@ -93,6 +93,14 @@ export class ZapContext {
         return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.chat.id, content, this.id);
     }
 
+    public async dm( message: string ){
+        if ( this.sender ) {
+            return await this.client.sendText( this.sender.id, message );
+        }
+
+        return null;
+    }
+
     public async send(content: string){
         return await this.client.sendReplyWithMentions(this.isGroupMsg? this.groupId : this.chat.id, content, this.id);
     }

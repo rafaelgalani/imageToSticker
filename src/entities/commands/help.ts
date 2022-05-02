@@ -30,6 +30,6 @@ export class HelpCommand extends ZapCommand {
             ${commandsPatterns.join('\n\n')}
         `);
 
-        await this.context.reply(message);
+        await this.context.dm(message);
     }
 }
