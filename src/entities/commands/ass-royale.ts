@@ -101,7 +101,7 @@ export class AssRoyaleCommand extends ZapCommand {
         if(!isMatchActive) {
           let test = 10;
           isMatchActive = true;
-          aliveMembers = await this.context.getAllMembersMentioned();
+          aliveMembers = await this.context.getAllGroupMembersMentions();
           matchScore = aliveMembers.map(player => ({ player, kills: 0, alive: true }));
           await this.context.reply(`Um Round Sex foi iniciado com TODOS os membros`);
           await this.context.sendFile('audios/roundsex.mp3');

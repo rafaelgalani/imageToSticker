@@ -110,7 +110,7 @@ export class ZapContext {
         return await this.client.sendFile(this.target, resolvePath('src', 'assets', folder, fileName), fileName, fileName, this.id, false, true);
     }
 
-    public async getAllMembersMentioned() {
+    public async getAllGroupMembersMentions() {
         return this.groupMembers.map(member => toAliasOrMention(member, this.groupId));
     }
 

@@ -1,6 +1,14 @@
-import { randomInt } from "src/utils";
+import { pickRandom } from "src/utils";
 import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
+
+const sentences = [
+  `O/A @randomMember, com TOTAL certeza.`,
+  `Talvez o/a @randomMember, mas pode ser que não`,
+  `Sem sombra de dúvidas, o/a @randomMember`,
+  `Essa aí tá ÓBVIO, é o/a @randomMember`,
+  `KKKKKKKK ESSA AÍ O/A @randomMember JÁ ME CONFIRMOU NO OFF 🤭`,
+];
 export class WhichCommand extends ZapCommand {
     
     public getPatterns(){
@@ -14,17 +22,8 @@ export class WhichCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-      const members = await this.context.getAllMembersMentioned();
-      const memberIndex = randomInt(members.length - 1);
-      const randomMember = members[memberIndex];
-      const sentences = [
-        `O/A ${randomMember}, com TOTAL certeza.`,
-        `Talvez o/a ${randomMember}, mas pode ser que não`,
-        `Sem sombra de dúvidas, o/a ${randomMember}`,
-        `Essa aí tá ÓBVIO, é o/a ${randomMember}`,
-        `KKKKKKKK ESSA AÍ O/A ${randomMember} JÁ ME CONFIRMOU NO OFF 🤭`
-      ]
-      const sentenceIndex = randomInt(sentences.length - 1);
-      return await this.context.reply(sentences[sentenceIndex]);
+      const members = await this.context.getAllGroupMembersMentions();
+      const randomMember = pickRandom( members );
+      return await this.context.reply( pickRandom( sentences ).replace( '@randomMember', randomMember ) );
     }
 }

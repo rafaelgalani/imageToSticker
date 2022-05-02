@@ -15,6 +15,6 @@ export class MentionAllCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        return await this.context.reply(`Os seguintes membros tomaram no cu: ${(await this.context.getAllMembersMentioned()).join(`\n`)}`);
+        return await this.context.reply(`Os seguintes membros tomaram no cu: ${(await this.context.getAllGroupMembersMentions()).join(`\n`)}`);
     }
 }
