@@ -1,8 +1,7 @@
 import { randomInt } from "src/utils";
-import { GroupOnlyRule, NArgumentsRule } from "../rules";
-import { ArgsOperator } from "../rules/group/n-arguments";
+import { GroupOnlyRule } from "../rules";
 import { ZapCommand } from "./command";
-export class NewCommand extends ZapCommand {
+export class WhichCommand extends ZapCommand {
     
     public getPatterns(){
         return ['qual', 'qual-membro', 'which-member', 'which'];
