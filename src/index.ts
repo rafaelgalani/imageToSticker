@@ -1,4 +1,4 @@
-import { Client, create } from '@open-wa/wa-automate';
+import { Client, ConfigObject, create } from '@open-wa/wa-automate';
 import msgHandler from 'src/handler/message';
 import { newReply, sendReplyWithMentions } from 'src/lib/additional-content';
 import * as puppeteer from 'puppeteer';
@@ -33,16 +33,17 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
 }
 
 (async () => {
-    const options = {
-        sessionId: 'botzim',
-        headless: false,
-        qrTimeout: 0,
-        authTimeout: 0,
-        devtools: false,
-        useChrome: true, 
-        killProcessOnBrowserClose: true,
-        multiDevice: true,
-    }
+    const options: ConfigObject = {
+      sessionId: "botzim",
+      headless: false,
+      qrTimeout: 0,
+      authTimeout: 0,
+      devtools: false,
+      useChrome: true,
+      killProcessOnBrowserClose: true,
+      multiDevice: true,
+      waitForRipeSession: false,
+    };
     
     create(options)
         .then((client) => start(client)  )
