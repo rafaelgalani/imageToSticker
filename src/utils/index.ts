@@ -49,13 +49,14 @@ export const toAliasOrMention = (id: ContactId, groupId: GroupChatId): Alias | M
     return aliases[ id ] ?? `@${id.replace('@c.us', '')}` as Mention;
 }
 
-export const loadJSON = (jsonFilename: string): Record<string, any> | null => {
-    const validateDataFolder = () => !existsSync(resolvePath('data')) && mkdirSync(resolvePath('data'));
-    
+export const loadJSON = <T>( jsonFilename: string, isAssetFile: boolean = false ): T | null => {
+    const validateDataFolder = () => !isAssetFile && !existsSync(resolvePath('data')) && mkdirSync(resolvePath('data'));
+    const path = ! isAssetFile ? [ 'data' ] : [ 'src', 'assets', 'data' ]
+
     try {
         validateDataFolder();
         const fileContent = readFileSync(
-            resolvePath('data', `${jsonFilename}.json`), 
+            resolvePath( ...path, `${jsonFilename}.json`), 
             'utf8'
         )
         return JSON.parse(fileContent);

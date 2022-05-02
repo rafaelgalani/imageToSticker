@@ -28,7 +28,7 @@ lib/giphy.js
 lib/*.json
 lib/instaStory.js
 lib/jiwa.js
-data
+/data
 utils/anu.js
 _IGNORE_*
 # managed by open-wa
