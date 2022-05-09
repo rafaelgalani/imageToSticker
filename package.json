@@ -28,6 +28,7 @@
     "google-translate-open-api": "^1.3.5",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
+    "puppeteer": "^14.0.0",
     "remove.bg": "^1.3.0",
     "require-from-web": "^1.2.0",
     "sharp": "^0.29.0",
@@ -36,7 +37,7 @@
     "video-url-link": "git+https://github.com/YogaSakti/video-url-link.git"
   },
   "devDependencies": {
-    "@types/puppeteer": "^5.4.4",
+    "@types/puppeteer": "^5.4.6",
     "@types/sharp": "^0.29.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.1",

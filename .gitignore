@@ -41,3 +41,4 @@ _IGNORE_*
 # end managed by open-wa
 logs
 .tool-versions
+/chromium
