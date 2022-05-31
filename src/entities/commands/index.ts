@@ -10,6 +10,7 @@ export { DemoteCommand } from './demote'
 export { StopRinhaCommand } from "./desrinha";
 export { FacebookCommand } from './facebook'
 export { FuckBillyCommand } from './fuck-billy'
+export { GhælPokemonCommand } from "./ghæl";
 export { HelpCommand } from './help'
 export { InstagramCommand } from './instagram'
 export { KickCommand } from './kick'
