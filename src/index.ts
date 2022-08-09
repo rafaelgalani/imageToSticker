@@ -42,7 +42,6 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
       useChrome: true,
       killProcessOnBrowserClose: true,
       multiDevice: true,
-      waitForRipeSession: false,
     };
     
     create(options)
