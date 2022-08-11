@@ -39,7 +39,7 @@ export const isGiphy = (url: string) => Boolean(url.match(new RegExp(Regexes.Gip
 export const isMediaGiphy = (url: string) => Boolean(url.match(new RegExp(Regexes.MediaGiphy, 'gi')));
 export const isId = (number: string) => Boolean( number.match(new RegExp(Regexes.Id)) );
 export const isMention = (number: string) => Boolean( number.match(new RegExp(Regexes.Mention)) );
-
+export const isNumber = (number: string) => new RegExp(/\d{1}/).test( number );
 
 export const toMention   = (id: ContactId):    Mention   => `@${id.replace('@c.us', '')}` as Mention;
 export const toContactId = (mention: Mention): ContactId => `${mention.substring(1)}@c.us` as ContactId;
