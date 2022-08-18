@@ -34,6 +34,22 @@ export class VotekickCommand extends ZapCommand {
         return await this.context.reply(message);
     }
 
+    private getVoteMessage( voteData: VotingResult, shouldBeKicked: boolean | undefined = undefined ) {
+        if ( undefined === shouldBeKicked ) {
+            return [
+              `Banir: ${voteData.shouldKick}/${voteData.votesNeeded}`,
+              `Não banir: ${voteData.shouldKeep}/${voteData.votesNeeded}`,
+            ].join("\n");
+        }
+
+        return [
+            `${shouldBeKicked?  '✅' : '❌'} - Banir: ${voteData.shouldKick}/${voteData.votesNeeded}`,
+            `${!shouldBeKicked? '✅' : '❌'} - Não banir: ${voteData.shouldKeep}/${voteData.votesNeeded}`,
+            '',
+            `O membro ${shouldBeKicked? 'será' : 'não será'} banido!!!`,
+        ].join("\n");
+    }
+
     protected async runSpecificLogic() {
         const { groupId, sender, args } = this.context;
         this.data = loadJSON < Record<Mention, VotingResult> >(`votekick-group-${groupId}`);
@@ -47,8 +63,7 @@ export class VotekickCommand extends ZapCommand {
             await this.saveWithReply(fullTrim(`
                 Votação iniciada, votekick no membro ${votingTarget}
                 
-                Banir: ${voteData.shouldKick}/${voteData.votesNeeded}
-                Não banir: ${voteData.shouldKeep}/${voteData.votesNeeded}
+                ${ this.getVoteMessage(voteData) }
             `));
         } else {
             // Voting already started. Process vote...
@@ -66,8 +81,7 @@ export class VotekickCommand extends ZapCommand {
                 return await this.saveWithReply(fullTrim(`
                     Votação atualizada: ${votingTarget}
                     
-                    Banir: ${updatedResult.shouldKick}/${updatedResult.votesNeeded}
-                    Não banir: ${updatedResult.shouldKeep}/${updatedResult.votesNeeded}
+                    ${ this.getVoteMessage( updatedResult ) }
                 `));
             } else {
                 const shouldKick = updatedResult.kicked;
@@ -75,10 +89,7 @@ export class VotekickCommand extends ZapCommand {
                 await this.saveWithReply(fullTrim(`
                     Votação encerrada: ${votingTarget}
                     
-                    ${shouldKick?  '✅' : '❌'} - Banir: ${updatedResult.shouldKick}/${updatedResult.votesNeeded}
-                    ${!shouldKick? '✅' : '❌'} - Não banir: ${updatedResult.shouldKeep}/${updatedResult.votesNeeded}
-                    
-                    O membro ${shouldKick? 'será' : 'não será'} banido!!!
+                    ${ this.getVoteMessage( updatedResult, shouldKick )}
                 `));
                 
                 if (shouldKick) {
