@@ -23,9 +23,9 @@ export class VotekickCommand extends ZapCommand {
                 { target: 2, operation: ArgsOperator.LTE },
                 { target: 1, operation: ArgsOperator.GTE },
             ), 
-            new ArgumentFormatterRule([
-                new ArgumentFormat(isMention, 0).override('O primeiro parâmetro do seu voto deve ser uma menção à algum membro.'),
-            ])
+            // new ArgumentFormatterRule([
+            //    new ArgumentFormat(isMention, 0).override('O primeiro parâmetro do seu voto deve ser uma menção à algum membro.'),
+            // ])
         ];
     }
 
@@ -34,26 +34,67 @@ export class VotekickCommand extends ZapCommand {
         return await this.context.reply(message);
     }
 
+    private getVoteOptionMessage( voteData: VotingResult, option: 'KICK' | 'KEEP' ) {
+        if ( option === "KICK" ) {
+            return `Banir: ${voteData.shouldKick}/${voteData.votesNeeded}`;
+        } else {
+            return `Não banir: ${voteData.shouldKeep}/${voteData.votesNeeded}`;
+        }
+    }
+
     private getVoteMessage( voteData: VotingResult, shouldBeKicked: boolean | undefined = undefined ) {
         if ( undefined === shouldBeKicked ) {
             return [
-              `Banir: ${voteData.shouldKick}/${voteData.votesNeeded}`,
-              `Não banir: ${voteData.shouldKeep}/${voteData.votesNeeded}`,
+              this.getVoteOptionMessage( voteData, 'KICK' ),
+              this.getVoteOptionMessage( voteData, 'KEEP' ),
             ].join("\n");
         }
 
         return [
-            `${shouldBeKicked?  '✅' : '❌'} - Banir: ${voteData.shouldKick}/${voteData.votesNeeded}`,
-            `${!shouldBeKicked? '✅' : '❌'} - Não banir: ${voteData.shouldKeep}/${voteData.votesNeeded}`,
+            `${shouldBeKicked?  '✅' : '❌'} - ${this.getVoteOptionMessage( voteData, 'KICK' )}`,
+            `${!shouldBeKicked? '✅' : '❌'} - ${this.getVoteOptionMessage( voteData, 'KEEP' )}`,
             '',
             `O membro ${shouldBeKicked? 'será' : 'não será'} banido!!!`,
         ].join("\n");
+    }
+
+    private getVoteMessages() {
+        const results = [];
+
+        for( const votingData of Object.values( this.data ) ) {
+            results.push(
+              [
+                `Membro: ${ votingData.target }`,
+                this.getVoteOptionMessage( votingData, 'KICK' ),
+                this.getVoteOptionMessage( votingData, 'KEEP' ),
+              ].join("\n")
+            );
+        }
+        return results;
     }
 
     protected async runSpecificLogic() {
         const { groupId, sender, args } = this.context;
         this.data = loadJSON < Record<Mention, VotingResult> >(`votekick-group-${groupId}`);
         if (!this.data) this.data = {};
+
+        const target = args[0];
+
+        if ( !isMention( target ) ) {
+            if ( 'list' === target ) {
+                const votingResults = this.getVoteMessages();
+
+                return await this.saveWithReply(
+                  fullTrim(`
+                    Votações abertas:
+                    
+                    ${ votingResults.join('\n\n') }
+                  `)
+                );
+            } else {
+                return await this.context.reply('Argumento inválido. Mencione um membro ou use "list" pra listar as votações.');
+            }
+        }
 
         const votingTarget = args[0] as Mention;
         
