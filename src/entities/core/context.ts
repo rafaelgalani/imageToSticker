@@ -122,6 +122,10 @@ export class ZapContext {
         return this.isAdmin(id)? 'admin' : 'membro(a) comum';
     }
 
+    public getAlias(id: ContactId): Alias | Mention  {
+        return toAliasOrMention(id, this.groupId);
+    }
+
     public getTitleAndMention(id: ContactId | Mention): `${Title} ${Alias|Mention}` {
         if (isMention(id)) return `${this.getTitle( toContactId(id as Mention) )} ${id as Mention}`;
         else return `${this.getTitle(id as ContactId)} ${toAliasOrMention(id as ContactId, this.groupId)}`

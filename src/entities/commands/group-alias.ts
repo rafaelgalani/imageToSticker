@@ -1,23 +1,26 @@
-import { saveJSON, loadJSON } from "src/utils";
-import { GroupOnlyRule, NArgumentsRule } from "../rules";
+import { saveJSON, loadJSON, isMention } from "src/utils";
+import { ArgumentFormat, ArgumentFormatterRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
 export class AliasCommand extends ZapCommand {
     
     public getPatterns(){
-        return ['alias', 'nick', 'nickname'];
+        return ['groupalias' ];
     }
 
     protected getRules(){
         return [ 
             new GroupOnlyRule().override('Só pode ser usado em grupo.'), 
-            new NArgumentsRule({ target: 1, operation: ArgsOperator.EQ }), 
+            new ArgumentFormatterRule([
+              new ArgumentFormat(( arg ) => isMention( arg ), 0),
+              new ArgumentFormat(( arg ) => !isMention( arg ), 1),
+            ]), 
         ];
     }
 
     protected async runSpecificLogic() {
         const { args, groupId, sender } = this.context;
-        const [ chosenAlias ] = args;
+        const [ member, chosenAlias ] = args;
         if (chosenAlias.length >= 30 || Array.from(chosenAlias)[0] == '@') {
           return await this.context.reply([
             `Apelido inválido:`,
@@ -25,7 +28,7 @@ export class AliasCommand extends ZapCommand {
             `  - Não pode ser uma menção.`,
           ].join('\n'));
         }
-        const filename = `aliases-group-${groupId}`;
+        const filename = `groupaliases-group-${groupId}`;
         
         const aliasesHashmap = loadJSON<Record<string, string>>(filename) ?? {};
         const normalizedAliases = Object.values( aliasesHashmap ).map(a => a.toLowerCase());
@@ -34,7 +37,7 @@ export class AliasCommand extends ZapCommand {
         }
         
         if ( normalizedAliases.includes( chosenAlias.toLowerCase() ) ) {
-            return await this.context.reply(`O apelido ${chosenAlias} já foi escolhido por outro membro. Escolha outro apelido.`);
+            return await this.context.reply(`${chosenAlias} já foi definido como outro membro. Escolha outro apelido.`);
         }
 
         if ( ['reset', 'delete', 'remove'].includes( chosenAlias.toLowerCase() ) ) {
@@ -49,6 +52,6 @@ export class AliasCommand extends ZapCommand {
         aliasesHashmap[ sender.id ] = chosenAlias;
         saveJSON( filename, aliasesHashmap );
 
-        return await this.context.reply(`Seu apelido foi definido como "${chosenAlias}".`);
+        return await this.context.reply(`Seu apelido no grupo foi definido como "${chosenAlias}".`);
     }
 }
