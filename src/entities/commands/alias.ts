@@ -1,4 +1,5 @@
-import { saveJSON, loadJSON } from "src/utils";
+import { ContactId } from "@open-wa/wa-automate";
+import { saveJSON, loadJSON, toMention } from "src/utils";
 import { GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
@@ -30,7 +31,9 @@ export class AliasCommand extends ZapCommand {
         const aliasesHashmap = loadJSON<Record<string, string>>(filename) ?? {};
         const normalizedAliases = Object.values( aliasesHashmap ).map(a => a.toLowerCase());
         if ( chosenAlias === 'list' ) {
-          return await this.context.reply(`${Object.values( aliasesHashmap ).join('\n')}`);
+          return await this.context.reply(
+            Object.entries( aliasesHashmap ).map(([ member, alias ]: [ ContactId, string ]) => `${toMention(member)}: ${alias}`).join('\n')
+          );
         }
         
         if ( normalizedAliases.includes( chosenAlias.toLowerCase() ) ) {

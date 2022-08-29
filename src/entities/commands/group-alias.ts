@@ -34,7 +34,9 @@ export class AliasCommand extends ZapCommand {
         const aliasesHashmap = loadJSON<Record<string, string>>(filename) ?? {};
         const normalizedAliases = Object.values( aliasesHashmap ).map(a => a.toLowerCase());
         if ( chosenAlias === 'list' ) {
-          return await this.context.reply(`${Object.entries( aliasesHashmap ).map(([ member, alias ]: [ ContactId, string ]) => `${toMention(member)}: ${alias}`).join('\n')}`);
+          return await this.context.reply(
+            Object.entries( aliasesHashmap ).map(([ member, alias ]: [ ContactId, string ]) => `${toMention(member)}: ${alias}`).join('\n')
+          );
         }
         
         if ( normalizedAliases.includes( chosenAlias.toLowerCase() ) ) {
