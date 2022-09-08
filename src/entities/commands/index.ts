@@ -11,6 +11,7 @@ export { StopRinhaCommand } from "./desrinha";
 export { FacebookCommand } from './facebook'
 export { FuckBillyCommand } from './fuck-billy'
 export { FlamengoCommand } from './flamengo'
+export { FTotalCommand } from './f-total'
 export { GhælPokemonCommand } from "./ghæl";
 export { HelpCommand } from './help'
 export { InstagramCommand } from './instagram'

@@ -164,4 +164,8 @@ export class ZapContext {
     public async demote(id: ContactId){
         return await this.client.demoteParticipant(this.groupId, id);
     }
+
+    public async kick(id: ContactId){
+        return await this.client.removeParticipant(this.groupId, id);
+    }
 }
