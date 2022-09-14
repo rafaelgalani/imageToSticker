@@ -3,7 +3,7 @@ require('dotenv').config();
 import { Client, Message } from '@open-wa/wa-automate'
 import * as allCommands from '../../entities/commands';
 import { ZapContext, ZapError } from '../../entities';
-import { fullTrim, verifyMute } from '../../utils';
+import { fullTrim } from '../../utils';
 import { ZapCommand } from '../../entities/commands/command';
 
 export default async (client: Client, message: Message) => {
@@ -14,8 +14,8 @@ export default async (client: Client, message: Message) => {
         let commands: ZapCommand[] = Object.keys(allCommands).map(a => new allCommands[a](context, allCommands[a].cooldownOptions));
         
         for (let command of commands){
-            const mute = verifyMute(context.author || context.from);
-            if (mute) return;
+            // const mute = verifyMute(context.author || context.from);
+            // if (mute) return;
 
             const result = await command.run();
             // console.log(

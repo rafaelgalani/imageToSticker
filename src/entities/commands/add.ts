@@ -1,5 +1,6 @@
 import { ContactId } from "@open-wa/wa-automate";
-import { getMemberNumber } from "../../utils";
+import type { Mention } from "src/types";
+import { getMemberNumber, isId, isMention, toContactId } from "../../utils";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
@@ -20,8 +21,16 @@ export class AddMemberCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, mentionedJidList, args, author, from, id } = this.context;
-        const memberNumber = getMemberNumber(args[0]) as ContactId;
-        return await client.addParticipant(groupId, memberNumber);
+        const { client, groupId, args } = this.context;
+        const [ personToAdd ] = args;
+
+        if ( isMention(personToAdd) ) {
+            return await client.addParticipant(groupId, toContactId(personToAdd));
+        } else if ( isId(personToAdd) ) {
+            return await client.addParticipant(groupId, personToAdd);
+        } else {
+            const memberNumber = getMemberNumber(personToAdd, groupId);
+            return await client.addParticipant(groupId, toContactId(memberNumber));
+        }
     }
 }

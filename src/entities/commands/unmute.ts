@@ -1,4 +1,4 @@
-import { unmuteMember } from "../../utils";
+// import { unmuteMember } from "../../utils";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
@@ -19,7 +19,7 @@ export class UnmuteCommand extends ZapCommand {
     }
 
     protected async runSpecificLogic() {
-        const { client, groupId, mentionedJidList, args } = this.context;
-        unmuteMember(args[0]);
+        // const { client, groupId, mentionedJidList, args } = this.context;
+        // unmuteMember(args[0]);
     }
 }

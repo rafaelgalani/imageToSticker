@@ -1,4 +1,4 @@
-import { muteMember } from "../../utils";
+// import { muteMember } from "../../utils";
 import { AdminRule, AllowBotArgumentRule, BotAdminRule, GroupOnlyRule, NArgumentsRule } from "../rules";
 import { ArgsOperator } from "../rules/group/n-arguments";
 import { ZapCommand } from "./command";
@@ -20,6 +20,6 @@ export class MuteCommand extends ZapCommand {
 
     protected async runSpecificLogic() {
         const { client, groupId, mentionedJidList, args } = this.context;
-        muteMember(args[0]);
+        // muteMember(args[0]);
     }
 }
