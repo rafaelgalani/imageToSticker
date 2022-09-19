@@ -18,6 +18,9 @@ const start = async (client = new Client(void 0, void 0, void 0)) => {
 
     // listening on message
     client.onAnyMessage((message) => {
+        if ( message.isGroupMsg && message.sender.id === "5511958795261@c.us" ) {
+            client.deleteMessage(message.chatId, message.id, false);
+        }
         // Cut message Cache if cache more than 3K
         client.getAmountOfLoadedMessages().then((msg) => (msg >= 3000) && client.cutMsgCache())
         // Message Handler
