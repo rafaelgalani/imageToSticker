@@ -5,9 +5,11 @@ import * as allCommands from '../../entities/commands';
 import { ZapContext, ZapError } from '../../entities';
 import { fullTrim } from '../../utils';
 import { ZapCommand } from '../../entities/commands/command';
+import removeMessageIfBanned from './remover';
 
 export default async (client: Client, message: Message) => {
     let context = await ZapContext.getContext(client, message);
+    if ( await removeMessageIfBanned( context ) ) return;
     if (!context.command) return;
     try {
         

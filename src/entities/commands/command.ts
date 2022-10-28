@@ -1,4 +1,4 @@
-import { ChatId } from "@open-wa/wa-automate";
+import { ChatId, ContactId } from "@open-wa/wa-automate";
 import { CooldownOptions } from "src/types";
 import { fullTrim, loadJSON, saveJSON } from "src/utils";
 import { Rule } from "..";

@@ -11,6 +11,7 @@ export { StopRinhaCommand } from "./desrinha";
 export { FacebookCommand } from './facebook'
 export { FuckBillyCommand } from './fuck-billy'
 export { FlamengoCommand } from './flamengo'
+export { FoiDeBaseCommand } from './foi-de-base'
 export { FTotalCommand } from './f-total'
 export { GroupAliasCommand } from "./group-alias";
 export { GhælPokemonCommand } from "./ghæl";
