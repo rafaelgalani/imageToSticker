@@ -38,7 +38,7 @@ export class FoiDeBaseCommand extends ZapCommand {
 					return await this.context.reply( 'Mencione o membro corretamente.' );
 				}
 
-				members = members.filter( member => member !== targetMember );
+				members = members.filter( member => member !== toContactId( targetMember ) );
 				saveJSON( filename, members );
 				return await this.context.reply( 'O membro foi removido da base.' );
 			}

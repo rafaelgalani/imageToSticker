@@ -19,7 +19,7 @@
   "homepage": "https://github.com/YogaSakti/imageToSticker",
   "license": "ISC",
   "dependencies": {
-    "@open-wa/wa-automate": "^4.46.3",
+    "@open-wa/wa-automate": "^4.66.3",
     "axios": "^0.21.1",
     "chalk": "^4.1.2",
     "chrome-launcher": "^0.14.0",
@@ -48,7 +48,6 @@
     "rimraf": "^3.0.2",
     "ts-node": "^10.2.1",
     "ts-node-dev": "^1.1.8",
-    "tsconfig-paths": "^3.11.0",
-    "typescript": "^4.4.2"
+    "typescript": "^5.1.6"
   }
 }

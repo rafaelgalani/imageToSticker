@@ -15,7 +15,10 @@
     "include": [ "src/**/*.ts" ],
      "esModuleInterop": true,
      "exclude": [
-        "./node_modules/**/*",
-         "./build/**/*",
+        "node_modules",
+        "./build/**/*",
+        "./node_modules",
+        "./node_modules/*",
+        "./node_modules/@types/node/index.d.ts",
     ]
 }
